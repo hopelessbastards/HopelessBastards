@@ -23,7 +23,6 @@ public class Bullet extends SkillVehicle{
 	 private double velocityX;
 	 private double velocityY;
 	 private Point2D center;
-	 private int dealingDamage = 50;
 	 
 	 private int damagingValue;
 	 
@@ -59,7 +58,7 @@ public class Bullet extends SkillVehicle{
 		this.bulletStartingX = (int)x + bulletOwner.getWidth()/2;
 		this.bulletStartingY = (int)y + bulletOwner.getHeight()/2;
 	      
-	      this.damagingValue = 100;
+	      this.damagingValue = 50;
 	      
 	      pointHelper = new Point[4];
 	      for(int i=0;i<pointHelper.length;i++){

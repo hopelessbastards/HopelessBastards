@@ -8,13 +8,15 @@ import applogic.elements.Entity;
 import applogic.elements.controllers.IEnvironment;
 import applogic.skills.viewbuilder.MageLightningViewBuilder;
 import math.RotatePoints;
+import soundapi.ISound;
+import soundapi.ISoundProvider;
+import soundapi.MP3;
 
 public class MageLightning extends AbstractSkill{
-	//private Sound boltSong;/*a villámlás wav hangfileja*/
-
-
-	 
-	 public int damageValue = 250;/*Ennyi életerõt vesz le arról,akit ér a támadás*/
+		
+	private ISound lightning;
+	
+	 private int damageValue = 250;/*Ennyi életerõt vesz le arról,akit ér a támadás*/
 	 private int manacost = 100;/*Ennyi manát vesz le a használata a támadásnak*/
 	 
 	 private double x, y, angle; // x,y and angle(szög)
@@ -34,13 +36,15 @@ public class MageLightning extends AbstractSkill{
 		boltSong = new Sound("/lightning.wav");
 	}*/
 	   
-	 public MageLightning(Entity skillOwner,IEnvironment environment,IViewBuilderContainer container,int skillnumber) {
+	 public MageLightning(Entity skillOwner,IEnvironment environment,IViewBuilderContainer container,int skillnumber,ISoundProvider soundProvider) {
 		 super(skillOwner,environment,container,skillnumber);
 		 setCdtime(2);
 		 this.collideAreaPoints = new Point[4];
 		 for(int i=0;i<collideAreaPoints.length;i++){
 			 this.collideAreaPoints[i] = new Point();
 		 }
+		 
+		 this.lightning = new MP3("lightning", soundProvider);
 		 
 		 setSkillViewBuilder(new MageLightningViewBuilder(this,container, skillOwner));
 		 setWidth(512);
@@ -59,7 +63,7 @@ public class MageLightning extends AbstractSkill{
 			
 			
 			setViewBuilderActivate(true);
-		//	boltSong.play();
+			this.lightning.play();
 			
 			/*A playernél leveszem a manát,amibe a skill került.*/
 			   if(getSkillOwner().getMana() - this.manacost < 0){

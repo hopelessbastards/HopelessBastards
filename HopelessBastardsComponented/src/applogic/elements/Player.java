@@ -1,10 +1,9 @@
 package applogic.elements;
 
-import java.util.List;
-
 import applogic.IViewBuilderContainer;
 import applogic.elements.controllers.EnemyAndFriendlyEntityProvider;
 import applogic.elements.controllers.IEnvironment;
+import soundapi.ISoundProvider;
 
 public abstract class Player extends Entity{
 
@@ -13,8 +12,8 @@ public abstract class Player extends Entity{
 	
 	public Player(int x, int y, int width, int height, double angle, int health, int maxhealth,
 			int mana, int maxMana,String networkId,CharacterType characterType,int skillCount,IViewBuilderContainer container,
-			IEnvironment environment,EnemyAndFriendlyEntityProvider provider) {
-		super(x, y, width, height, angle, health, maxhealth, mana, maxMana,skillCount,container,environment,provider);
+			IEnvironment environment,EnemyAndFriendlyEntityProvider provider,ISoundProvider soundProvider) {
+		super(x, y, width, height, angle, health, maxhealth, mana, maxMana,skillCount,container,environment,provider,soundProvider);
 		this.networkId = networkId;
 		this.characterType = characterType;
 	}

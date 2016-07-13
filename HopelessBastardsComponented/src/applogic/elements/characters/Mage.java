@@ -12,18 +12,20 @@ import applogic.skills.MageLightning;
 import applogic.skills.MageSmokeTeleport;
 import applogic.skills.ZombieSimpleAttack;
 import applogic.viewbuilder.entities.MageViewBuilder;
+import soundapi.ISoundProvider;
 
 public class Mage extends Player{
 	
 	public Mage(int x, int y, int width, int height, double angle, int health, int maxhealth, int mana, int maxMana,
-			String networkId, CharacterType characterType,int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider) {
-		super(x, y, width, height, angle, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider);
+			String networkId, CharacterType characterType,int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
+			ISoundProvider soundProvider) {
+		super(x, y, width, height, angle, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
 		
 		
 		
 		getSkills()[0] = new ZombieSimpleAttack(this, environment,container, 0);
-		getSkills()[1] = new IceBlock(this, environment,container, 1);
-		getSkills()[2] = new MageLightning(this,environment,container,2);
+		getSkills()[1] = new IceBlock(this, environment,container, 1,soundProvider);
+		getSkills()[2] = new MageLightning(this,environment,container,2,soundProvider);
 		getSkills()[3] = new MageHealthSteal(this, environment,container, 3);
 		getSkills()[4] = new MageSmokeTeleport(this,environment,container,4);
 		getSkills()[6] = new ChangePlayerSkill(this, environment, container,6);

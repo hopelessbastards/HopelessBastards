@@ -45,7 +45,7 @@ public class Engine extends GameState{
 		this.converter  = converter;
 		this.garbageCollector = new GarbageCollector();
 		viewBuilderContainer = new ViewBuilderContainer(tiles, nonBlockingTile, this.converter, player,garbageCollector);
-		this.environment = new Environment(tiles,viewBuilderContainer,this.converter);
+		this.environment = new Environment(tiles,viewBuilderContainer,this.converter,soundProvider);
 		
 		this.cursorProvider = this.environment.getCursorInformationProvider();
 		

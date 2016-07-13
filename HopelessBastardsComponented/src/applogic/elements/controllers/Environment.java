@@ -22,6 +22,7 @@ import applogic.elements.characters.SteveShooter;
 import applogic.engine.CollisionDetection;
 import applogic.engine.ICollisionDetection;
 import screenconverter.IConverter;
+import soundapi.ISoundProvider;
 
 public class Environment implements IEnvironment{
 
@@ -56,7 +57,7 @@ public class Environment implements IEnvironment{
 	
 	private IGarbageCollector garbageCollector;
 	
-	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter) {
+	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider) {
 		this.garbageCollector = new GarbageCollector();
 		
 		this.enemyEntities = new ArrayList<Entity>();
@@ -74,7 +75,7 @@ public class Environment implements IEnvironment{
 		
 		players = new ArrayList<Player>();
 		
-		players.add(new Mage(2500, 2500, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true)));
+		players.add(new Mage(2500, 2500, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider));
 		//players.add(new SteveShooter(2500, 2500, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true)));
 		friendlyEntities.add(players.get(0));
 		
@@ -90,7 +91,7 @@ public class Environment implements IEnvironment{
 		
 		this.stupidZombieCommander = new StupidZombieAI(this);
 		
-		enemyEntities.add(new Zombie(3000, 3000,64,64,0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false)));
+		enemyEntities.add(new Zombie(3000, 3000,64,64,0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		
 		this.stupidZombieCommander.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
 		enemyEntities.get(enemyEntities.size()-1).setCommander(stupidZombieCommander);
@@ -108,7 +109,7 @@ public class Environment implements IEnvironment{
 		
 		this.collision = new CollisionDetection();
 		
-		enemyPlayers.add(new SteveShooter(3000, 3000, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,false)));
+		enemyPlayers.add(new SteveShooter(3000, 3000, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		//enemyPlayers.add(new Mage(2500, 2500, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this));
 		enemyPlayers.get(enemyPlayers.size() - 1).setCommander(new DoNothingCommander());
 		

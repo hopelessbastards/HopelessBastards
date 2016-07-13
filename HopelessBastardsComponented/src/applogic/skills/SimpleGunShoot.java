@@ -8,15 +8,20 @@ import applogic.elements.controllers.IEnvironment;
 import applogic.skills.vehicles.Bomb;
 import applogic.skills.vehicles.Bullet;
 import applogic.skills.viewbuilder.SimpleGunShootViewBuilder;
+import soundapi.ISound;
+import soundapi.ISoundProvider;
+import soundapi.MP3;
 
 public class SimpleGunShoot extends AbstractSkill{
 	private int manacost = 50;/*Ennyi manát vesz le a használata a támadásnak*/
 	
+	private ISound shot;
 	public SimpleGunShoot(Entity skillOwner, IEnvironment environment, IViewBuilderContainer container,
-			int skillnumber) {
+			int skillnumber,ISoundProvider soundProvider) {
 		super(skillOwner, environment, container, skillnumber);
 		setCdtime(1);
 		
+		this.shot = new MP3("shot", soundProvider);
 		setSkillViewBuilder(new SimpleGunShootViewBuilder(this, container, skillOwner));
 	}
 
@@ -27,6 +32,7 @@ public class SimpleGunShoot extends AbstractSkill{
 			setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
 			
 			getEnvironment().getSkillVehicles().add(new Bullet(getSkillOwner().getX() + getSkillOwner().getWidth() + 80,getSkillOwner().getY() + getSkillOwner().getHeight()/2 + 5,getSkillOwner().getAngle(),65,6,getSkillOwner(),getContainer()));
+			this.shot.play();
 			
 			setViewBuilderActivate(true);
 

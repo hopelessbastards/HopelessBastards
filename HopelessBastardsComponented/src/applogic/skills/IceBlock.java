@@ -6,13 +6,20 @@ import applogic.IViewBuilderContainer;
 import applogic.elements.Entity;
 import applogic.elements.controllers.IEnvironment;
 import applogic.skills.viewbuilder.IceBlockViewBuilder;
+import soundapi.ISound;
+import soundapi.ISoundProvider;
+import soundapi.MP3;
 
 public class IceBlock extends AbstractSkill{
 	private int manacost = 100;/*Ennyi manát vesz le a használata a támadásnak*/
 
-	public IceBlock(Entity skillOwner, IEnvironment environment, IViewBuilderContainer container, int skillnumber) {
+	private ISound iceblocksound;
+	
+	public IceBlock(Entity skillOwner, IEnvironment environment, IViewBuilderContainer container, int skillnumber,ISoundProvider soundProvider) {
 		super(skillOwner, environment, container, skillnumber);
 		setSecWhileActive(5);
+		
+		this.iceblocksound = new MP3("iceblock", soundProvider);
 		
 		setCdtime(2);
 		 
@@ -41,6 +48,7 @@ public class IceBlock extends AbstractSkill{
 			   getSkillOwner().setStunned(true);
 			   
 			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			   this.iceblocksound.play();
 			   
 		}
 	}

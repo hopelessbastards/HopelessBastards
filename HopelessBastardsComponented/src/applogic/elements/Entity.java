@@ -7,6 +7,8 @@ import applogic.elements.controllers.Commander;
 import applogic.elements.controllers.EnemyAndFriendlyEntityProvider;
 import applogic.elements.controllers.IEnvironment;
 import applogic.skills.AbstractSkill;
+import applogic.viewbuilder.string.DamageTextViewBuilder;
+import soundapi.ISoundProvider;
 
 public abstract class Entity extends LivingObject{
 	
@@ -59,11 +61,15 @@ public abstract class Entity extends LivingObject{
     private List<Entity> friendlyPlayers;
     private List<LivingObject> friendlyBuildings;
     
+    private ISoundProvider soundProvider;
     
 	public Entity(int x, int y, int width, int height, double angle, int health,int maxhealth,int mana,int maxMana,
-			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider) {
+			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
+			ISoundProvider soundProvider) {
 		super(x, y, width, height, angle,0,0,health,maxhealth);
 		this.live = true;
+		
+		this.soundProvider = soundProvider;
 		
 		this.friendlyBuildings = provider.getFriendlyBuildings();
 		this.friendlyEntities = provider.getFriendlyEntities();
@@ -103,6 +109,9 @@ public abstract class Entity extends LivingObject{
 		}else{
 			setHealth(getHealth() + health);
 		}
+		
+		
+		getContainer().getStringBuilder().add(new DamageTextViewBuilder(this,health));
 		
 		if(getHealth() <= 0){
 			die();
@@ -413,5 +422,15 @@ public abstract class Entity extends LivingObject{
 
 	public void setStunned(boolean stunned) {
 		this.stunned = stunned;
+	}
+
+	public ISoundProvider getSoundProvider() {
+		return soundProvider;
+	}
+
+	public void setSoundProvider(ISoundProvider soundProvider) {
+		this.soundProvider = soundProvider;
 	}	
+	
+	
 }

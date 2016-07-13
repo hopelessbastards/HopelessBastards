@@ -6,6 +6,7 @@ import applogic.IViewBuilderContainer;
 import applogic.elements.Entity;
 import applogic.elements.controllers.IEnvironment;
 import applogic.viewbuilder.IImageViewBuilder;
+import soundapi.ISoundProvider;
 
 public abstract class AbstractSkill {
 	/*Ez az osztály arra szolgál,hogy definiáljon közös elemeket, ami minden skillben benne kell,hogy legyen.

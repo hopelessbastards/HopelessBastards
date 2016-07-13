@@ -20,4 +20,20 @@
 		<path>./res/loginSong.mp3</path>
 		<logicname>loginSong</logicname>
 	</sound>
+	<sound>
+		<path>./res/fireball.mp3</path>
+		<logicname>fireball</logicname>
+	</sound>
+	<sound>
+		<path>./res/iceblock.mp3</path>
+		<logicname>iceblock</logicname>
+	</sound>
+	<sound>
+		<path>./res/shot.mp3</path>
+		<logicname>shot</logicname>
+	</sound>
+	<sound>
+		<path>./res/lightning.mp3</path>
+		<logicname>lightning</logicname>
+	</sound>
 </sounds>

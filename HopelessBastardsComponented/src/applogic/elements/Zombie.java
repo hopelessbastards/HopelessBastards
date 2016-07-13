@@ -8,6 +8,7 @@ import applogic.elements.controllers.IEnvironment;
 import applogic.skills.ChangePlayerSkill;
 import applogic.skills.ZombieSimpleAttack;
 import applogic.viewbuilder.entities.ZombieViewBuilder;
+import soundapi.ISoundProvider;
 
 public class Zombie extends Entity{
 	
@@ -18,8 +19,9 @@ public class Zombie extends Entity{
 	private Entity owner;
 
 	public Zombie(int x, int y, int width, int height, double angle, int health, int maxhealth, int mana, int maxMana,
-			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider) {
-		super(x, y, width, height, angle, health, maxhealth, mana, maxMana, skillCount,container,environment,provider);
+			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
+			ISoundProvider soundProvider) {
+		super(x, y, width, height, angle, health, maxhealth, mana, maxMana, skillCount,container,environment,provider,soundProvider);
 		
 		getSkills()[0] = new ZombieSimpleAttack(this, environment,container, 0);
 		getSkills()[6] = new ChangePlayerSkill(this, environment, container,6);
