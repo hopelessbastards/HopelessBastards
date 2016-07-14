@@ -27,7 +27,7 @@ public class MageViewBuilder extends IImageViewBuilder{
 		this.container = container;
 		
 		describers = new ImageDescriptor[1];
-		describers[0] = new ImageDescriptor(10, 10,10,10,10,mage.getWidth(),1000,"fire", 0);
+		describers[0] = new ImageDescriptor(10, 10, 10, 10, 10, mage.getWidth(), 1000, "fire", 0);
 		this.mage = mage;
 		animationHandler = new AnimationHandler(60, 2,true,"mage");
 		this.attackanimation = new AnimationHandler(80, 1, false,"mageattack");
@@ -36,22 +36,27 @@ public class MageViewBuilder extends IImageViewBuilder{
 		
 	}
 	
+	/**
+	 * Get the image description.
+	 * 
+	 * The mage animation depends on normal or on attack state.
+	 */
 	@Override
 	public ImageDescriptor[] getImageDescriptor() {
 		
-		if(appointer == null && mage.getCollideArea().contains(container.getCursorInformationProvider().getMouse())){
+		if (appointer == null && mage.getCollideArea().contains(container.getCursorInformationProvider().getMouse())){
 			appointer = new EntityAppointerRectangle(mage);
 			container.getRectangleBuilder().add(this.appointer);
-		}else{
+		} else {
 			/*Ha az egérrel nem a karakter felett vagyunk, akkor ha a kijelölõ négyzet kivan
 			 rajzolva, akkor tüntessük már el.*/
-			if(appointer != null){
+			if (appointer != null){
 				appointer.setDeletable(true);
 				appointer = null;
 			}
 		}
-		
-		for(int i=0;i<mage.getSkillCount();i++){
+				
+		for (int i = 0; i < mage.getSkillCount(); i++) {
 			if(mage.getSkills()[i] != null && (mage.getSkills()[i].isViewBuilderActivate())){
 				usingHandler = attackanimation;
 				attackanimation.setAnimationable(true);
@@ -59,7 +64,8 @@ public class MageViewBuilder extends IImageViewBuilder{
 				break;
 			}
 		}
-		if(attackanimation.getAnimationable() == false){
+		
+		if (attackanimation.getAnimationable() == false) {
 			usingHandler = animationHandler;
 		}
 		
