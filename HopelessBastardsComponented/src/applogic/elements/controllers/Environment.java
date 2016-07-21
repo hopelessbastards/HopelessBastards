@@ -1,5 +1,6 @@
 package applogic.elements.controllers;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import applogic.CursorInformationProvider;
 import applogic.GarbageCollector;
 import applogic.IGarbageCollector;
 import applogic.IViewBuilderContainer;
+import applogic.collision.Collision;
+import applogic.collision.DoublePoint;
 import applogic.elements.CharacterType;
 import applogic.elements.Entity;
 import applogic.elements.LivingObject;
@@ -42,7 +45,7 @@ public class Environment implements IEnvironment{
 	private List<LivingObject> buildings;
 	
 	private Entity player;
-	
+	private DoublePoint playerLocation;
 	private EntityCommander userAction;
 	
 	private CursorInformationProvider cursorProvider;
@@ -59,6 +62,8 @@ public class Environment implements IEnvironment{
 	
 	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider) {
 		this.garbageCollector = new GarbageCollector();
+		
+		this.playerLocation = new DoublePoint();
 		
 		this.enemyEntities = new ArrayList<Entity>();
 		this.friendlyEntities = new ArrayList<Entity>();
@@ -120,7 +125,7 @@ public class Environment implements IEnvironment{
 
 	@Override
 	public void PlayerMoved(Entity player) {
-		for(int i=0;i<tiles.size();i++){
+		/*for(int i=0;i<tiles.size();i++){
 			if(collision.entityCollideTileWithPoints(player, tiles.get(i))){
 				this.collided = true;
 				player.setX(player.getXold());
@@ -131,7 +136,26 @@ public class Environment implements IEnvironment{
 			player.setXold(player.getX());
 			player.setYold(player.getY());
 		}
-		this.collided = false;
+		this.collided = false;*/
+	
+		Collision collision = new Collision();
+		DoublePoint db = new DoublePoint((int)player.getX(), (int)player.getY());
+		Rectangle rectes = new Rectangle((int)player.getXold(),(int)player.getYold(),player.getWidth(),player.getHeight());
+		
+		/*Kell egy olyan gyorsítás, hogyha megvan az ütközés, akkor ne vizsgáljuk tovább.*/
+		for(int i = 0;i < tiles.size();i++){
+			playerLocation = collision.newLocation(rectes, tiles.get(i).getCollideArea(), db);
+			
+			if(playerLocation != null){
+				
+				player.setX(playerLocation.getX());
+				player.setY(playerLocation.getY());
+				
+				player.setXold(playerLocation.getX());
+				player.setYold(playerLocation.getY());
+				break;
+			}
+		}
 	}
 
 	@Override
