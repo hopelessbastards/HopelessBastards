@@ -1,18 +1,20 @@
 package applogic;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Random;
-
 import applogic.elements.Tile;
 import applogic.elements.TileType;
 import applogic.viewbuilder.IImageViewBuilder;
+import applogic.viewbuilder.IRectangleViewBuilder;
 import applogic.viewbuilder.TileViewBuilder;
+import applogic.viewbuilder.simpleshapes.SimpleRectangle;
 
 public class MapLoader implements IMapLoader{
 
 	@Override
-	public void loadMap(Object bitMap,Object bitTileMap,List<Tile> tiles,List<Tile> nonBlockingTile,List<IImageViewBuilder> viewBuilder) {
+	public void loadMap(Object bitMap,Object bitTileMap,List<Tile> tiles,List<Tile> nonBlockingTile,List<IImageViewBuilder> viewBuilder,List<IRectangleViewBuilder> rect) {
 		
 		Random random = new Random();
 		
@@ -54,6 +56,7 @@ public class MapLoader implements IMapLoader{
 				if(x > wallX[0] && y > wallY[0] && x < wallX[1] && y < wallY[1]){
 					nonBlockingTile.add(new Tile(x*128,y*128,128,128,0,0,0,false,TileType.GRASS));
 					viewBuilder.add(new TileViewBuilder(nonBlockingTile.get(nonBlockingTile.size()-1)));
+					
 				}else{
 					nonBlockingTile.add(new Tile(x*128,y*128,128,128,0,0,0,false,TileType.WATER));
 					viewBuilder.add(new TileViewBuilder(nonBlockingTile.get(nonBlockingTile.size()-1)));
@@ -80,6 +83,7 @@ public class MapLoader implements IMapLoader{
 		
 		tiles.add(new Tile(wallX[0]*128,wallY[0]*128,128,128,0,0,0,true,TileType.WALLCORNER));
 		viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
+		rect.add(new SimpleRectangle(wallX[0] * 128, wallY[0] * 128, 0, 0, 0, tiles.get(tiles.size()-1).getWidth(), tiles.get(tiles.size()-1).getHeight(), Color.red, true));
 		
 		tiles.add(new Tile(wallX[1]*128,wallY[0]*128,128,128,90,wallX[1]*128 + 64,wallY[0]*128 + 64,true,TileType.WALLCORNER));
 		viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
@@ -100,8 +104,15 @@ public class MapLoader implements IMapLoader{
 			}else if(wallnumber == 1){
 				tiles.add(new Tile(i*128,wallY[0]*128,128,128,270,i*128 + 64,wallY[0]*128 + 64,true,TileType.WALL2));
 			}
-			
+		
 			viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
+			if(i * 128 == 2560){
+				
+				rect.add(new SimpleRectangle(i * 128, wallY[0] * 128, 0, 0, 0, tiles.get(tiles.size()-1).getWidth(), tiles.get(tiles.size()-1).getHeight(), Color.red, true));
+				
+			}
+			
+			
 		}
 		
 		for(int i=wallY[0] + 1;i < wallY[1];i++){

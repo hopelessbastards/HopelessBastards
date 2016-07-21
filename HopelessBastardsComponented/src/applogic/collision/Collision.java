@@ -73,6 +73,7 @@ public class Collision {
 				pp[2] = lines[i].getP1();
 				pp[3] = lines[i].getP2();
 				if(lineCounter.twoLinesCollided(pp)){
+					
 					for(int k = 0;k<4;k++){
 						Rectangle rect = new Rectangle((int)eightPoints[0].getX(), (int)eightPoints[0].getY(), (int)eightPoints[1].getX() - (int)eightPoints[0].getX(), (int)eightPoints[3].getY() - (int)eightPoints[0].getY());
 						Point po = new Point((int)moverpositions[1].getX(), (int)moverpositions[1].getY());
@@ -90,7 +91,7 @@ public class Collision {
 						if(moverpositions[1].getY() > lines[i].getP1().getY()){
 							newpoint.setLocation(moverpositions[1].getX(), moverpositions[1].getY());
 						}else{
-							newpoint.setLocation(moverpositions[1].getX(), lines[i].getP1().getY());
+							newpoint.setLocation(moverpositions[1].getX(), lines[i].getP1().getY() + 1);
 						}
 				
 						return newpoint;
@@ -100,7 +101,7 @@ public class Collision {
 							newpoint.setLocation(moverpositions[1].getX(), moverpositions[1].getY());
 							
 						}else{
-							newpoint.setLocation(lines[i].getP1().getX(), moverpositions[1].getY());
+							newpoint.setLocation(lines[i].getP1().getX() - 1, moverpositions[1].getY());
 							
 						}
 						return newpoint;
@@ -109,7 +110,7 @@ public class Collision {
 						if(moverpositions[1].getX() > lines[i].getP1().getX()){
 							newpoint.setLocation(moverpositions[1].getX(), moverpositions[1].getY());
 						}else{
-							newpoint.setLocation(lines[i].getP1().getX(), moverpositions[1].getY());
+							newpoint.setLocation(lines[i].getP1().getX() + 1, moverpositions[1].getY());
 							
 						}
 						
@@ -120,7 +121,7 @@ public class Collision {
 						if(moverpositions[1].getY() < lines[i].getP1().getY()){
 							newpoint.setLocation(moverpositions[1].getX(), moverpositions[1].getY());
 						}else{
-							newpoint.setLocation(moverpositions[1].getX(), lines[i].getP1().getY());
+							newpoint.setLocation(moverpositions[1].getX(), lines[i].getP1().getY() - 1);
 						}
 						return newpoint;
 					}

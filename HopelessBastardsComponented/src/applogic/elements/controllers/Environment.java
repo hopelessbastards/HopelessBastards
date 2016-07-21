@@ -80,7 +80,7 @@ public class Environment implements IEnvironment{
 		
 		players = new ArrayList<Player>();
 		
-		players.add(new Mage(2500, 2500, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider));
+		players.add(new Mage(3500, 3048, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider));
 		//players.add(new SteveShooter(2500, 2500, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true)));
 		friendlyEntities.add(players.get(0));
 		
@@ -125,25 +125,41 @@ public class Environment implements IEnvironment{
 
 	@Override
 	public void PlayerMoved(Entity player) {
-		/*for(int i=0;i<tiles.size();i++){
-			if(collision.entityCollideTileWithPoints(player, tiles.get(i))){
-				this.collided = true;
-				player.setX(player.getXold());
-				player.setY(player.getYold());
-			}
-		}	
-		if(collided == false){
-			player.setXold(player.getX());
-			player.setYold(player.getY());
-		}
-		this.collided = false;*/
 	
 		Collision collision = new Collision();
 		DoublePoint db = new DoublePoint((int)player.getX(), (int)player.getY());
 		Rectangle rectes = new Rectangle((int)player.getXold(),(int)player.getYold(),player.getWidth(),player.getHeight());
+		List<DoublePoint> maybePoint = new ArrayList<DoublePoint>();
 		
-		/*Kell egy olyan gyorsítás, hogyha megvan az ütközés, akkor ne vizsgáljuk tovább.*/
-		for(int i = 0;i < tiles.size();i++){
+		maybePoint.add(db);
+		int maybeIndex = 0;
+		boolean finded = false;
+		boolean findFree = true;
+		
+		while(!finded){
+			findFree = true;
+			for(int i=0;i<tiles.size();i++){
+				playerLocation = collision.newLocation(rectes, tiles.get(i).getCollideArea(), maybePoint.get(maybeIndex));
+				
+				if(playerLocation != null){
+					maybePoint.add(playerLocation);
+					
+					findFree = false;
+				}
+			}
+			
+			if(findFree){
+				player.setX(maybePoint.get(maybeIndex).getX());
+				player.setY(maybePoint.get(maybeIndex).getY());	
+				player.setXold(maybePoint.get(maybeIndex).getX());
+				player.setYold(maybePoint.get(maybeIndex).getY());
+				
+				finded = true;
+			}
+			maybeIndex++;
+		}
+		
+		/*for(int i = 0;i < tiles.size();i++){
 			playerLocation = collision.newLocation(rectes, tiles.get(i).getCollideArea(), db);
 			
 			if(playerLocation != null){
@@ -153,9 +169,13 @@ public class Environment implements IEnvironment{
 				
 				player.setXold(playerLocation.getX());
 				player.setYold(playerLocation.getY());
-				break;
+				
 			}
 		}
+		
+		player.setXold(player.getX());
+		player.setYold(player.getY());*/
+		
 	}
 
 	@Override

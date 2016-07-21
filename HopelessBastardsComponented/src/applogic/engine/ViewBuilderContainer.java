@@ -75,13 +75,19 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		
 		staticviewBuilder = new ArrayList<IImageViewBuilder>();
 		viewBuilder = new ArrayList<IImageViewBuilder>();
+		
+		this.polygonBuilder = new ArrayList<IPolygonViewBuilder>();
+		this.rectangleBuilder = new ArrayList<IRectangleViewBuilder>();
+		this.ovalBuilder = new ArrayList<IOvalViewBuilder>();
+		this.lineBuilder = new ArrayList<ILineViewBuilder>();
+		this.stringBuilder = new ArrayList<IStringViewBuilder>();
 			
 		try {
 			/*A mapLoader kopmponenst használva betöltjük az összes statikus pályaelemet a memóriába.*/
 			BufferedImage bitmap = ImageIO.read(getClass().getResource("/res/" + "bitMap.png"));
 			BufferedImage tileBitMap = ImageIO.read(getClass().getResource("/res/" + "tileMap.png"));
 			this.mapLoader = new MapLoader();
-			this.mapLoader.loadMap(bitmap,tileBitMap, tiles,nonBlockingTile,notDestroyableView);
+			this.mapLoader.loadMap(bitmap,tileBitMap, tiles,nonBlockingTile,notDestroyableView,rectangleBuilder);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -91,11 +97,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		staticviewBuilder.add(new HealthBarViewBuilder(converter.getMonitorScreenManager(), this));
 		
 		
-		this.polygonBuilder = new ArrayList<IPolygonViewBuilder>();
-		this.rectangleBuilder = new ArrayList<IRectangleViewBuilder>();
-		this.ovalBuilder = new ArrayList<IOvalViewBuilder>();
-		this.lineBuilder = new ArrayList<ILineViewBuilder>();
-		this.stringBuilder = new ArrayList<IStringViewBuilder>();
+	
 		
 		this.cdTimes = new ArrayList<IStringViewBuilder>();
 		
