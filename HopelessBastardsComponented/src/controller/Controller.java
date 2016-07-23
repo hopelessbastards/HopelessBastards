@@ -15,9 +15,17 @@ import controller.events.KeyValue;
 import controller.events.KeyValueConstant;
 import controller.events.MoveWayEnum;
 import controller.events.MovedWay;
+import graphicsEngine.ICanvas;
 
 public class Controller implements IController,KeyListener,MouseMotionListener,MouseWheelListener,MouseListener{
 
+	private ICanvas canvas;
+	
+	private Point press;
+	private Point release;
+	private Point dragg;
+	private Point move;
+	
 	private MenuListener mlistener = null;
 	private GameListener glistener = null;
 	private ActivationNumber number;
@@ -28,11 +36,17 @@ public class Controller implements IController,KeyListener,MouseMotionListener,M
 	private Character characterBoxingType;
 	private String validCharacters = "0123456789qwertzuiopasdfghjklyxcvbnm,.*QWERTZUIOPASDFGHJKLYXCVBNM@";
 	
-	public Controller() {
+	public Controller(ICanvas canvas) {
+		this.canvas = canvas;
 		number = new ActivationNumber(0);
 		screen = new CursorInformation(new Point(1,2), 1, 1);
 		value = new KeyValue();
 		way = new MovedWay(MoveWayEnum.DOWN);
+		
+		press = new Point();
+		release = new Point();
+		dragg = new Point();
+		move = new Point();
 	}
 	
 	@Override
@@ -49,9 +63,11 @@ public class Controller implements IController,KeyListener,MouseMotionListener,M
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		this.screen.setLocationOnScreen(e.getLocationOnScreen());
-		this.screen.setxOnScreen(e.getXOnScreen());
-		this.screen.setyOnScreen(e.getYOnScreen());
+		press.setLocation(e.getXOnScreen() - canvas.getCanvasRectangleOnScreen().x, 
+				e.getYOnScreen() - canvas.getCanvasRectangleOnScreen().y);
+		this.screen.setLocationOnScreen(press);
+		this.screen.setxOnScreen(e.getXOnScreen() - canvas.getCanvasRectangleOnScreen().x);
+		this.screen.setyOnScreen(e.getYOnScreen() - canvas.getCanvasRectangleOnScreen().y);
 		
 		if(mlistener != null){
 			mlistener.cursorClicked(screen);
@@ -75,9 +91,11 @@ public class Controller implements IController,KeyListener,MouseMotionListener,M
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		this.screen.setLocationOnScreen(e.getLocationOnScreen());
-		this.screen.setxOnScreen(e.getXOnScreen());
-		this.screen.setyOnScreen(e.getYOnScreen());
+		dragg.setLocation(e.getXOnScreen() - canvas.getCanvasRectangleOnScreen().x, 
+				e.getYOnScreen() - canvas.getCanvasRectangleOnScreen().y);
+		this.screen.setLocationOnScreen(dragg);
+		this.screen.setxOnScreen(e.getXOnScreen() - canvas.getCanvasRectangleOnScreen().x);
+		this.screen.setyOnScreen(e.getYOnScreen() - canvas.getCanvasRectangleOnScreen().y);
 		
 		if(mlistener != null){
 			mlistener.cursorMOved(screen);
@@ -88,9 +106,11 @@ public class Controller implements IController,KeyListener,MouseMotionListener,M
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		this.screen.setLocationOnScreen(e.getLocationOnScreen());
-		this.screen.setxOnScreen(e.getXOnScreen());
-		this.screen.setyOnScreen(e.getYOnScreen());
+		move.setLocation(e.getXOnScreen() - canvas.getCanvasRectangleOnScreen().x, 
+				e.getYOnScreen() - canvas.getCanvasRectangleOnScreen().y);
+		this.screen.setLocationOnScreen(move);
+		this.screen.setxOnScreen(e.getXOnScreen()  - canvas.getCanvasRectangleOnScreen().x);
+		this.screen.setyOnScreen(e.getYOnScreen() - canvas.getCanvasRectangleOnScreen().y);
 		
 		if(mlistener != null){
 			mlistener.cursorMOved(screen);

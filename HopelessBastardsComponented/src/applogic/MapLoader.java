@@ -14,7 +14,7 @@ import applogic.viewbuilder.simpleshapes.SimpleRectangle;
 public class MapLoader implements IMapLoader{
 
 	@Override
-	public void loadMap(Object bitMap,Object bitTileMap,List<Tile> tiles,List<Tile> nonBlockingTile,List<IImageViewBuilder> viewBuilder,List<IRectangleViewBuilder> rect) {
+	public void loadMap(Object bitMap,Object bitTileMap,List<Tile> tiles,List<Tile> nonBlockingTile,List<IImageViewBuilder> viewBuilder) {
 		
 		Random random = new Random();
 		
@@ -83,7 +83,6 @@ public class MapLoader implements IMapLoader{
 		
 		tiles.add(new Tile(wallX[0]*128,wallY[0]*128,128,128,0,0,0,true,TileType.WALLCORNER));
 		viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
-		rect.add(new SimpleRectangle(wallX[0] * 128, wallY[0] * 128, 0, 0, 0, tiles.get(tiles.size()-1).getWidth(), tiles.get(tiles.size()-1).getHeight(), Color.red, true));
 		
 		tiles.add(new Tile(wallX[1]*128,wallY[0]*128,128,128,90,wallX[1]*128 + 64,wallY[0]*128 + 64,true,TileType.WALLCORNER));
 		viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
@@ -101,32 +100,52 @@ public class MapLoader implements IMapLoader{
 			
 			if(wallnumber == 0){
 				tiles.add(new Tile(i*128,wallY[0]*128,128,128,270,i*128 + 64,wallY[0]*128 + 64,true,TileType.WALL1));
-			}else if(wallnumber == 1){
+			}else{
 				tiles.add(new Tile(i*128,wallY[0]*128,128,128,270,i*128 + 64,wallY[0]*128 + 64,true,TileType.WALL2));
 			}
 		
 			viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
-			if(i * 128 == 2560){
-				
-				rect.add(new SimpleRectangle(i * 128, wallY[0] * 128, 0, 0, 0, tiles.get(tiles.size()-1).getWidth(), tiles.get(tiles.size()-1).getHeight(), Color.red, true));
-				
-			}
-			
 			
 		}
 		
 		for(int i=wallY[0] + 1;i < wallY[1];i++){
-			tiles.add(new Tile(wallX[1]*128,i*128,128,128,0,wallX[1]*128 + 64,i*128 + 64,true,TileType.WALL1));
+			wallnumber = random.nextInt(2);
+			
+			if(wallnumber == 0){
+				tiles.add(new Tile(wallX[1]*128,i*128,128,128,0,wallX[1]*128 + 64,i*128 + 64,true,TileType.WALL1));
+				
+			}else{
+				tiles.add(new Tile(wallX[1]*128,i*128,128,128,0,wallX[1]*128 + 64,i*128 + 64,true,TileType.WALL2));
+				
+			}
+			
 			viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
 		}
 		
 		for(int i=wallX[1] - 1;i > wallX[0];i--){
-			tiles.add(new Tile(i*128,wallY[1]*128,128,128,90,i*128 + 64,wallY[1]*128 + 64,true,TileType.WALL1));
+			wallnumber = random.nextInt(2);
+			if(wallnumber == 0){
+				tiles.add(new Tile(i*128,wallY[1]*128,128,128,90,i*128 + 64,wallY[1]*128 + 64,true,TileType.WALL1));
+				
+			}else{
+				tiles.add(new Tile(i*128,wallY[1]*128,128,128,90,i*128 + 64,wallY[1]*128 + 64,true,TileType.WALL2));
+				
+			}
+			
 			viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
 		}
 		
 		for(int i=wallY[1] - 1;i > wallY[0];i--){
-			tiles.add(new Tile(wallX[0]*128,i*128,128,128,180,wallX[0]*128 + 64,i*128 + 64,true,TileType.WALL1));
+			wallnumber = random.nextInt(2);
+			
+			if(wallnumber == 0){
+				tiles.add(new Tile(wallX[0]*128,i*128,128,128,180,wallX[0]*128 + 64,i*128 + 64,true,TileType.WALL1));
+				
+			}else{
+				tiles.add(new Tile(wallX[0]*128,i*128,128,128,180,wallX[0]*128 + 64,i*128 + 64,true,TileType.WALL2));
+				
+			}
+			
 			viewBuilder.add(new TileViewBuilder(tiles.get(tiles.size()-1)));
 		}
 		

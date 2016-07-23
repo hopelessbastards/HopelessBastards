@@ -44,7 +44,7 @@ public class ProviderFactory implements IProviderFactory{
 		renderer = rendererProvider.getRenderer();
 		converterProvider = new ConverterProvider(renderer);
 		converter = converterProvider.getConverter();
-		controllerProvider = new ControllerProvider((IEventHandlerer)renderer.getCanvas());
+		controllerProvider = new ControllerProvider((IEventHandlerer)renderer.getCanvas(),renderer.getCanvas());
 		controller = controllerProvider.getController();
 		appLogicProvider = new AppLogicProvider(this,soundProvider);
 		gameLoop = appLogicProvider.getGameLoop();

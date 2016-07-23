@@ -1,5 +1,6 @@
 package screenconverter;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 import applogic.viewbuilder.IImageViewBuilder;
@@ -26,4 +27,5 @@ public interface IConverter {
 	fázisban.*/
 	
 	public Size getCanvasSize();
+	public Rectangle getCanvasRectangleOnScreen();
 }

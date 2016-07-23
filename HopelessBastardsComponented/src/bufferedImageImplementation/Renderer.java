@@ -2,6 +2,7 @@ package bufferedImageImplementation;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.util.Map;
 import graphicsEngine.Animation;
 import graphicsEngine.ICanvas;
@@ -181,5 +182,10 @@ public class Renderer implements IRenderer{
 	@Override
 	public void canvasInit() {
 		canvas.init();
+	}
+
+	@Override
+	public Rectangle getCanvasRectangleOnScreen() {
+		return this.canvas.getCanvasRectangleOnScreen();
 	}
 }

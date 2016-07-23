@@ -15,8 +15,8 @@ public class WindowFrame extends JFrame implements IWindowFrame{
 	private int BoundX = 0;
 	private int BoundY = 0;
 	
-	private int WIDTH;
-	private int HEIGHT;
+	private int width;
+	private int height;
 	
 	public WindowFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,10 +27,14 @@ public class WindowFrame extends JFrame implements IWindowFrame{
 		setUndecorated(true);
 		setCursor(cursor);
 		
+		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();/*A képernyõ méretét kérem le*/
-		HEIGHT = dim.height;
-		WIDTH = dim.width;
-		setBounds(BoundX,BoundY, WIDTH, HEIGHT);
+		height = dim.height;
+		width = dim.width;
+		/*height = 500;
+		width = 500;*/
+		
+		setBounds(BoundX,BoundY, width, height);
 		
 		//pack();
 		setResizable(true);

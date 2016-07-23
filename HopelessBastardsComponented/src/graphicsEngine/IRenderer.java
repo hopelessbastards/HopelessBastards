@@ -1,5 +1,7 @@
 package graphicsEngine;
 
+import java.awt.Rectangle;
+
 import screenconverter.Size;
 import screenconverter.descriptors.ImageDescriptor;
 import screenconverter.descriptors.LineDescriptor;
@@ -20,6 +22,7 @@ public interface IRenderer {
 	public ICanvas getCanvas();
 	public void cameraMove(int x,int y);
 	public Size getCanvasSize();
+	public Rectangle getCanvasRectangleOnScreen();
 	
 	public void canvasInit();
 	public void canvasRefresh();

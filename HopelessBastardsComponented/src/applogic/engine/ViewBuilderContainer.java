@@ -87,7 +87,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 			BufferedImage bitmap = ImageIO.read(getClass().getResource("/res/" + "bitMap.png"));
 			BufferedImage tileBitMap = ImageIO.read(getClass().getResource("/res/" + "tileMap.png"));
 			this.mapLoader = new MapLoader();
-			this.mapLoader.loadMap(bitmap,tileBitMap, tiles,nonBlockingTile,notDestroyableView,rectangleBuilder);
+			this.mapLoader.loadMap(bitmap,tileBitMap, tiles,nonBlockingTile,notDestroyableView);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -96,12 +96,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		staticviewBuilder.add(new SkillBarViewBuilder(converter.getMonitorScreenManager(), this));
 		staticviewBuilder.add(new HealthBarViewBuilder(converter.getMonitorScreenManager(), this));
 		
-		
-	
-		
 		this.cdTimes = new ArrayList<IStringViewBuilder>();
-		
-		
 		
 		//stringBuilder.add(new SimpleText(500, 500,0, 0,0, "mukodj", Color.red));
 		//rectangleBuilder.add(new SimpleRectangle(600, 600, 45,600,600, 50, 50, Color.green, false));

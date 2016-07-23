@@ -221,4 +221,9 @@ public class Converter implements IConverter{
 	public void startOfPieces() {
 		renderer.canvasInit();
 	}
+
+	@Override
+	public Rectangle getCanvasRectangleOnScreen() {
+		return this.renderer.getCanvasRectangleOnScreen();
+	}
 }
