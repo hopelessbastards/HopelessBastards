@@ -13,51 +13,45 @@ import applogic.viewbuilder.IImageViewBuilder;
 import math.RotatePoints;
 
 public class Bullet extends SkillVehicle{
-	 private double x, y, angle; 
+	private double x, y, angle; 
 	   
-	 private double px,py;
+	private double px,py;
 	 
-	 private Polygon polygon = null;
-	 private Point distance;
-	 private Rectangle rect;
-	 private double velocityX;
-	 private double velocityY;
-	 private Point2D center;
+	private Polygon polygon = null;
+	private Point distance;
+	private Rectangle rect;
+	private double velocityX;
+	private double velocityY;
+	private Point2D center;
 	 
-	 private int damagingValue;
+	private int damagingValue;
 	 
 	 /*Az alábbi két változó segédváltozó*/
-		private LivingObject building;
-		private Entity entity;
+	private LivingObject building;
+	private Entity entity;
 	   
-	 private IImageViewBuilder bulletViewBuilder;
+	private IImageViewBuilder bulletViewBuilder;
 	 
-	   public boolean startShoot;
+	public boolean startShoot;
 	    
-	   private Point bulletDamagedCenterPoint = new Point();
-	   //private Tile t;
-	   
-	   private Point[] pointHelper;
+	private Point bulletDamagedCenterPoint = new Point();
+	private Point[] pointHelper;
 	 
-	 
-	   private int bulletStartingX;
-	   private int bulletStartingY;
+	private int bulletStartingX;
+	private int bulletStartingY;
 	   
-	   private Entity bulletOwner;
+	private Entity bulletOwner;
 	   
 	   public Bullet(double x, double y, double angle, int width, int height,Entity player,IViewBuilderContainer container) {
-		   super((int)x, (int)y,width,height, angle,0,0, player,container);
+		  super((int)x, (int)y,width,height, angle,0,0, player,container);
 	      this.x = x;
 	      this.y = y;
 	      
 	      this.bulletOwner = player;
-			setEnemyBuildings(bulletOwner.getEnemyBuildings());
-			setEnemyEntities(bulletOwner.getEnemyEntities());
-			setEnemyPlayers(bulletOwner.getEnemyPlayers());
-	      
-		this.bulletStartingX = (int)x + bulletOwner.getWidth()/2;
-		this.bulletStartingY = (int)y + bulletOwner.getHeight()/2;
-	      
+	      setEnemyBuildings(bulletOwner.getEnemyBuildings());
+	      setEnemyEntities(bulletOwner.getEnemyEntities());
+	      setEnemyPlayers(bulletOwner.getEnemyPlayers());
+	    
 	      this.damagingValue = 50;
 	      
 	      pointHelper = new Point[4];
@@ -99,7 +93,7 @@ public class Bullet extends SkillVehicle{
 	      
 	     this.px = xx[0];
 	     this.py = yy[0];
-	      
+	     
 	     /*A polygon csúcspontjai*/
 	    /*  int[] polx = polygon.xpoints;
 	      int[] poly = polygon.ypoints;*/
@@ -122,6 +116,9 @@ public class Bullet extends SkillVehicle{
 	      
 	      this.x=center.getX() - getWidth()/2;
 	      this.y=center.getY() - getHeight()/2;
+	     
+	      this.bulletStartingX = (int)center.getX();
+		  this.bulletStartingY = (int)center.getY();
 	      
 	      /*Beállítok egy írányegyenest, amit követni fog a golyó.Ezt az irányvektort elforgatom adott szöggel.*/
 	      px += Math.cos(Math.toRadians(angle))*6000;
@@ -228,7 +225,7 @@ public class Bullet extends SkillVehicle{
 		   
 		   double distance = Math.sqrt((distx*distx)+(disty*disty));
 		   
-		   if(distance > 500){
+		   if(distance > 400){
 			   setDeletable(true);
 		   }
 		   
@@ -346,7 +343,9 @@ public class Bullet extends SkillVehicle{
 			}
 			area /= 2.0;
 			return (area);
-		}
+	   }
+	   
+	   
 	   public  Point2D centerOfMass(Point2D[] polyPoints) {
 			double cx = 0, cy = 0;
 			double area = area(polyPoints);

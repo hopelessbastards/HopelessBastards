@@ -26,9 +26,13 @@ public abstract class Entity extends LivingObject{
 	private double velocityX = 0;/*velocity- sebesség*/
     private double velocityY = 0;
     
-    private int movementSpeed = 6;
+    private double movementSpeed = 1;
+    private double backMovementSpeed = 2;
     
-    private int turningSpeed = 2;/*milyen mértékben forduljon(360 mennyivel módosuljon)*/
+    private int maxMovementSpeed = 6;
+    
+    private double turningSpeed = 2;/*milyen mértékben forduljon(360 mennyivel módosuljon)*/
+    
     
 	private AbstractSkill[] skills;/*hogy hány skillje van konfigfileból kapja.*/
     
@@ -138,21 +142,18 @@ public abstract class Entity extends LivingObject{
 	}
 	
 	public void moveForward(){
-		// x += Math.cos(Math.toRadians(angle)) * sx;
-		 
+		
+		
 		setX(getX() + Math.cos( Math.toRadians(getAngle())) * this.movementSpeed);
-		// y += Math.sin(Math.toRadians(angle)) * sy;
 				 
 		setY(getY() + Math.sin(Math.toRadians(getAngle())) * this.movementSpeed);
 	}
 	
 	public void moveBack() {
-		// x += Math.cos(Math.toRadians(angle)) * sx;
 		 
-		setX(getX() - Math.cos( Math.toRadians(getAngle())) * (this.movementSpeed/2));
-		// y += Math.sin(Math.toRadians(angle)) * sy;
+		setX(getX() - Math.cos( Math.toRadians(getAngle())) * (this.backMovementSpeed));
 				 
-		setY(getY() - Math.sin(Math.toRadians(getAngle())) * (this.movementSpeed/2));	
+		setY(getY() - Math.sin(Math.toRadians(getAngle())) * (this.backMovementSpeed));	
 	}
 
 	public void turnLeft() {
@@ -245,14 +246,14 @@ public abstract class Entity extends LivingObject{
 		this.skills = skills;
 	}
 
-	public int getTurningSpeed() {
+	public double getTurningSpeed() {
 		return turningSpeed;
 	}
 	
-	public void setTurningSpeed(int turningSpeed) {
+	public void setTurningSpeed(double turningSpeed) {
 		this.turningSpeed = turningSpeed;
 	}
-		
+
 	public double getXold() {
 		return xold;
 	}
@@ -293,11 +294,11 @@ public abstract class Entity extends LivingObject{
 		this.velocityY = velocityY;
 	}
 	
-	public int getMovementSpeed() {
+	public double getMovementSpeed() {
 		return movementSpeed;
 	}
 	
-	public void setMovementSpeed(int movementSpeed) {
+	public void setMovementSpeed(double movementSpeed) {
 		this.movementSpeed = movementSpeed;
 	}
 	
@@ -430,6 +431,22 @@ public abstract class Entity extends LivingObject{
 
 	public void setSoundProvider(ISoundProvider soundProvider) {
 		this.soundProvider = soundProvider;
+	}
+
+	public double getBackMovementSpeed() {
+		return backMovementSpeed;
+	}
+
+	public void setBackMovementSpeed(double backMovementSpeed) {
+		this.backMovementSpeed = backMovementSpeed;
+	}
+
+	public int getMaxMovementSpeed() {
+		return maxMovementSpeed;
+	}
+
+	public void setMaxMovementSpeed(int maxMovementSpeed) {
+		this.maxMovementSpeed = maxMovementSpeed;
 	}	
 	
 	

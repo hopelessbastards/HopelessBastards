@@ -3,6 +3,7 @@ package applogic.collision;
 public class HomogeneusOperations {
 	
 	private HomogeneusCoordinate line;
+	private DoublePoint commonPoint;
 	
 	public HomogeneusOperations() {
 		super();	
@@ -23,8 +24,8 @@ public class HomogeneusOperations {
 		HomogeneusCoordinate b = new HomogeneusCoordinate(points[2], points[3]);
 		
 		HomogeneusCoordinate end = getHomogeneusMultiplication(a, b);
-		DoublePoint p = new DoublePoint((int)(end.getI()/end.getK()), (int)(end.getJ()/end.getK()));
+		commonPoint = new DoublePoint((int)(end.getI()/end.getK()), (int)(end.getJ()/end.getK()));
 		
-		return p;
+		return commonPoint;
 	}
 }

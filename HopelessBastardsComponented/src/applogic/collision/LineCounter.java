@@ -1,33 +1,32 @@
 package applogic.collision;
 
-
-public class LineCounter {
+public class LineCounter implements ILineCounter{
 	private HomogeneusOperations op;
 
-	public boolean twoLinesCollided(DoublePoint[] p){
+	public boolean twoLinesCollided(DoublePoint[] twoLines){
 		op = new HomogeneusOperations();
 		
-		DoublePoint doublePoints = op.twoLinesCommonPoint(p);
+		DoublePoint doublePoints = op.twoLinesCommonPoint(twoLines);
 		
 		int minx = 0;
 		int maxx = 0;
 		int miny = 0;
 		int maxy = 0;
 		
-		for(int i=0;i<p.length - 2;i++){
-			if(p[i].getX() < p[minx].getX()){
+		for(int i=0;i<twoLines.length - 2;i++){
+			if(twoLines[i].getX() < twoLines[minx].getX()){
 				minx = i;
 			}
 			
-			if(p[i].getX() > p[maxx].getX()){
+			if(twoLines[i].getX() > twoLines[maxx].getX()){
 				maxx = i;
 			}
 			
-			if(p[i].getY() < p[miny].getY()){
+			if(twoLines[i].getY() < twoLines[miny].getY()){
 				miny = i;
 			}
 			
-			if(p[i].getY() > p[maxy].getY()){
+			if(twoLines[i].getY() > twoLines[maxy].getY()){
 				maxy = i;
 			}
 		}
@@ -37,28 +36,28 @@ public class LineCounter {
 		int miny2 = 2;
 		int maxy2 = 2;
 		
-		for(int i=2;i<p.length;i++){
-			if(p[i].getX() < p[minx2].getX()){
+		for(int i=2;i<twoLines.length;i++){
+			if(twoLines[i].getX() < twoLines[minx2].getX()){
 				minx2 = i;
 			}
 			
-			if(p[i].getX() > p[maxx2].getX()){
+			if(twoLines[i].getX() > twoLines[maxx2].getX()){
 				maxx2 = i;
 			}
 			
-			if(p[i].getY() < p[miny2].getY()){
+			if(twoLines[i].getY() < twoLines[miny2].getY()){
 				miny2 = i;
 			}
 			
-			if(p[i].getY() > p[maxy2].getY()){
+			if(twoLines[i].getY() > twoLines[maxy2].getY()){
 				maxy2 = i;
 			}
 		}
 		
-		if(doublePoints.getX() >= p[minx].getX() && doublePoints.getX() <= p[maxx].getX() && 
-				doublePoints.getY() >= p[miny].getY() && doublePoints.getY() <= p[maxy].getY() &&
-				doublePoints.getX() >= p[minx2].getX() && doublePoints.getX() <= p[maxx2].getX() && 
-				doublePoints.getY() >= p[miny2].getY() && doublePoints.getY() <= p[maxy2].getY()
+		if(doublePoints.getX() >= twoLines[minx].getX() && doublePoints.getX() <= twoLines[maxx].getX() && 
+				doublePoints.getY() >= twoLines[miny].getY() && doublePoints.getY() <= twoLines[maxy].getY() &&
+				doublePoints.getX() >= twoLines[minx2].getX() && doublePoints.getX() <= twoLines[maxx2].getX() && 
+				doublePoints.getY() >= twoLines[miny2].getY() && doublePoints.getY() <= twoLines[maxy2].getY()
 				){
 			
 			return true;

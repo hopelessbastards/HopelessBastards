@@ -3,7 +3,7 @@ package applogic.collision;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class Collision {
+public class Collision implements ICollision{
 	
 	private DoublePoint[] eightPoints;
 	
@@ -12,9 +12,17 @@ public class Collision {
 	
 	private DoublePoint[] moverpositions;
 	
-	private LineCounter lineCounter;
+	private ILineCounter lineCounter;
+	
+	Line[] line = new Line[2];
+
+	private Line[] lines;
+
+	private DoublePoint[] collidedPoints;
 	
 	public Collision() {
+		
+		collidedPoints = new DoublePoint[4];
 		
 		this.lineCounter = new LineCounter();
 		moverpositions = new DoublePoint[2];
@@ -37,6 +45,7 @@ public class Collision {
 		moverLine = new Line(null, null,null);
 	}
 	
+	@Override
 	public DoublePoint newLocation(Rectangle mover,Rectangle staticElement, DoublePoint moverDestination){
 		
 		eightPoints[0].setLocation(staticElement.x - mover.width, staticElement.y - mover.height);/*balfelsõ*/
@@ -57,22 +66,22 @@ public class Collision {
 		
 		
 		/*Azok a vonalak, melyek az ütközésnél.*/
-		Line[] lines = mustCheckLines();
+		lines = mustCheckLines();
 		
 		for(int i=0;i<lines.length;i++){
 			
 			if(lines[i] != null){
-				DoublePoint[] pp = new DoublePoint[4];
-				for(int j=0;j<pp.length;j++){
-					pp[j] = new DoublePoint();
+				
+				for(int j=0;j<collidedPoints.length;j++){
+					collidedPoints[j] = new DoublePoint();
 				}
 				
-				pp[0] = moverpositions[0];
-				pp[1] = moverpositions[1];
+				collidedPoints[0] = moverpositions[0];
+				collidedPoints[1] = moverpositions[1];
 				
-				pp[2] = lines[i].getP1();
-				pp[3] = lines[i].getP2();
-				if(lineCounter.twoLinesCollided(pp)){
+				collidedPoints[2] = lines[i].getP1();
+				collidedPoints[3] = lines[i].getP2();
+				if(lineCounter.twoLinesCollided(collidedPoints)){
 					
 					for(int k = 0;k<4;k++){
 						Rectangle rect = new Rectangle((int)eightPoints[0].getX(), (int)eightPoints[0].getY(), (int)eightPoints[1].getX() - (int)eightPoints[0].getX(), (int)eightPoints[3].getY() - (int)eightPoints[0].getY());
@@ -110,8 +119,7 @@ public class Collision {
 						if(moverpositions[1].getX() > lines[i].getP1().getX()){
 							newpoint.setLocation(moverpositions[1].getX(), moverpositions[1].getY());
 						}else{
-							newpoint.setLocation(lines[i].getP1().getX() + 1, moverpositions[1].getY());
-							
+							newpoint.setLocation(lines[i].getP1().getX() + 1, moverpositions[1].getY());		
 						}
 						
 						return newpoint;
@@ -124,19 +132,18 @@ public class Collision {
 							newpoint.setLocation(moverpositions[1].getX(), lines[i].getP1().getY() - 1);
 						}
 						return newpoint;
-					}
-					
+					}	
 				}
-				
 			}
 		}
-		//System.out.println("elért nullig");
+		
 		/*Ha nem volt ütközés, akkor térjünk vissza azzal a pozícióval, ahova menni akartunk.*/
 		return null;
 	}
 	
-	private Line[] mustCheckLines(){
-		Line[] line = new Line[2];
+	@Override
+	public Line[] mustCheckLines(){
+		
 		
 		if(moverpositions[0].getX() >= eightPoints[0].getX() && moverpositions[0].getX() <= eightPoints[1].getX() && moverpositions[0].getY() <= eightPoints[1].getY()){
 			line[0] = staticLines[3];

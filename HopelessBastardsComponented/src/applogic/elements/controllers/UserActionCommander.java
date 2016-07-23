@@ -20,10 +20,20 @@ public class UserActionCommander extends EntityCommander{
 		if(!getControlledEntity().isStunned()){
 			/*Csak akkor csinálhat bármit is a karakter, ha az nincs lestunnolva.*/
 			if(isUp()){
+				if(getControlledEntity().getMovementSpeed() < getControlledEntity().getMaxMovementSpeed()){
+					getControlledEntity().setMovementSpeed(getControlledEntity().getMovementSpeed() + 0.1);
+				}
 				getControlledEntity().moveForward();
 				getControlledEntity().setMoving(true);
 				getEnvironment().PlayerMoved(getControlledEntity());
 				
+			}else if(getControlledEntity().getMovementSpeed() > 1){
+				/*Az else ág azért kell, mertha nemnyomja a gombot a player, mozogni a lassulás
+				 végett azért még kell*/
+				getControlledEntity().setMovementSpeed(getControlledEntity().getMovementSpeed() - 0.1);
+				getControlledEntity().moveForward();
+				getControlledEntity().setMoving(true);
+				getEnvironment().PlayerMoved(getControlledEntity());
 			}
 			
 			if(isDown()){
