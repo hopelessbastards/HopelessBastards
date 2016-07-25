@@ -42,6 +42,8 @@ public class Environment implements IEnvironment{
 	private List<LivingObject> buildings;
 	
 	private Entity player;
+	private PlayerRectangle playerRectangle;
+	
 	private DoublePoint playerLocation;
 	private EntityCommander userAction;
 	
@@ -60,7 +62,8 @@ public class Environment implements IEnvironment{
 	
 	private IEntityCreator entityCreator;
 	
-	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider) {
+	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider, PlayerRectangle playerRectangle) {
+		this.playerRectangle = playerRectangle;
 		
 		this.selectedCharacterType = CharacterType.MAGE;
 		this.garbageCollector = new GarbageCollector();
@@ -86,15 +89,15 @@ public class Environment implements IEnvironment{
 		
 		this.entityCreator = new EntityCreator(this, soundProvider, container);
 		
-		player = new Mage(3500, 3048, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider);
-		//players.add(new SteveShooter(2500, 2500, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true)));
-		friendlyEntities.add(player);
+		/*player = new Mage(3500, 3048, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider);
+		
+		friendlyEntities.add(player);*/
 		
 		userAction = new UserActionCommander(this);
 		
-		player.setCommander(userAction);
+		/*player.setCommander(userAction);
 		
-		player.setControlledByPlayer(true);
+		player.setControlledByPlayer(true);*/
 		
 		this.container = container;
 	
@@ -102,27 +105,28 @@ public class Environment implements IEnvironment{
 		
 		this.stupidZombieCommander = new StupidZombieAI(this);
 		
-		enemyEntities.add(new Zombie(3000, 3000, 0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		/*enemyEntities.add(new Zombie(3000, 3000, 0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		
 		this.stupidZombieCommander.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
 		enemyEntities.get(enemyEntities.size()-1).setCommander(stupidZombieCommander);
-		enemyEntities.get(enemyEntities.size()-1).setSelectedEntity(player);
+		enemyEntities.get(enemyEntities.size()-1).setSelectedEntity(player);*/
 		
 		/*Kit kövessen a kamera*/
 		//this.container.setPlayer(enemyEntities.get(enemyEntities.size() - 1));
-		this.container.setPlayer(player);
 		
-		this.cursorProvider = new CursorInformationProvider(player,this.converter);
+		
+		
+		this.cursorProvider = new CursorInformationProvider(playerRectangle,this.converter);
 		
 		this.container.setCursor(cursorProvider);
 		
-		userAction.setControlledEntity(player);
+		
 		
 		this.collision = new Collision();
 		
-		enemyPlayers.add(new SteveShooter(3000, 3000, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		//enemyPlayers.add(new SteveShooter(3000, 3000, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		//enemyPlayers.add(new Mage(2500, 2500, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this));
-		enemyPlayers.get(enemyPlayers.size() - 1).setCommander(new DoNothingCommander());
+		//enemyPlayers.get(enemyPlayers.size() - 1).setCommander(new DoNothingCommander());
 		
 		buildings.add(new BlueBase(2000, 2000, 297, 297, 0, container));
 		buildings.add(new RedBase(3500, 3000, 297, 234, 0, container));
@@ -170,7 +174,10 @@ public class Environment implements IEnvironment{
 	public void tick(double appTime) {
 		cursorProvider.tick(appTime);
 		
-		player.tick(appTime);
+		if(player != null){
+			player.tick(appTime);
+		}
+		
 		for(int i=0;i<enemyEntities.size();i++){
 			enemyEntities.get(i).tick(appTime);
 		}
@@ -236,7 +243,8 @@ public class Environment implements IEnvironment{
 	public void setPlayer(Entity player) {
 		this.player = player;
 		container.setPlayer(player);
-		cursorProvider.setCenterObject(player);
+		playerRectangle.setCenterObject(player);
+		cursorProvider.setPlayerRectangle(playerRectangle);
 		this.player.setControlledByPlayer(true);
 		
 	}
@@ -263,27 +271,43 @@ public class Environment implements IEnvironment{
 
 	@Override
 	public void makePlayer(int x, int y, String networkid, String characterType) {
-		this.player = entityCreator.createEntity(x, y, networkid, characterType);
+		this.player = entityCreator.createEntity(x, y, networkid, characterType, true);
+		
+		player.setCommander(userAction);
+		
+		player.setControlledByPlayer(true);
+		
+		userAction.setControlledEntity(player);
+		
+		this.container.setPlayer(player);
+		
+		userAction.setControlledEntity(player);
+		
+		playerRectangle.setCenterObject(player);
 	}
 
 	@Override
 	public void makeEnemyPlayer(int x, int y, String networkid, String characterType) {
-		enemyPlayers.add(entityCreator.createEntity(x, y, networkid, characterType));
+		enemyPlayers.add(entityCreator.createEntity(x, y, networkid, characterType, false));
+		enemyPlayers.get(enemyPlayers.size() - 1).setCommander(new DoNothingCommander());
 	}
 
 	@Override
 	public void makeEnemyEntity(int x, int y, String networkid, String characterType) {
-		enemyEntities.add(entityCreator.createEntity(x, y, networkid, characterType));
+		enemyEntities.add(entityCreator.createEntity(x, y, networkid, characterType, false));
+		enemyEntities.get(enemyEntities.size() - 1).setCommander(new DoNothingCommander());
 	}
 
 	@Override
 	public void makeFriendlyPlayer(int x, int y, String networkid, String characterType) {
-		friendlyPlayers.add(entityCreator.createEntity(x, y, networkid, characterType));
+		friendlyPlayers.add(entityCreator.createEntity(x, y, networkid, characterType, true));
+		friendlyPlayers.get(friendlyPlayers.size() - 1).setCommander(new DoNothingCommander());
 	}
 
 	@Override
 	public void makeFriendlyEntity(int x, int y, String networkid, String characterType) {
-		friendlyEntities.add(entityCreator.createEntity(x, y, networkid, characterType));
+		friendlyEntities.add(entityCreator.createEntity(x, y, networkid, characterType, true));
+		friendlyEntities.get(friendlyEntities.size() - 1).setCommander(new DoNothingCommander());
 	}
 
 	@Override
@@ -294,5 +318,10 @@ public class Environment implements IEnvironment{
 	@Override
 	public void setSelectedCharacterType(CharacterType characterType) {
 		this.selectedCharacterType = characterType;
+	}
+
+	@Override
+	public PlayerRectangle getPlayerRectangle() {
+		return this.playerRectangle;
 	}	
 }

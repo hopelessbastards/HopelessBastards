@@ -23,6 +23,8 @@ public class MageViewBuilder extends IImageViewBuilder{
 	/*Ez a piros négyzet, ami a karakterek felett jelenik meg, ha az egeret feléjük húzzák.*/
 	private IRectangleViewBuilder appointer;
 	
+	private IRectangleViewBuilder healthBar;
+	
 	public MageViewBuilder(Mage mage,IViewBuilderContainer container) {
 		this.container = container;
 		
@@ -32,8 +34,14 @@ public class MageViewBuilder extends IImageViewBuilder{
 		animationHandler = new AnimationHandler(60, 2,true,"mage");
 		this.attackanimation = new AnimationHandler(80, 1, false,"mageattack");
 		usingHandler = animationHandler;
-		container.getRectangleBuilder().add(new HealtBarRectangle(mage));
-		
+		this.healthBar = new HealtBarRectangle(mage);
+		container.getRectangleBuilder().add(healthBar);
+	}
+	
+	@Override
+	public void setDeletable(boolean deletable) {
+		super.setDeletable(deletable);
+		healthBar.setDeletable(deletable);
 	}
 	
 	/**

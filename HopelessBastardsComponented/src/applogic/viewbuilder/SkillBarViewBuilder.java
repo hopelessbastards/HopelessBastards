@@ -28,10 +28,13 @@ public class SkillBarViewBuilder extends IImageViewBuilder{
 	@Override
 	public ImageDescriptor[] getImageDescriptor() {
 		
+		if(container.getPlayer() != null){
 			/*Itt lekérdezi a monitorscreenmanager komponenstõl, hogy hova is kellene raknia a skillbart.*/
 			this.barPoint = this.monitorScreenManager.getSkillBarLocation((int)container.getPlayer().getX() + container.getPlayer().getWidth()/2,(int)container.getPlayer().getY() + container.getPlayer().getHeight()/2);
 			describers[0].setX(barPoint.x);
 			describers[0].setY(barPoint.y);
+		}
+			
 						
 		return this.describers;
 	}

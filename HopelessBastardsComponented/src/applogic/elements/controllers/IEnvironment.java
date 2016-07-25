@@ -20,6 +20,7 @@ public interface IEnvironment {
 	public List<SkillVehicle> getSkillVehicles();
 	public EntityCommander getUserAction();
 	public Entity getPlayer();
+	public PlayerRectangle getPlayerRectangle();
 	public void setPlayer(Entity player);
 	public CursorInformationProvider getCursorInformationProvider();
 	public CharacterType getSelectedCharacterType();

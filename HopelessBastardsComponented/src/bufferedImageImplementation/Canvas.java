@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+
+import config.ConfigDataProvider;
 import controller.Controller;
 import controller.IController;
 import controller.IEventHandlerer;
@@ -21,8 +23,8 @@ public class Canvas extends java.awt.Canvas implements ICanvas,IEventHandlerer{
 	private Graphics g;
 	
 	/*Canvas location on the screen.*/
-	private int BoundX = 100;
-	private int BoundY = 100;
+	private int BoundX = 0;
+	private int BoundY = 0;
 	
 	private Graphics2D g2d;
 	
@@ -31,14 +33,19 @@ public class Canvas extends java.awt.Canvas implements ICanvas,IEventHandlerer{
 	private Size canvasSize;
 	private Rectangle rectangleOnScreen;
 	
+	private ConfigDataProvider data;
+	
 	public Canvas(int width,int height,boolean fullScreenMode) {
+		data = new ConfigDataProvider();
+		
 		this.rectangleOnScreen = new Rectangle();
 		
 		Dimension dim;
 		if(fullScreenMode){
 			dim = Toolkit.getDefaultToolkit().getScreenSize();/*A képernyõ méretét kérem le*/
 			//dim = new Dimension(dim.width,dim.height);
-			dim = new Dimension(500,500);
+			dim = new Dimension(data.getScreenWidth(),data.getScreenHeight());
+			//dim = new Dimension(700,700);
 		}else{
 			dim = new Dimension(WIDTH,HEIGHT);
 		}
@@ -49,7 +56,10 @@ public class Canvas extends java.awt.Canvas implements ICanvas,IEventHandlerer{
 		setPreferredSize(dim);
 		setMaximumSize(dim);
 		setMinimumSize(dim);
-		System.out.println(dim.getWidth());
+		
+		BoundX = data.getScreenX();
+		BoundY = data.getScreenY();
+		
 		setBounds(BoundX, BoundY, (int)dim.getWidth(), (int)dim.getHeight());
 	}
 	

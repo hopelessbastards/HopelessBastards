@@ -57,7 +57,7 @@ public class MageSmokeTeleport extends AbstractSkill{
 	}
 
 	@Override
-	public void activateSkillByServer() {
+	public void activateSkillByServer(double appTime) {
 		
 	}
 

@@ -15,8 +15,8 @@ public class GameStateContainer extends AbstractGameStateContainer{
 		 és továbbadni lejebb, mert ebben van benne a logikai-fizikai sound resource összerendelés.*/
 
 		/*Kezdéskor ez legyen a gamestate.*/
-		//setActualGameState(new Engine(converter));
-		setActualGameState(new Login(converter,getSoundProvider()));
+		setActualGameState(new Engine(converter,getSoundProvider()));
+		//setActualGameState(new Login(converter,getSoundProvider()));
 		/*Az alábbiakban a GameStatenkat átadjuk a controllernek, hogy ez lesz az esemény
 		 figyelõ osztályom.*/
 		if(getActualGameState().getOwnGameStateType() == GameStateEnum.GAME){

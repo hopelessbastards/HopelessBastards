@@ -2,6 +2,7 @@ package applogic;
 
 import java.awt.Point;
 import applogic.elements.BasicElement;
+import applogic.elements.controllers.PlayerRectangle;
 import screenconverter.IConverter;;;
 
 public class CursorInformationProvider {
@@ -18,24 +19,30 @@ public class CursorInformationProvider {
 	
 	/*Ez az objektum az , ami a képernyõ közepén van, ehhez igazodik a kamerától kezdve az egér helyzete,
 	 és még sok más stb..*/
-	private BasicElement centerObject;
+	private PlayerRectangle playerRectangle;
 	
 	private IConverter converter;
 	
-	public CursorInformationProvider(BasicElement centerObject,IConverter converter) {
-		this.centerObject = centerObject;
+	public CursorInformationProvider(PlayerRectangle playerRectangle,IConverter converter) {
+		this.playerRectangle = playerRectangle;
 		this.mouse = new Point(0,0);
 		this.locationOnScreen = new Point(0,0);
 		this.converter = converter;
 	}	
 
-	public BasicElement getCenterObject() {
-		return centerObject;
+	
+
+	public PlayerRectangle getPlayerRectangle() {
+		return playerRectangle;
 	}
 
-	public void setCenterObject(BasicElement centerObject) {
-		this.centerObject = centerObject;
+
+
+	public void setPlayerRectangle(PlayerRectangle playerRectangle) {
+		this.playerRectangle = playerRectangle;
 	}
+
+
 
 	public Point getMouse() {
 		return mouse;
@@ -81,11 +88,11 @@ public class CursorInformationProvider {
 	}
 	
 	public void tick(double appTime){
-		if(centerObject == null){
+		if(playerRectangle == null){
 			this.mouse.setLocation(this.locationOnScreen.getX(),this.locationOnScreen.getY());
 		}else{
-			this.mouse.setLocation(this.locationOnScreen.getX() + (centerObject.getX() + centerObject.getWidth()/2 - converter.getCanvasSize().getWIDTH()/2) ,
-					this.locationOnScreen.getY() + (centerObject.getY() + (centerObject.getHeight() / 2) - converter.getCanvasSize().getHEIGHT()/2 ));
+			this.mouse.setLocation(this.locationOnScreen.getX() + (playerRectangle.getX() + playerRectangle.getWidth()/2 - converter.getCanvasSize().getWIDTH()/2) ,
+					this.locationOnScreen.getY() + (playerRectangle.getY() + (playerRectangle.getHeight() / 2) - converter.getCanvasSize().getHEIGHT()/2 ));
 		}
 	}
 

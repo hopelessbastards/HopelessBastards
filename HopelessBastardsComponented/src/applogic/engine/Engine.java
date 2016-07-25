@@ -1,5 +1,6 @@
 package applogic.engine;
 
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +15,21 @@ import applogic.elements.Player;
 import applogic.elements.Tile;
 import applogic.elements.controllers.Environment;
 import applogic.elements.controllers.IEnvironment;
+import applogic.elements.controllers.PlayerRectangle;
 import controller.events.ActivationNumber;
 import controller.events.CursorInformation;
 import controller.events.KeyValue;
 import controller.events.KeyValueConstant;
 import controller.events.MoveWayEnum;
 import controller.events.MovedWay;
+import io.socket.client.Socket;
+import network.Connector;
+import network.IConnector;
+import network.INetworkProvider;
+import network.INetworkSetup;
+import network.IWorldUpdater;
+import network.NetworkSetup;
+import network.WorldUpdater;
 import screenconverter.IConverter;
 import soundapi.ISoundProvider;
 
@@ -34,18 +44,34 @@ public class Engine extends GameState{
 	mert ezeken át lehet gyalogolni, ilyen a talajkõzet és stb...*/
 	
 	private Player player;
+	private PlayerRectangle playerRectangle;
 	
 	private IGarbageCollector garbageCollector;
 	private IEnvironment environment;
 	private CursorInformationProvider cursorProvider;
 	
+	private IConnector networkConnector;
+	private INetworkSetup networkSetup;
+	private IWorldUpdater worldUpdater;
+	
+	private double lastUpdateTime;
+	
 	public Engine(IConverter converter,ISoundProvider soundProvider) {
 		super(soundProvider);
+		networkConnector = new Connector();
+		networkConnector.connect("asd");
+		
+		this.playerRectangle = new PlayerRectangle();
+		
 		setNextGameState(GameStateEnum.GAME);
 		this.converter  = converter;
 		this.garbageCollector = new GarbageCollector();
-		viewBuilderContainer = new ViewBuilderContainer(tiles, nonBlockingTile, this.converter, player,garbageCollector);
-		this.environment = new Environment(tiles,viewBuilderContainer,this.converter,soundProvider);
+		viewBuilderContainer = new ViewBuilderContainer(tiles, nonBlockingTile, this.converter, player, playerRectangle, garbageCollector);
+		this.environment = new Environment(tiles,viewBuilderContainer,this.converter,soundProvider, playerRectangle);
+		
+		networkSetup = new NetworkSetup((Socket)networkConnector.getLivingConnection(), environment);
+		networkSetup.setupNetwork();
+		worldUpdater = new WorldUpdater((Socket)networkConnector.getLivingConnection());
 		
 		this.cursorProvider = this.environment.getCursorInformationProvider();
 		
@@ -157,6 +183,11 @@ public class Engine extends GameState{
 				players.get(i).tick();
 			}*/
 			environment.tick(appTime);
+			
+			if(lastUpdateTime + 0.1 <= appTime){
+				worldUpdater.updateServer(environment);
+				lastUpdateTime = appTime;
+			}
 
 			return null;
 		}else{

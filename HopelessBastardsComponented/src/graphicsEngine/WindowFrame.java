@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import bufferedImageImplementation.Canvas;
+import config.ConfigDataProvider;
 
 import javax.swing.JButton;
 
@@ -18,7 +19,11 @@ public class WindowFrame extends JFrame implements IWindowFrame{
 	private int width;
 	private int height;
 	
+	private ConfigDataProvider data;
+	
 	public WindowFrame() {
+		data = new ConfigDataProvider();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		/*Saját egérkurzor beállítása a framehez.*/
@@ -29,12 +34,17 @@ public class WindowFrame extends JFrame implements IWindowFrame{
 		
 		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();/*A képernyõ méretét kérem le*/
-		height = dim.height;
-		width = dim.width;
-		/*height = 500;
-		width = 500;*/
+		/*width = dim.width;
+		height = dim.height;*/
+		width = data.getScreenWidth();
+		height = data.getScreenHeight();
+		/*width = 700;
+		height = 700;*/
 		
-		setBounds(BoundX,BoundY, width, height);
+		BoundX = data.getScreenX();
+		BoundY = data.getScreenY();
+		
+		setBounds(BoundX, BoundY, width, height);
 		
 		//pack();
 		setResizable(true);

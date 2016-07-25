@@ -21,11 +21,11 @@ public class EntityCreator implements IEntityCreator{
 	}
 
 	@Override
-	public Entity createEntity(int x, int y, String networkid, String characterType) {
+	public Entity createEntity(int x, int y, String networkid, String characterType, boolean friendOfThisPlayer) {
 		if(characterType.equals("MAGE")){
-			return new Mage(x, y, 0, 400, 1000, 300, 1000, networkid, CharacterType.MAGE, 7, container, environment, new EnemyAndFriendlyEntityProvider(environment,false),this.soundProvider);
+			return new Mage(x, y, 1000, 1000, 1000, 1000, networkid, CharacterType.MAGE, 7, container, environment, new EnemyAndFriendlyEntityProvider(environment,friendOfThisPlayer),this.soundProvider);
 		}else if(characterType.equals("STEVE")){
-			return new SteveShooter(x, y, 0, 400, 1000, 300, 1000, networkid, CharacterType.STEVE, 7, container, environment, new EnemyAndFriendlyEntityProvider(environment,false),this.soundProvider);
+			return new SteveShooter(x, y, 1000, 1000, 1000, 1000, networkid, CharacterType.STEVE, 7, container, environment, new EnemyAndFriendlyEntityProvider(environment,friendOfThisPlayer),this.soundProvider);
 		}
 		return null;
 	}

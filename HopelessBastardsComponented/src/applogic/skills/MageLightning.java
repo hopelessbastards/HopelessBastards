@@ -24,18 +24,6 @@ public class MageLightning extends AbstractSkill{
 	 
 	 private Point[] collideAreaPoints;
 	   
-	   /*segédadattagok, a memória tartalékolása miatt*/
-		/*private Player enemy;
-		private Entity enem;
-		private Player ene;
-		private Entity en;*/
-	
-	/*public MageLightning(Player player) {
-		super(player);
-		this.cdtime = 10;
-		boltSong = new Sound("/lightning.wav");
-	}*/
-	   
 	 public MageLightning(Entity skillOwner,IEnvironment environment,IViewBuilderContainer container,int skillnumber,ISoundProvider soundProvider) {
 		 super(skillOwner,environment,container,skillnumber);
 		 setCdtime(2);
@@ -85,37 +73,38 @@ public class MageLightning extends AbstractSkill{
 			   /*Ezzel állítjuk be a playernél, hogy ez a sorszámú képessége el lett tolva és volt rá
 			    elegendõ manája is.*/
 			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
-			   //player.skill0started = true;
 			   
+			   setNetworkActivate(true);
+			   //player.skill0started = true; 
 		}
 	}
 
 	@Override
-	public void activateSkillByServer() {
-		//this.skillStartedMainTime = Game.maintime;/*A skillkezdési idõt beállítom a játék fõidejére*/
-		//isactivated = true;/*aktívnak tekintjük innentõl a skillt*/
-		//player.monitorScreenmanager.skill0useable = false;
+	public void activateSkillByServer(double appTime) {
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
 		
-		
-		//boltSong.play();
+		setViewBuilderActivate(true);
+		this.lightning.play();
 		
 		/*A playernél leveszem a manát,amibe a skill került.*/
-		  /* if(player.mana - this.manacost < 0){
-		    	player.mana = 0;
-		    }else{
-		    	player.mana-=this.manacost;
-		    }
+		if(getSkillOwner().getMana() - this.manacost < 0){
+	    	getSkillOwner().setMana(0);
+	    }else{
+	    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+	    }
 		
-		   /*beállítom a paraméterben kapott koordinátákat és szöget, ami a player saját helyzete is egyben.*/
-		 /*  this.x = player.x + player.width;
-		   this.y = player.y - 118;
-		   this.angle = player.angle;
-		   this.width = 512;
-		   this.height = 300;
+		 /*beállítom a paraméterben kapott koordinátákat és szöget, ami a player saját helyzete is egyben.*/
+		this.x = getSkillOwner().getX() + getSkillOwner().getWidth();
+		this.y = getSkillOwner().getY() - 118;
+		this.angle = getSkillOwner().getAngle();
+		this.width = 512;
+		this.height = 300;
 		
-		damagingNow = true;/*most sebezhet a skill*/
-		/*animaionStillRuning = true;/*most már kirajzolhatjuk az animációt.*/
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
 		   
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
 		//player.skill0started = false;
 		
 	}
@@ -136,6 +125,13 @@ public class MageLightning extends AbstractSkill{
 			   if(getPolygon().intersects(en.getCollideArea())){
 				   en.setHealth(-damageValue);
 				   //player.handler.damagetext.add(new DamagingText(en.x, en.y,String.valueOf(damageValue),true, player.handler));
+			   }
+		   }
+		   
+		   for(int i=0;i<getEnvironment().getEnemyPlayers().size();i++){
+			   Entity player = getEnvironment().getEnemyPlayers().get(i);
+			   if(getPolygon().intersects(player.getCollideArea())){
+				   player.setHealth(-damageValue);
 			   }
 		   }
 		   

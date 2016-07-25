@@ -41,6 +41,8 @@ public abstract class AbstractSkill {
 	
 	private IViewBuilderContainer container;
 	
+	private boolean networkActivate;
+	
 	private int width;
 	private int height;
 	
@@ -56,7 +58,7 @@ public abstract class AbstractSkill {
 	
 	public abstract void activateSkill(double appTime);/*Minden skillnek kell lennie egy aktiváló metódusnak*/
 	
-	public abstract void activateSkillByServer();
+	public abstract void activateSkillByServer(double appTime);
 	
 	public abstract void tick(double appTime);
 	
@@ -183,5 +185,17 @@ public abstract class AbstractSkill {
 
 	public void setViewBuilderActivate(boolean viewBuilderActivate) {
 		this.viewBuilderActivate = viewBuilderActivate;
+	}
+
+	public boolean isNetworkActivate() {
+		return networkActivate;
+	}
+
+	public void setNetworkActivate(boolean networkActivate) {
+		this.networkActivate = networkActivate;
+	}
+
+	public void setDeletable(boolean deletable) {
+		this.deletable = deletable;
 	}
 }

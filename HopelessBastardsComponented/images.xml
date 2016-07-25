@@ -19,24 +19,16 @@
 		<sprite>false</sprite>
 	</image>
 	<image>
-		<path>skills64px.png</path>
-		<column>2</column>
-		<row>3</row>
-		<sheetwidth>64</sheetwidth>
-		<sheetheight>64</sheetheight>
+		<path>mage1.png</path>
 		<logicname>mage</logicname>
 		<animation>0</animation>
-		<sprite>true</sprite>
+		<sprite>false</sprite>
 	</image>
 	<image>
-		<path>skills64px.png</path>
-		<column>3</column>
-		<row>3</row>
-		<sheetwidth>64</sheetwidth>
-		<sheetheight>64</sheetheight>
+		<path>mage2.png</path>
 		<logicname>mage</logicname>
 		<animation>1</animation>
-		<sprite>true</sprite>
+		<sprite>false</sprite>
 	</image>
 	<image>
 		<path>skills64px.png</path>

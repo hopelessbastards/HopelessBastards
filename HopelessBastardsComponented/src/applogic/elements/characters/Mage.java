@@ -11,15 +11,18 @@ import applogic.skills.MageHealthSteal;
 import applogic.skills.MageLightning;
 import applogic.skills.MageSmokeTeleport;
 import applogic.skills.ZombieSimpleAttack;
+import applogic.viewbuilder.IImageViewBuilder;
 import applogic.viewbuilder.entities.MageViewBuilder;
 import soundapi.ISoundProvider;
 
 public class Mage extends Player{
 	
-	public Mage(int x, int y, double angle, int health, int maxhealth, int mana, int maxMana,
+	private IImageViewBuilder mageView;
+	
+	public Mage(int x, int y, int health, int maxhealth, int mana, int maxMana,
 			String networkId, CharacterType characterType,int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
-		super(x, y, 63, 63, angle, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
+		super(x, y, 64, 64, 0, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
 		
 		
 		
@@ -30,19 +33,19 @@ public class Mage extends Player{
 		getSkills()[4] = new MageSmokeTeleport(this,environment,container,4);
 		getSkills()[6] = new ChangePlayerSkill(this, environment, container,6);
 		
-		container.getViewBuilder().add(new MageViewBuilder(this,container));
+		this.mageView = new MageViewBuilder(this,container);
+		container.getViewBuilder().add(mageView);
 		
 		/*a skilleihez viewBuildert is hozzáad.*/
-		
-		
-		
+				
 	}
-
+	
 	@Override
 	public void setDeletable(boolean deletable) {
 		super.setDeletable(deletable);
-		
+		mageView.setDeletable(deletable);
 	}
+
 	
 	@Override
 	public boolean isDead() {

@@ -13,6 +13,7 @@ import applogic.MapLoader;
 import applogic.elements.Entity;
 import applogic.elements.Player;
 import applogic.elements.Tile;
+import applogic.elements.controllers.PlayerRectangle;
 import applogic.skills.imageicons.ImageIconTimerPicture;
 import applogic.viewbuilder.HealthBarViewBuilder;
 import applogic.viewbuilder.IImageViewBuilder;
@@ -57,16 +58,16 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 	private IGarbageCollector garbageCollector;
 	
 	private Entity player;
-	
+	private PlayerRectangle playerRectangle;
 	private IMapLoader mapLoader;
 	
 	private CursorInformationProvider cursor;
 	
 	private IConverter converter;
 	
-	public ViewBuilderContainer(List<Tile> tiles,List<Tile> nonBlockingTile,IConverter converter,Player player,IGarbageCollector garbageCollector) {
+	public ViewBuilderContainer(List<Tile> tiles,List<Tile> nonBlockingTile,IConverter converter,Player player, PlayerRectangle playerRectangle, IGarbageCollector garbageCollector) {
 		this.player = player;
-		
+		this.playerRectangle = playerRectangle;
 		this.converter = converter;
 		this.garbageCollector = garbageCollector;
 		
@@ -119,7 +120,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		
 		converter.startOfPieces();
 		/*Elõször a kamerát állíttatjuk be vele, megadva, hogy melyik pont legyen a képernyõ középpontjában.*/
-		converter.moveCamera((int)player.getX() + player.getWidth()/2, (int)player.getY() + player.getHeight()/2);
+		converter.moveCamera((int)playerRectangle.getX() + playerRectangle.getWidth()/2, (int)playerRectangle.getY() + playerRectangle.getHeight()/2);
 		
 		/*Majd a kép,vonal,poly leírókat adjuk át, és ez szépen összeragaszt belõle egy kirajzolható képet.
 		 A képleíróknak két lista is van, a viewBuilder, és a staticviewBuilder.Ezekre azért van szükség, hogy

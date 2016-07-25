@@ -19,9 +19,9 @@ public class Zombie extends Entity{
 	private Entity owner;
 
 	public Zombie(int x, int y, double angle, int health, int maxhealth, int mana, int maxMana,
-			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
+			int skillCount, String networkId, IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
-		super(x, y, 64, 64, angle, health, maxhealth, mana, maxMana, skillCount,container,environment,provider,soundProvider);
+		super(x, y, 64, 64, angle, health, maxhealth, mana, maxMana, skillCount, networkId, container,environment,provider,soundProvider);
 		
 		getSkills()[0] = new ZombieSimpleAttack(this, environment,container, 0);
 		getSkills()[6] = new ChangePlayerSkill(this, environment, container,6);

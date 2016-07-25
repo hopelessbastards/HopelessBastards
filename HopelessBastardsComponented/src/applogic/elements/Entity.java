@@ -26,7 +26,7 @@ public abstract class Entity extends LivingObject{
 	private double velocityX = 0;/*velocity- sebesség*/
     private double velocityY = 0;
     
-    private double movementSpeed = 1;
+    private double movementSpeed = /*1*/6;
     private double backMovementSpeed = 2;
     
     private int maxMovementSpeed = 6;
@@ -73,10 +73,11 @@ public abstract class Entity extends LivingObject{
     
     
 	public Entity(int x, int y, int width, int height, double angle, int health,int maxhealth,int mana,int maxMana,
-			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
+			int skillCount, String networkId,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
 		super(x, y, width, height, angle,0,0,health,maxhealth);
 		this.live = true;
+		this.id = networkId;
 		
 		this.soundProvider = soundProvider;
 		
@@ -113,18 +114,22 @@ public abstract class Entity extends LivingObject{
 	}
 	
 	public void setHealth(int health){
+		
+		getContainer().getStringBuilder().add(new DamageTextViewBuilder(this,health));
+		
 		if(getHealth()+health > getMaxhealth()){
 			setHealth(getMaxhealth());
 		}else{
 			setHealth(getHealth() + health);
 		}
 		
-		
-		getContainer().getStringBuilder().add(new DamageTextViewBuilder(this,health));
-		
 		if(getHealth() <= 0){
 			die();
 		}
+	}
+	
+	public void setNetworkHealth(int health){
+		super.setHealth(health);
 	}
 	
 	/*Az entitások tick metódusa azt csinálja, hogy meghívja a cammanderének a command metódusát, hogy
@@ -476,7 +481,5 @@ public abstract class Entity extends LivingObject{
 
 	public void setCharacterType(CharacterType characterType) {
 		this.characterType = characterType;
-	}	
-	
-	
+	}		
 }

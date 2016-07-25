@@ -16,6 +16,5 @@ public abstract class IImageViewBuilder implements IViewBuilder{
 	@Override
 	public void setDeletable(boolean deletable) {
 		this.deletable = deletable;
-		
 	}
 }

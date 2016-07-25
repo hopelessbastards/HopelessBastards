@@ -28,7 +28,7 @@ public class WorldUpdater implements IWorldUpdater{
 	
 	@Override
 	public void updateServer(IEnvironment environment) {
-		if(true){
+		if(true && environment.getPlayer() != null){
 			update = false;
 			deleter.clearJSONArray(entities);
 			deleter.clearJSONObject(entity);
@@ -36,7 +36,7 @@ public class WorldUpdater implements IWorldUpdater{
 			
 			try{
 				entity.put("id",environment.getPlayer().getId());
-				entity.put("username",environment.getPlayer().getUsername());
+				entity.put("username",/*environment.getPlayer().getUsername()*/"ASDFighter");
 				entity.put("characterType", environment.getPlayer().getCharacterType().toString());
 				if(environment.getPlayer().getSelectedEntity() != null){
 					entity.put("selectedPlayer", environment.getPlayer().getSelectedEntity().getId());
@@ -54,8 +54,10 @@ public class WorldUpdater implements IWorldUpdater{
 				entity.put("maxmana", environment.getPlayer().getMaxMana());
 				
 				for(int i=0;i<environment.getPlayer().getSkills().length;i++){
-					if(environment.getPlayer().getSkillStarted()[i]){
+					if(environment.getPlayer().getSkills()[i] != null && environment.getPlayer().getSkills()[i].isNetworkActivate()){
 						entity.put("skillStarted", i);
+						environment.getPlayer().getSkills()[i].setNetworkActivate(false);
+						environment.getPlayer().setSkillStarted(i, false);
 						break;
 					}
 				}
@@ -63,14 +65,8 @@ public class WorldUpdater implements IWorldUpdater{
 				if(!entity.has("skillStarted")){
 					entity.put("skillStarted", -1);
 				}
-				for(int i=0;i<environment.getPlayer().getSkills().length;i++){
-					if(environment.getPlayer().getSkillStarted(i)){
-						environment.getPlayer().setSkillStarted(i, false);
-						break;
-					}
-				}
 				
-				entities.put(entity);
+				//entities.put(entity);
 				
 				
 				/*for(int i=0;i<environment.getOwnedEntities().size();i++){
@@ -108,7 +104,8 @@ public class WorldUpdater implements IWorldUpdater{
 				}*/
 				
 				playerDescritpor.put("descriptor", entities);
-				socket.emit("playerMoved",playerDescritpor);
+				
+				socket.emit("playerMoved",entity);
 					
 			}catch(JSONException e){
 				e.getMessage();

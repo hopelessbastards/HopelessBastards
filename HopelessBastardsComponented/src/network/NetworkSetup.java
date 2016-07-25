@@ -3,10 +3,9 @@ package network;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.omg.Messaging.SyncScopeHelper;
 
-import applogic.elements.CharacterType;
 import applogic.elements.Entity;
-import applogic.elements.characters.Mage;
 import applogic.elements.controllers.IEnvironment;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -15,8 +14,6 @@ public class NetworkSetup implements INetworkSetup{
 
 	private Socket socket;
 	private IEnvironment environment;
-	
-	private Entity player;
 	
 	public NetworkSetup(Socket socket,IEnvironment environment) {
 		super();
@@ -48,26 +45,11 @@ public class NetworkSetup implements INetworkSetup{
 					
 					JSONObject ob = new JSONObject();
 					
-					environment.makePlayer(3500, 3048, id, environment.getSelectedCharacterType().toString());
+					environment.makePlayer(3400, 3048, id, environment.getSelectedCharacterType().toString());
 						
 					ob.put("characterType",environment.getSelectedCharacterType().toString());	
 					socket.emit("characterType",ob);
-					
-					/*for(int i=0;i<entity.size();i++){
-						if(entity.get(i).getId() == Id.PLAYER){
-							player = (Player)entity.get(i);
-						}
-					}
-					entityTrade();
-					Entity trade = null;
-					for(int i=0;i<entity.size();i++){
-						if(entity.get(i).id == Id.PLAYER){
-							trade = entity.get(i);
-						}
-					}
-					/*for(int i=0;i<25;i++){
-						addEntity(new Zombie(i*68+1000, i*68+1000, 63, 63,Id.ZOMBIE,player,Handler.this));
-					}*/
+				
 				}catch(JSONException e){
 					e.getMessage();
 				}
@@ -85,9 +67,9 @@ public class NetworkSetup implements INetworkSetup{
 					/*Ha új játékos csatlakozik, elküldi mindenkinek az id-jét és a karakter típusát
 					 ezek szerint létre tudjua minden enemy hozni õt a saját lokális terében.*/
 					
-					if(!playerId.equals(environment.getPlayer().getId())){
-						environment.makeEnemyPlayer(3000, 3000, playerId, characterType);
-					}
+					
+					environment.makeEnemyPlayer(3400, 3048, playerId, characterType);
+					
 					
 				}catch(JSONException e){
 					e.getMessage();
@@ -104,6 +86,7 @@ public class NetworkSetup implements INetworkSetup{
 					/*id alapján töröljük a listából(nincs kész)*/
 					for(int i=0;i<environment.getEnemyPlayers().size();i++){
 						if(environment.getEnemyPlayers().get(i).getId().equals(id)){
+							environment.getEnemyPlayers().get(i).setDeletable(true);
 							environment.getEnemyPlayers().remove(i);
 						}
 					}
@@ -143,17 +126,16 @@ public class NetworkSetup implements INetworkSetup{
 				try{
 					Entity enemy = null;
 					String playerId = data.getString("id");
-					boolean exist = false;
+					
 					for(int i=0;i<environment.getEnemyPlayers().size();i++){
 						if(environment.getEnemyPlayers().get(i).getId().equals(playerId)){
-							exist = true;
 							enemy = environment.getEnemyPlayers().get(i);
 							break;
 						}
 					}
 					
 					
-						if(exist){
+						if(enemy != null){
 							//Player entity = enemies.getById(playerId);
 							//entity.username = data.getString("username");
 							/*ezzel a sorral állítom be a user
@@ -176,7 +158,7 @@ public class NetworkSetup implements INetworkSetup{
 							enemy.setX(data.getDouble("x"));
 							enemy.setY(data.getDouble("y"));
 							enemy.setAngle(data.getDouble("angle"));
-							enemy.setHealth(data.getInt("health"));
+							enemy.setNetworkHealth(data.getInt("health"));
 							enemy.setMaxhealth(data.getInt("maxhealth"));
 							enemy.setMana(data.getInt("mana"));
 							enemy.setMaxMana(data.getInt("maxmana"));
@@ -186,8 +168,11 @@ public class NetworkSetup implements INetworkSetup{
 							}
 							
 							for(int k=0;k<enemy.getSkillCount();k++){
+								
 								if(enemy.getSkillStarted(k)){
-									enemy.getSkills()[k].activateSkillByServer();
+									enemy.getSkills()[k].activateSkillByServer(enemy.getAppTime());
+									enemy.setSkillStarted(k, false);
+									enemy.getSkills()[k].setNetworkActivate(false);
 									break;
 								}
 							}

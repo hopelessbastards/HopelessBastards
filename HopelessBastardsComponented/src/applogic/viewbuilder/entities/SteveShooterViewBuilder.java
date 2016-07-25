@@ -21,6 +21,8 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 	
 	private IRectangleViewBuilder appointer;
 	
+	private IRectangleViewBuilder healthBar;
+	
 	public SteveShooterViewBuilder(Entity steve,IViewBuilderContainer container) {
 		this.container = container;
 		
@@ -31,7 +33,14 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 		animationHandler = new AnimationHandler(60, 2,true,"steve");
 
 		usingHandler = animationHandler;
-		container.getRectangleBuilder().add(new HealtBarRectangle(steve));
+		this.healthBar = new HealtBarRectangle(steve);
+		container.getRectangleBuilder().add(healthBar);
+	}
+	
+	@Override
+	public void setDeletable(boolean deletable) {
+		super.setDeletable(deletable);
+		healthBar.setDeletable(deletable);
 	}
 	
 	@Override

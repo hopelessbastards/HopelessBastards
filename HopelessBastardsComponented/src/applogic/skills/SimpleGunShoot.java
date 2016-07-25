@@ -47,7 +47,7 @@ public class SimpleGunShoot extends AbstractSkill{
 	}
 
 	@Override
-	public void activateSkillByServer() {
+	public void activateSkillByServer(double appTime) {
 		// TODO Auto-generated method stub
 		
 	}

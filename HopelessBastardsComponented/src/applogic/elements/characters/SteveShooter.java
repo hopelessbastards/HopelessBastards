@@ -11,15 +11,18 @@ import applogic.skills.MageLightning;
 import applogic.skills.PoisonBombBladeStorm;
 import applogic.skills.SimpleGunShoot;
 import applogic.skills.vehicles.PoisonBomb;
+import applogic.viewbuilder.IImageViewBuilder;
 import applogic.viewbuilder.entities.SteveShooterViewBuilder;
 import soundapi.ISoundProvider;
 
 public class SteveShooter extends Player{
 
-	public SteveShooter(int x, int y, double angle, int health, int maxhealth, int mana,
+	private IImageViewBuilder steve;
+	
+	public SteveShooter(int x, int y, int health, int maxhealth, int mana,
 			int maxMana, String networkId, CharacterType characterType, int skillCount, IViewBuilderContainer container,
 			IEnvironment environment,EnemyAndFriendlyEntityProvider provider,ISoundProvider soundProvider) {
-		super(x, y, 100, 100, angle, health, maxhealth, mana, maxMana, networkId, characterType, skillCount, container,
+		super(x, y, 100, 100, 0, health, maxhealth, mana, maxMana, networkId, characterType, skillCount, container,
 				environment,provider,soundProvider);
 		
 		getSkills()[0] = new MageLightning(this, environment, container,0,soundProvider);
@@ -30,8 +33,14 @@ public class SteveShooter extends Player{
 		//getSkills()[5] = new MageLightning(this, environment, container,5);
 		getSkills()[6] = new ChangePlayerSkill(this, environment, container,6);
 		
-
-		container.getViewBuilder().add(new SteveShooterViewBuilder(this,container));
+		steve = new SteveShooterViewBuilder(this,container);
+		container.getViewBuilder().add(steve);
+	}
+	
+	@Override
+	public void setDeletable(boolean deletable) {
+		super.setDeletable(deletable);
+		steve.setDeletable(deletable);
 	}
 
 	@Override
