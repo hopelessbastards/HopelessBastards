@@ -3,17 +3,16 @@ package applogic.elements.controllers;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-
 import applogic.CursorInformationProvider;
 import applogic.GarbageCollector;
 import applogic.IGarbageCollector;
 import applogic.IViewBuilderContainer;
 import applogic.collision.Collision;
 import applogic.collision.DoublePoint;
+import applogic.collision.ICollision;
 import applogic.elements.CharacterType;
 import applogic.elements.Entity;
 import applogic.elements.LivingObject;
-import applogic.elements.Player;
 import applogic.elements.SkillVehicle;
 import applogic.elements.Tile;
 import applogic.elements.Zombie;
@@ -22,14 +21,12 @@ import applogic.elements.buildings.GreenBase;
 import applogic.elements.buildings.RedBase;
 import applogic.elements.characters.Mage;
 import applogic.elements.characters.SteveShooter;
-import applogic.engine.CollisionDetection;
-import applogic.engine.ICollisionDetection;
 import screenconverter.IConverter;
 import soundapi.ISoundProvider;
 
 public class Environment implements IEnvironment{
-
-	private List<Player> players;
+	
+	private CharacterType selectedCharacterType;
 	
 	private List<Entity> enemyEntities;
 	private List<Entity> friendlyEntities;
@@ -38,10 +35,10 @@ public class Environment implements IEnvironment{
 	private List<LivingObject> enemyBuildings;
 	private List<LivingObject> friendlyBuildings;
 	
+	private List<Entity> ownedEntities;
+	
 	private List<SkillVehicle> skillVehicles;
-	
 	private List<Tile> tiles;
-	
 	private List<LivingObject> buildings;
 	
 	private Entity player;
@@ -50,8 +47,7 @@ public class Environment implements IEnvironment{
 	
 	private CursorInformationProvider cursorProvider;
 	
-	private ICollisionDetection collision;
-	private boolean collided;
+	private ICollision collision;
 	private StupidZombieAI stupidZombieCommander;
 	
 	private IViewBuilderContainer container;
@@ -60,8 +56,18 @@ public class Environment implements IEnvironment{
 	
 	private IGarbageCollector garbageCollector;
 	
+	private ISoundProvider soundProvider;
+	
+	private IEntityCreator entityCreator;
+	
 	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider) {
+		
+		this.selectedCharacterType = CharacterType.MAGE;
 		this.garbageCollector = new GarbageCollector();
+		
+		this.soundProvider = soundProvider;
+		
+		this.ownedEntities = new ArrayList<Entity>();
 		
 		this.playerLocation = new DoublePoint();
 		
@@ -78,16 +84,16 @@ public class Environment implements IEnvironment{
 		
 		buildings = new ArrayList<LivingObject>();
 		
-		players = new ArrayList<Player>();
+		this.entityCreator = new EntityCreator(this, soundProvider, container);
 		
-		players.add(new Mage(3500, 3048, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider));
+		player = new Mage(3500, 3048, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider);
 		//players.add(new SteveShooter(2500, 2500, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true)));
-		friendlyEntities.add(players.get(0));
+		friendlyEntities.add(player);
 		
 		userAction = new UserActionCommander(this);
 		
-		players.get(0).setCommander(userAction);
-		player = players.get(0);
+		player.setCommander(userAction);
+		
 		player.setControlledByPlayer(true);
 		
 		this.container = container;
@@ -96,7 +102,7 @@ public class Environment implements IEnvironment{
 		
 		this.stupidZombieCommander = new StupidZombieAI(this);
 		
-		enemyEntities.add(new Zombie(3000, 3000,64,64,0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		enemyEntities.add(new Zombie(3000, 3000, 0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		
 		this.stupidZombieCommander.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
 		enemyEntities.get(enemyEntities.size()-1).setCommander(stupidZombieCommander);
@@ -110,11 +116,11 @@ public class Environment implements IEnvironment{
 		
 		this.container.setCursor(cursorProvider);
 		
-		userAction.setControlledEntity(players.get(0));
+		userAction.setControlledEntity(player);
 		
-		this.collision = new CollisionDetection();
+		this.collision = new Collision();
 		
-		enemyPlayers.add(new SteveShooter(3000, 3000, 100, 100, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		enemyPlayers.add(new SteveShooter(3000, 3000, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		//enemyPlayers.add(new Mage(2500, 2500, 63, 63, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this));
 		enemyPlayers.get(enemyPlayers.size() - 1).setCommander(new DoNothingCommander());
 		
@@ -126,7 +132,7 @@ public class Environment implements IEnvironment{
 	@Override
 	public void PlayerMoved(Entity player) {
 	
-		Collision collision = new Collision();
+		
 		DoublePoint db = new DoublePoint((int)player.getX(), (int)player.getY());
 		Rectangle rectes = new Rectangle((int)player.getXold(),(int)player.getYold(),player.getWidth(),player.getHeight());
 		List<DoublePoint> maybePoint = new ArrayList<DoublePoint>();
@@ -157,25 +163,7 @@ public class Environment implements IEnvironment{
 				finded = true;
 			}
 			maybeIndex++;
-		}
-		
-		/*for(int i = 0;i < tiles.size();i++){
-			playerLocation = collision.newLocation(rectes, tiles.get(i).getCollideArea(), db);
-			
-			if(playerLocation != null){
-				
-				player.setX(playerLocation.getX());
-				player.setY(playerLocation.getY());
-				
-				player.setXold(playerLocation.getX());
-				player.setYold(playerLocation.getY());
-				
-			}
-		}
-		
-		player.setXold(player.getX());
-		player.setYold(player.getY());*/
-		
+		}	
 	}
 
 	@Override
@@ -266,5 +254,45 @@ public class Environment implements IEnvironment{
 	@Override
 	public List<SkillVehicle> getSkillVehicles() {
 		return this.skillVehicles;
+	}
+
+	@Override
+	public List<Entity> getOwnedEntities() {
+		return this.ownedEntities;
+	}
+
+	@Override
+	public void makePlayer(int x, int y, String networkid, String characterType) {
+		this.player = entityCreator.createEntity(x, y, networkid, characterType);
+	}
+
+	@Override
+	public void makeEnemyPlayer(int x, int y, String networkid, String characterType) {
+		enemyPlayers.add(entityCreator.createEntity(x, y, networkid, characterType));
+	}
+
+	@Override
+	public void makeEnemyEntity(int x, int y, String networkid, String characterType) {
+		enemyEntities.add(entityCreator.createEntity(x, y, networkid, characterType));
+	}
+
+	@Override
+	public void makeFriendlyPlayer(int x, int y, String networkid, String characterType) {
+		friendlyPlayers.add(entityCreator.createEntity(x, y, networkid, characterType));
+	}
+
+	@Override
+	public void makeFriendlyEntity(int x, int y, String networkid, String characterType) {
+		friendlyEntities.add(entityCreator.createEntity(x, y, networkid, characterType));
+	}
+
+	@Override
+	public CharacterType getSelectedCharacterType() {
+		return this.selectedCharacterType;
+	}
+
+	@Override
+	public void setSelectedCharacterType(CharacterType characterType) {
+		this.selectedCharacterType = characterType;
 	}	
 }

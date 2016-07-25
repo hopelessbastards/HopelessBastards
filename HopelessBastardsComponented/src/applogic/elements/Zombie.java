@@ -18,10 +18,10 @@ public class Zombie extends Entity{
 	/*A zombie tulajdonosa, ezt még ki kell dolgozni.*/
 	private Entity owner;
 
-	public Zombie(int x, int y, int width, int height, double angle, int health, int maxhealth, int mana, int maxMana,
+	public Zombie(int x, int y, double angle, int health, int maxhealth, int mana, int maxMana,
 			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
-		super(x, y, width, height, angle, health, maxhealth, mana, maxMana, skillCount,container,environment,provider,soundProvider);
+		super(x, y, 64, 64, angle, health, maxhealth, mana, maxMana, skillCount,container,environment,provider,soundProvider);
 		
 		getSkills()[0] = new ZombieSimpleAttack(this, environment,container, 0);
 		getSkills()[6] = new ChangePlayerSkill(this, environment, container,6);

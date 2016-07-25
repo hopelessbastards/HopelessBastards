@@ -1,7 +1,7 @@
 package network;
 
-import applogic.elements.Entity;
+import applogic.elements.controllers.IEnvironment;
 
 public interface IWorldUpdater {
-	public void updateServer(Entity entity);
+	public void updateServer(IEnvironment environment);
 }

@@ -67,6 +67,11 @@ public abstract class Entity extends LivingObject{
     
     private ISoundProvider soundProvider;
     
+    private String id;
+    private String username;
+    private CharacterType characterType;
+    
+    
 	public Entity(int x, int y, int width, int height, double angle, int health,int maxhealth,int mana,int maxMana,
 			int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
@@ -447,6 +452,30 @@ public abstract class Entity extends LivingObject{
 
 	public void setMaxMovementSpeed(int maxMovementSpeed) {
 		this.maxMovementSpeed = maxMovementSpeed;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public CharacterType getCharacterType() {
+		return characterType;
+	}
+
+	public void setCharacterType(CharacterType characterType) {
+		this.characterType = characterType;
 	}	
 	
 	

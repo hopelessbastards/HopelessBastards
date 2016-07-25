@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import applogic.elements.CharacterType;
+import applogic.elements.Entity;
 import applogic.elements.characters.Mage;
 import applogic.elements.controllers.IEnvironment;
 import io.socket.client.Socket;
@@ -14,6 +15,8 @@ public class NetworkSetup implements INetworkSetup{
 
 	private Socket socket;
 	private IEnvironment environment;
+	
+	private Entity player;
 	
 	public NetworkSetup(Socket socket,IEnvironment environment) {
 		super();
@@ -42,33 +45,15 @@ public class NetworkSetup implements INetworkSetup{
 					 newPlayer esemény  egy id és egy karaktertípus elég ahhoz, hogy
 					 létrehozhassa minden más karakter ezt az új játékost ellenfélként
 					 a saját kliensében.*/
-					/*if(environment.getPlayer().getCharacterType() == CharacterType.MAGE){
-						addEntity(new Mage(1600,1600,63,63,Id.PLAYER,id,Handler.this,gsm.username));
-						environment.getFriendlyPlayers().add(new Mage(1600, 1600, 64, 64, 0, 1000, 1000, 1000, 1000, id, CharacterType.MAGE, 7, container, environment, provider, soundProvider));
-						JSONObject ob = new JSONObject();
-						try{
-								
-								ob.put("characterType","MAGE");
-								
-								socket.emit("characterType",ob);
-						}catch(JSONException e){
-							e.getMessage();
-						}
-					}else if(Handler.this.characterType == CharacterType.SOLDIER){
-						addEntity(new Muscleman(1600,1600,63,63,Id.PLAYER,id,Handler.this,gsm.username));
-						JSONObject ob = new JSONObject();
-						try{
-								
-								ob.put("characterType","MUSCLEMAN");
-								
-								socket.emit("characterType",ob);
-						}catch(JSONException e){
-							e.getMessage();
-						}
-					}
 					
-					//addTile(new Wall(25*64,25*64,64,64,false,Id.WALL,WallType.FOLD,Handler.this));
-					for(int i=0;i<entity.size();i++){
+					JSONObject ob = new JSONObject();
+					
+					environment.makePlayer(3500, 3048, id, environment.getSelectedCharacterType().toString());
+						
+					ob.put("characterType",environment.getSelectedCharacterType().toString());	
+					socket.emit("characterType",ob);
+					
+					/*for(int i=0;i<entity.size();i++){
 						if(entity.get(i).getId() == Id.PLAYER){
 							player = (Player)entity.get(i);
 						}
@@ -99,18 +84,14 @@ public class NetworkSetup implements INetworkSetup{
 					
 					/*Ha új játékos csatlakozik, elküldi mindenkinek az id-jét és a karakter típusát
 					 ezek szerint létre tudjua minden enemy hozni õt a saját lokális terében.*/
-					/*if(!playerId.equals(player.networkId)){
-						if(characterType.equals("MAGE")){
-							enemies.add(new Mage(25*63,25*63, 63, 63, Id.ENEMYPLAYER, playerId, Handler.this,gsm.username));
-						}else if(characterType.equals("MUSCLEMAN")){
-							enemies.add(new Muscleman(25*63,25*63, 63, 63, Id.ENEMYPLAYER, playerId, Handler.this,gsm.username));
-						}
-					}*/
+					
+					if(!playerId.equals(environment.getPlayer().getId())){
+						environment.makeEnemyPlayer(3000, 3000, playerId, characterType);
+					}
 					
 				}catch(JSONException e){
 					e.getMessage();
 				}
-				
 			}
 		}).on("playerDisconnected", new Emitter.Listener() {
 			
@@ -121,7 +102,11 @@ public class NetworkSetup implements INetworkSetup{
 				try{
 					String id = data.getString("id");
 					/*id alapján töröljük a listából(nincs kész)*/
-					//enemies.removeById(id);
+					for(int i=0;i<environment.getEnemyPlayers().size();i++){
+						if(environment.getEnemyPlayers().get(i).getId().equals(id)){
+							environment.getEnemyPlayers().remove(i);
+						}
+					}
 				}catch(JSONException e){
 					e.getMessage();
 				}
@@ -142,11 +127,8 @@ public class NetworkSetup implements INetworkSetup{
 						/*Minden player karakterét úgy hozzuk létre, hogy a jsonbõl kiszedjük,
 						 hogy mi a karakterének típusa, és aszerint hozzuk létre.*/
 						System.out.println("getPlayers");
-						if(characterType.equals("MAGE")){
-							//enemies.add(new Mage(x, y, 63, 63, Id.ENEMYPLAYER, id, Handler.this,gsm.username));
-						}else if(characterType.equals("MUSCLEMAN")){
-							//enemies.add(new Muscleman(x, y, 63, 63, Id.ENEMYPLAYER, id, Handler.this,gsm.username));
-						}
+						
+						environment.makeEnemyPlayer((int)x, (int)y, id, characterType);
 					}
 				}catch(JSONException e){
 					e.getMessage();
@@ -159,59 +141,57 @@ public class NetworkSetup implements INetworkSetup{
 				JSONObject data = (JSONObject)arg0[0];
 				
 				try{
+					Entity enemy = null;
 					String playerId = data.getString("id");
+					boolean exist = false;
+					for(int i=0;i<environment.getEnemyPlayers().size();i++){
+						if(environment.getEnemyPlayers().get(i).getId().equals(playerId)){
+							exist = true;
+							enemy = environment.getEnemyPlayers().get(i);
+							break;
+						}
+					}
 					
-						/*if(enemies.getById(playerId) != null){
-							Player entity = enemies.getById(playerId);
-							entity.username = data.getString("username");/*ezzel a sorral állítom be a user
+					
+						if(exist){
+							//Player entity = enemies.getById(playerId);
+							//entity.username = data.getString("username");
+							/*ezzel a sorral állítom be a user
 							nevét a Musclemanoknak meg satöbbiknek, nem pedig kosntruktorába(így mûködik
 							amúgy pedig nem igazán akart.)*/
 							
-						/*	if(enemies.getById(data.getString("selectedPlayer")) != null){
-								entity.selectedPlayer = enemies.getById(data.getString("selectedPlayer"));
-							}else if(friends.getById(data.getString("selectedPlayer")) != null){
-								entity.selectedPlayer = friends.getById(data.getString("selectedPlayer"));
-							}else{
-								entity.selectedPlayer = player;
+							Entity selectedEntity = null;
+							for(int j=0;j<environment.getEnemyPlayers().size();j++){
+								if(environment.getEnemyPlayers().get(j).getId().equals(data.getString("selectedPlayer"))){
+									selectedEntity = environment.getEnemyPlayers().get(j);
+									break;
+								}
+							}
+							
+							if(selectedEntity == null){
+								environment.getPlayer().setSelectedEntity(environment.getPlayer());
 							}
 							
 							
-							entity.x = data.getDouble("x");
-							entity.y = data.getDouble("y");
-							entity.angle = data.getDouble("angle");
-							entity.health = data.getInt("health");
-							entity.maxHealth = data.getInt("maxhealth");
-							entity.mana = data.getInt("mana");
-							entity.maxMana = data.getInt("maxmana");
-							entity.onegunman = data.getBoolean("onegunman");
-							entity.twogunman = data.getBoolean("twogunman");
-							entity.dead = data.getBoolean("dead");
-							entity.live = data.getBoolean("live");
-							entity.skill0started = data.getBoolean("skill0started");
-							entity.skill1started = data.getBoolean("skill1started");
-							entity.skill2started = data.getBoolean("skill2started");
-							entity.skill3started = data.getBoolean("skill3started");
-							entity.skill4started = data.getBoolean("skill4started");
-							entity.skill5started = data.getBoolean("skill5started");
-							entity.skill6started = data.getBoolean("skill6started");
-							
-							if(entity.skill0started){
-								entity.skills[0].activateSkillByServer();
-							}else if(entity.skill1started){
-								entity.skills[1].activateSkillByServer();
-							}else if(entity.skill2started){
-								entity.skills[2].activateSkillByServer();
-							}else if(entity.skill3started){
-								entity.skills[3].activateSkillByServer();
-							}else if(entity.skill4started){
-								entity.skills[4].activateSkillByServer();
-							}else if(entity.skill5started){
-								entity.skills[5].activateSkillByServer();
-							}else if(entity.skill6started){
-								entity.skills[6].activateSkillByServer();
+							enemy.setX(data.getDouble("x"));
+							enemy.setY(data.getDouble("y"));
+							enemy.setAngle(data.getDouble("angle"));
+							enemy.setHealth(data.getInt("health"));
+							enemy.setMaxhealth(data.getInt("maxhealth"));
+							enemy.setMana(data.getInt("mana"));
+							enemy.setMaxMana(data.getInt("maxmana"));
+							enemy.setDead(data.getBoolean("dead"));
+							if(data.getInt("skillStarted") >= 0){
+								enemy.setSkillStarted(data.getInt("skillStarted"), true);
 							}
-						}*/
-						
+							
+							for(int k=0;k<enemy.getSkillCount();k++){
+								if(enemy.getSkillStarted(k)){
+									enemy.getSkills()[k].activateSkillByServer();
+									break;
+								}
+							}
+						}
 				}catch(JSONException e){
 					e.getMessage();
 				}

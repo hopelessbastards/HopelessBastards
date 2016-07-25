@@ -16,10 +16,10 @@ import soundapi.ISoundProvider;
 
 public class Mage extends Player{
 	
-	public Mage(int x, int y, int width, int height, double angle, int health, int maxhealth, int mana, int maxMana,
+	public Mage(int x, int y, double angle, int health, int maxhealth, int mana, int maxMana,
 			String networkId, CharacterType characterType,int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
-		super(x, y, width, height, angle, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
+		super(x, y, 63, 63, angle, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
 		
 		
 		

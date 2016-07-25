@@ -1,7 +1,7 @@
 package applogic.elements;
 
 public enum CharacterType {
-	MAGE(0),MUSCLEMAN(1);
+	MAGE(0),STEVE(1),ZOMBIE(2);
 	
 	private int number;
 	
@@ -17,8 +17,10 @@ public enum CharacterType {
 	public String toString() {
 		if(this == CharacterType.MAGE){
 			return "MAGE";
-		}else if(this == CharacterType.MUSCLEMAN){
-			return "MUSCLEMAN";
+		}else if(this == CharacterType.STEVE){
+			return "STEVE";
+		}else if(this == CharacterType.ZOMBIE){
+			return "ZOMBIE";
 		}
 		return null;
 	}
