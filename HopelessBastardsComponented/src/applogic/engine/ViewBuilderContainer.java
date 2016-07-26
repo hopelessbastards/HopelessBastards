@@ -1,6 +1,7 @@
 package applogic.engine;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,9 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 	
 	private IConverter converter;
 	
+	private File file;
+	private String path;
+	
 	public ViewBuilderContainer(List<Tile> tiles,List<Tile> nonBlockingTile,IConverter converter,Player player, PlayerRectangle playerRectangle, IGarbageCollector garbageCollector) {
 		this.player = player;
 		this.playerRectangle = playerRectangle;
@@ -84,9 +88,13 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		this.stringBuilder = new ArrayList<IStringViewBuilder>();
 			
 		try {
+			path = new File(".").getCanonicalPath() + "./res/";
+			
 			/*A mapLoader kopmponenst használva betöltjük az összes statikus pályaelemet a memóriába.*/
-			BufferedImage bitmap = ImageIO.read(getClass().getResource("/res/" + "bitMap.png"));
-			BufferedImage tileBitMap = ImageIO.read(getClass().getResource("/res/" + "tileMap.png"));
+			file = new File(path + "bitMap.png");
+			BufferedImage bitmap = ImageIO.read(file);
+			file = new File(path + "tileMap.png");
+			BufferedImage tileBitMap = ImageIO.read(file);
 			this.mapLoader = new MapLoader();
 			this.mapLoader.loadMap(bitmap,tileBitMap, tiles,nonBlockingTile,notDestroyableView);
 			

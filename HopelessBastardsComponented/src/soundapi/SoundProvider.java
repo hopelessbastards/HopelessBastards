@@ -1,5 +1,7 @@
 package soundapi;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import xmlhandlers.ISoundLoader;
@@ -13,7 +15,14 @@ public class SoundProvider implements ISoundProvider{
 	public SoundProvider() {
 		/*Betölti Map-be a logikai-elérési útvonal párokat.*/
 		soundLoader = new SaxSoundLoader();
-		sounds = soundLoader.Parse("./sounds.xml");
+		String path;
+		try {
+			path = new File(".").getCanonicalPath();
+			sounds = soundLoader.Parse(path + "/sounds.xml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
 	}
 	
 	@Override

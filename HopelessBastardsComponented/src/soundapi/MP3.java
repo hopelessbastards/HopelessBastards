@@ -1,7 +1,9 @@
 package soundapi;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import javazoom.jl.player.Player;
 
@@ -14,10 +16,17 @@ public class MP3 implements ISound{
 	private String logicFilename;
     private Player player; 
     private ISoundProvider soundProvider;
+    private String path;
     
     public MP3(String logicFilename,ISoundProvider soundProvider) {
         this.logicFilename = logicFilename;
         this.soundProvider = soundProvider;
+        
+        try {
+			this.path = new File(".").getCanonicalPath() + "./res/";
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     @Override
@@ -30,7 +39,7 @@ public class MP3 implements ISound{
     @Override
     public void play() {
         try {
-        	FileInputStream fis = new FileInputStream(soundProvider.getSoundMap().get(this.logicFilename));
+        	FileInputStream fis = new FileInputStream(path + soundProvider.getSoundMap().get(this.logicFilename));
             BufferedInputStream bis = new BufferedInputStream(fis);
             player = new Player(bis);
         }

@@ -1,6 +1,7 @@
 package bufferedImageImplementation;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -11,8 +12,9 @@ public class SpriteSheet {
 	
 	public SpriteSheet(String path) {
 		try {
-			sheet = ImageIO.read(getClass().getResource("/res/" + path));
+			File file = new File(new File(".").getCanonicalPath() + "./res/" + path);
 			
+			sheet = ImageIO.read(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

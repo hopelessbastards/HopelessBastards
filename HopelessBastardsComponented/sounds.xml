@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sounds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<sound>
-		<path>./res/hit.mp3</path>
+		<path>hit.mp3</path>
 		<logicname>hit1</logicname>
 	</sound>
 	<sound>
-		<path>./res/hit2.mp3</path>
+		<path>hit2.mp3</path>
 		<logicname>hit2</logicname>
 	</sound>
 	<sound>
-		<path>./res/hit3.mp3</path>
+		<path>hit3.mp3</path>
 		<logicname>hit3</logicname>
 	</sound>
 	<sound>
-		<path>./res/glass.mp3</path>
+		<path>glass.mp3</path>
 		<logicname>error</logicname>
 	</sound>
 	<sound>
-		<path>./res/loginSong.mp3</path>
+		<path>loginSong.mp3</path>
 		<logicname>loginSong</logicname>
 	</sound>
 	<sound>
-		<path>./res/fireball.mp3</path>
+		<path>fireball.mp3</path>
 		<logicname>fireball</logicname>
 	</sound>
 	<sound>
-		<path>./res/iceblock.mp3</path>
+		<path>iceblock.mp3</path>
 		<logicname>iceblock</logicname>
 	</sound>
 	<sound>
-		<path>./res/shot.mp3</path>
+		<path>shot.mp3</path>
 		<logicname>shot</logicname>
 	</sound>
 	<sound>
-		<path>./res/lightning.mp3</path>
+		<path>lightning.mp3</path>
 		<logicname>lightning</logicname>
 	</sound>
 </sounds>
