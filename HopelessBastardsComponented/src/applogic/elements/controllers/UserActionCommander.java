@@ -1,7 +1,7 @@
 package applogic.elements.controllers;
 
 public class UserActionCommander extends EntityCommander{
-
+	
 	
 	public UserActionCommander(IEnvironment environment) {
 		super(environment);
@@ -40,16 +40,19 @@ public class UserActionCommander extends EntityCommander{
 				getControlledEntity().moveBack();
 				getControlledEntity().setMoving(true);
 				getEnvironment().PlayerMoved(getControlledEntity());
+				
 			}
 			
 			if(isLeft()){
 				getControlledEntity().turnLeft();
 				getControlledEntity().setMoving(true);
+				
 			}
 			
 			if(isRight()){
 				getControlledEntity().trunRight();
 				getControlledEntity().setMoving(true);
+				
 			}
 			
 			

@@ -1,5 +1,6 @@
 package applogic.engine;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import applogic.CursorInformationProvider;
+import applogic.GameLoop;
 import applogic.IGarbageCollector;
 import applogic.IMapLoader;
 import applogic.IViewBuilderContainer;
@@ -25,11 +27,18 @@ import applogic.viewbuilder.IRectangleViewBuilder;
 import applogic.viewbuilder.IStringViewBuilder;
 import applogic.viewbuilder.MouseViewBuilder;
 import applogic.viewbuilder.SkillBarViewBuilder;
+import applogic.viewbuilder.entities.DoublePointtt;
+import applogic.viewbuilder.entities.LineEquation;
+import applogic.viewbuilder.entities.MageViewBuilder;
 import screenconverter.IConverter;
 import screenconverter.IMonitorScreenManager;
 
 
 public class ViewBuilderContainer implements IViewBuilderContainer{
+	public double newxx;
+	public double newyy;
+	
+	
 	/*Ezt a komponenst fogja továbbhívni a GameState, amikor renderelnie kell.Ez a szolgáltatás 
 	 gyûjti össze az összes kirajzolandó alakzatot, és képet, és adja át értelmezhetõ
 	 formában a ScreenConverter szolgáltatásnak.*/
@@ -116,7 +125,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 	}
 
 	@Override
-	public void viewPrepare() {
+	public void viewPrepare(double lastTickTime, double nextTickTime) {
 		/*Ezt a metódust hívja tovább a GameState, amikor renderelni szeretne.*/
 		
 		
@@ -126,10 +135,12 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		 egy másik komponensnek.*/
 		this.garbageCollector.cleanViewBuilders(rectangleBuilder,viewBuilder,ovalBuilder,stringBuilder,lineBuilder,polygonBuilder);
 		
-		converter.startOfPieces();
+		converter.startOfPieces();	
+		
+		
 		/*Elõször a kamerát állíttatjuk be vele, megadva, hogy melyik pont legyen a képernyõ középpontjában.*/
 		converter.moveCamera((int)playerRectangle.getX() + playerRectangle.getWidth()/2, (int)playerRectangle.getY() + playerRectangle.getHeight()/2);
-		
+		//converter.moveCamera(3000, 3000);
 		/*Majd a kép,vonal,poly leírókat adjuk át, és ez szépen összeragaszt belõle egy kirajzolható képet.
 		 A képleíróknak két lista is van, a viewBuilder, és a staticviewBuilder.Ezekre azért van szükség, hogy
 		 ki tudjuk egymásutáni sorrendet rakni.Például a staticviewBuilderben vannak azok az elemek, 

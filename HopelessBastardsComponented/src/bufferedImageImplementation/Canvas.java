@@ -43,8 +43,8 @@ public class Canvas extends java.awt.Canvas implements ICanvas,IEventHandlerer{
 		Dimension dim;
 		if(fullScreenMode){
 			dim = Toolkit.getDefaultToolkit().getScreenSize();/*A képernyõ méretét kérem le*/
-			//dim = new Dimension(dim.width,dim.height);
-			dim = new Dimension(data.getScreenWidth(),data.getScreenHeight());
+			dim = new Dimension(dim.width,dim.height);
+			//dim = new Dimension(data.getScreenWidth(),data.getScreenHeight());
 			//dim = new Dimension(700,700);
 		}else{
 			dim = new Dimension(WIDTH,HEIGHT);

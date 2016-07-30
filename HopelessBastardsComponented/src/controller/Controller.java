@@ -19,6 +19,9 @@ import graphicsEngine.ICanvas;
 
 public class Controller implements IController,KeyListener,MouseMotionListener,MouseWheelListener,MouseListener{
 
+	public static boolean fel,le,jobbra,balra;
+	
+	
 	private ICanvas canvas;
 	
 	private Point press;
@@ -155,15 +158,19 @@ public class Controller implements IController,KeyListener,MouseMotionListener,M
 			
 		}else if(glistener != null){
 			if(e.getKeyCode() == KeyEvent.VK_W){
+				fel = true;
 				way.setWay(MoveWayEnum.UP);
 				glistener.characterMoved(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_A){
+				balra = true;
 				way.setWay(MoveWayEnum.LEFT);
 				glistener.characterMoved(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_D){
+				le = true;
 				way.setWay(MoveWayEnum.RIGHT);
 				glistener.characterMoved(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_S){
+				jobbra = true;
 				way.setWay(MoveWayEnum.DOWN);
 				glistener.characterMoved(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_0){
@@ -230,15 +237,19 @@ public class Controller implements IController,KeyListener,MouseMotionListener,M
 			
 		}else if(glistener != null){
 			if(e.getKeyCode() == KeyEvent.VK_A){
+				balra = false;
 				way.setWay(MoveWayEnum.LEFT);
 				glistener.characterStopMoving(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_S){
+				le = false;
 				way.setWay(MoveWayEnum.DOWN);
 				glistener.characterStopMoving(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_D){
+				jobbra = false;
 				way.setWay(MoveWayEnum.RIGHT);
 				glistener.characterStopMoving(way);
 			}else if(e.getKeyCode() == KeyEvent.VK_W){
+				fel = false;
 				way.setWay(MoveWayEnum.UP);
 				glistener.characterStopMoving(way);
 			}

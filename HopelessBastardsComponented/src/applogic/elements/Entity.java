@@ -11,6 +11,22 @@ import applogic.viewbuilder.string.DamageTextViewBuilder;
 import soundapi.ISoundProvider;
 
 public abstract class Entity extends LivingObject{
+	public double oldx1 = 0;
+	public double oldy1 = 0;
+	public double oldx2 = 0;
+	public double oldy2 = 0;
+	
+	public double interspeedx;
+	public double interspeedy;
+	
+	public double interx;
+	public double intery;
+	
+	public double newx;
+	public double newy;
+	public double newangle;
+	
+	public boolean gotNetworkUpdate;
 	
 	private boolean selected = false;/*ez azért kell, hogy kivan-e választva ez az entitás az itteni
 	lokális player számára.*/
@@ -26,12 +42,12 @@ public abstract class Entity extends LivingObject{
 	private double velocityX = 0;/*velocity- sebesség*/
     private double velocityY = 0;
     
-    private double movementSpeed = /*1*/6;
-    private double backMovementSpeed = 2;
+    private double movementSpeed = /*1*/50;
+    private double backMovementSpeed = 50;
     
     private int maxMovementSpeed = 6;
     
-    private double turningSpeed = 2;/*milyen mértékben forduljon(360 mennyivel módosuljon)*/
+    private double turningSpeed = 30;/*milyen mértékben forduljon(360 mennyivel módosuljon)*/
     
     
 	private AbstractSkill[] skills;/*hogy hány skillje van konfigfileból kapja.*/
@@ -71,11 +87,22 @@ public abstract class Entity extends LivingObject{
     private String username;
     private CharacterType characterType;
     
-    
 	public Entity(int x, int y, int width, int height, double angle, int health,int maxhealth,int mana,int maxMana,
 			int skillCount, String networkId,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
 		super(x, y, width, height, angle,0,0,health,maxhealth);
+		
+		oldx1 = x;
+		oldx2 = x;
+		oldy1 = y;
+		oldy2 = y;
+		
+		interx = x;
+		intery = y;
+		
+		newx = x;
+		newy = y;
+		
 		this.live = true;
 		this.id = networkId;
 		
@@ -140,7 +167,12 @@ public abstract class Entity extends LivingObject{
 			environment.getPlayer().setSelectedEntity(this);
 		}
 		
+		
 		commander.command(appTime);
+		/*moveBack();
+		moveForward();
+		turnLeft();
+		trunRight();*/
 		/*Illetve a skillek tick metódusát is tovább hívja.*/
 		for(int i=0;i<skills.length;i++){
 			if(skills[i] != null){
@@ -157,6 +189,8 @@ public abstract class Entity extends LivingObject{
 		setX(getX() + Math.cos( Math.toRadians(getAngle())) * this.movementSpeed);
 				 
 		setY(getY() + Math.sin(Math.toRadians(getAngle())) * this.movementSpeed);
+		/*setX(newx);
+		setY(newy);*/
 	}
 	
 	public void moveBack() {
@@ -164,9 +198,12 @@ public abstract class Entity extends LivingObject{
 		setX(getX() - Math.cos( Math.toRadians(getAngle())) * (this.backMovementSpeed));
 				 
 		setY(getY() - Math.sin(Math.toRadians(getAngle())) * (this.backMovementSpeed));	
+		/*setX(newx);
+		setY(newy);*/
 	}
 
 	public void turnLeft() {
+		//setAngle(newangle);
 		setAngle(getAngle() - this.turningSpeed);
 		if (getAngle() > 360) {
 		       setAngle(0);
@@ -176,13 +213,56 @@ public abstract class Entity extends LivingObject{
 	}
 
 	public void trunRight() {
+		//setAngle(newangle);
 		setAngle(getAngle() + this.turningSpeed);
 		if (getAngle() > 360) {
 		       setAngle(0);
 		} else if (getAngle() < 0) {
 		       setAngle(360);
+		}	
+	}
+	
+	
+	public void moveForwardNew(double moveSpeed){
+		
+		
+		//setX(getX() + Math.cos( Math.toRadians(getAngle())) * this.movementSpeed);
+				 
+		//setY(getY() + Math.sin(Math.toRadians(getAngle())) * this.movementSpeed);
+		newx = getX() + Math.cos( Math.toRadians(newangle)) * moveSpeed;
+		newy = getY() + Math.sin(Math.toRadians(newangle)) * moveSpeed;
+	}
+	
+	public void moveBackNew(double moveSpeed) {
+		 
+		//setX(getX() - Math.cos( Math.toRadians(getAngle())) * (this.backMovementSpeed));
+				 
+		//setY(getY() - Math.sin(Math.toRadians(getAngle())) * (this.backMovementSpeed));	
+		
+		newx = getX() - Math.cos( Math.toRadians(newangle)) * (moveSpeed);
+		newy = getY() - Math.sin(Math.toRadians(newangle)) * (moveSpeed);
+	}
+
+	public void turnLeftNew(double turnSpeed) {
+		//setAngle(getAngle() - this.turningSpeed);
+		newangle = getAngle() - turnSpeed;
+		if (newangle > 360) {
+		       newangle = 0;
+		} else if (newangle < 0) {
+		       newangle = 360;
+		}
+	}
+
+	public void trunRightNew(double turnSpeed) {
+		//setAngle(getAngle() + this.turningSpeed);
+		newangle = getAngle() + turnSpeed;
+		if (newangle > 360) {
+		       newangle = 0;
+		} else if (newangle < 0) {
+		       newangle = 360;
 		}		
 	}
+	
 	
 	@Override
 	public void setDeletable(boolean deletable) {
@@ -245,6 +325,7 @@ public abstract class Entity extends LivingObject{
 	}
 	
 	public void setCommander(Commander commander) {
+		System.out.println("SetCommander" + commander);
 		this.commander = commander;
 	}
 	
@@ -482,4 +563,13 @@ public abstract class Entity extends LivingObject{
 	public void setCharacterType(CharacterType characterType) {
 		this.characterType = characterType;
 	}		
+	
+	/*Minden entitás eltudja dönteni, hogy õ e a player az adott lokális térben.*/
+	public boolean isThisEntityIsThePlayer(){
+		if(environment.getPlayer() == this){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

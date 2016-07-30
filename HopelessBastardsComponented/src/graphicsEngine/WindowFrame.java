@@ -34,8 +34,8 @@ public class WindowFrame extends JFrame implements IWindowFrame{
 		
 		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();/*A képernyõ méretét kérem le*/
-		/*width = dim.width;
-		height = dim.height;*/
+		//width = dim.width;
+		//height = dim.height;
 		width = data.getScreenWidth();
 		height = data.getScreenHeight();
 		/*width = 700;

@@ -15,6 +15,18 @@ public class GameLoop implements Runnable,IGameLoop{
 	private int skippedFrames;
 	private int maxSkippedFrames;
 	
+	private double lastTickTime;
+	
+	public static double lastRenderTime;
+	public static double nextRendererTime;
+	public static double renderTime;
+	public static boolean startapp;
+	
+	
+	public static double lastTick;
+	public static double lastlastTick;
+	public static double nextTick;
+	public static double currentTick;
 	
 	private double startingAppTime;
 	/*Van referenciája egy GameStateContainerre, aminek továbbhivja a tick és render metódusát,
@@ -29,7 +41,7 @@ public class GameLoop implements Runnable,IGameLoop{
 	
 	private void gameLoopInitialization(){
 		 runFlag = true;
-	     delta = 0.016;
+	     delta = 1;
 	     nextTime = (double)System.nanoTime() / 1000000000.0;
 	     maxTimeDiff = 0.5;
 	     skippedFrames = 1;
@@ -50,8 +62,8 @@ public class GameLoop implements Runnable,IGameLoop{
 		gameStateContainer.tick(appTime);
 	}
 	@Override
-	public void render(){
-		gameStateContainer.render();
+	public void render(double lastTickTime, double nextTickTime){
+		gameStateContainer.render(lastTickTime, nextTickTime);
 	}
 	
 	private synchronized void stop(){
@@ -69,42 +81,74 @@ public class GameLoop implements Runnable,IGameLoop{
 	@Override
 	public void run() {
 		gameLoopInitialization();
-	    
+	    int nticks = 0;
 		startingAppTime = (double)System.nanoTime() / 1000000000.0; 
-        while(runFlag){
+		
+		
+       /* while(runFlag){
             currTime = (double)System.nanoTime() / 1000000000.0;
             if((currTime - nextTime) > maxTimeDiff){
             	nextTime = currTime;
             }
             if(currTime >= nextTime){
-                // assign the time for the next update
+                
                 nextTime += delta;
                 tick(currTime - startingAppTime);
-               // tick++;
+                nticks++;
+                double tickTime = (currTime - startingAppTime)/ nticks;
+               
                 if((currTime < nextTime) || (skippedFrames > maxSkippedFrames)){
-                	
                     render();
-                   // render++;
+                   
                     skippedFrames = 1;
                 }else{
                     skippedFrames++;
                 }
             }else{
                 sleepTime = (int)(1000.0 * (nextTime - currTime));
-                // ébresztés ellenõrzés
                 if(sleepTime > 0)
                 {
-                    // sleep until the next update(következõ tick hívásik altatni a szálat)
                     try
                     {
                         Thread.sleep(sleepTime);
                     }
                     catch(InterruptedException e)
-                    {//itt ne csináljon semmit
+                    {
                     }
                 }
             }
-        }
+        }*/
+		
+		  while(runFlag){
+	    	   currTime = (double)System.nanoTime() / 1000000000.0;
+	    	   
+	            if(lastTickTime + delta <= currTime){
+
+	                tick(currTime - startingAppTime);
+	                
+	                currTime = (double)System.nanoTime() / 1000000000.0; 
+	                lastTickTime = currTime;
+	                
+	                lastlastTick = lastTick;
+                	lastTick = currTime;
+                	int dd = 0;
+	                while(currTime < lastTickTime + delta){
+	                	currTime = (double)System.nanoTime() / 1000000000.0;
+	                	
+	                	nextTick = lastTickTime + delta;
+	                	currentTick = currTime;
+	                	lastRenderTime = (double)System.nanoTime() / 1000000000.0;
+	                	render(lastTickTime, lastTickTime + delta);
+	                	//System.out.println("RendereltGameloop");
+	                	nextRendererTime = (double)System.nanoTime() / 1000000000.0;
+	                	dd++;
+	                	//System.out.println(dd);
+	                	renderTime = nextRendererTime - lastRenderTime;
+	                	//System.out.println(nextRendererTime - lastRenderTime);
+	                	
+	                }
+	            }
+	       }
         stop();
 	}
 }

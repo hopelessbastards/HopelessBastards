@@ -49,6 +49,8 @@ public abstract class EntityCommander implements Commander{
 	public Entity getControlledEntity() {
 		return controlledEntity;
 	}
+	
+	
 
 	public boolean isUp() {
 		return up;

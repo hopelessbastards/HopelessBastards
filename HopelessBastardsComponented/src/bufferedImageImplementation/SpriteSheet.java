@@ -12,7 +12,7 @@ public class SpriteSheet {
 	
 	public SpriteSheet(String path) {
 		try {
-			File file = new File(new File(".").getCanonicalPath() + "./res/" + path);
+			File file = new File(new File(".").getCanonicalPath() + "/res/" + path);
 			
 			sheet = ImageIO.read(file);
 		} catch (IOException e) {

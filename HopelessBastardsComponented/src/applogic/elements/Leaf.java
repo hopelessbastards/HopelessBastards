@@ -18,8 +18,8 @@ public class Leaf extends BasicElement{
 		
 		this.random = new Random();
 		/*Véletlenszerûen számítódik az esési sebességük.*/
-		this.speedx = random.nextInt(5) + 1;
-		this.speedy = random.nextInt(5) + 1;
+		this.speedx = random.nextInt(20) + 1;
+		this.speedy = random.nextInt(20) + 1;
 		
 		this.container.getStaticviewBuilder().add(new LeafViewBuilder(this));
 	}

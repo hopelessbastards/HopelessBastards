@@ -45,7 +45,7 @@ public class NetworkSetup implements INetworkSetup{
 					
 					JSONObject ob = new JSONObject();
 					
-					environment.makePlayer(3400, 3048, id, environment.getSelectedCharacterType().toString());
+					environment.makePlayer(2600, 3048, id, environment.getSelectedCharacterType().toString());
 						
 					ob.put("characterType",environment.getSelectedCharacterType().toString());	
 					socket.emit("characterType",ob);
@@ -122,7 +122,6 @@ public class NetworkSetup implements INetworkSetup{
 			@Override
 			public void call(Object... arg0) {
 				JSONObject data = (JSONObject)arg0[0];
-				
 				try{
 					Entity enemy = null;
 					String playerId = data.getString("id");
@@ -153,6 +152,68 @@ public class NetworkSetup implements INetworkSetup{
 							if(selectedEntity == null){
 								environment.getPlayer().setSelectedEntity(environment.getPlayer());
 							}
+							
+							/*enemy.oldx2 = enemy.oldx1;
+							enemy.oldx1 = data.getDouble("x");
+							
+							enemy.oldy2 = enemy.oldy1;
+							enemy.oldy1 = data.getDouble("y");*/
+							
+							
+							enemy.oldx2 = enemy.oldx1;
+							enemy.oldx1 = data.getDouble("x");
+							
+							enemy.oldy2 = enemy.oldy1;
+							enemy.oldy1 = data.getDouble("y");
+						
+							//System.out.println("tickkkkkkk: " + data.getDouble("x"));
+							
+						
+								if(enemy.interx < data.getDouble("x")){
+									enemy.interspeedx = enemy.oldx1 - enemy.oldx2 + Math.abs(enemy.interx - data.getDouble("x"));
+									//System.out.println("lemarad");
+								}else if(enemy.interx > enemy.getX()){
+									
+									enemy.interspeedx = enemy.oldx1 - enemy.oldx2 - Math.abs(enemy.interx - data.getDouble("x"));
+									//System.out.println("elhalad");
+								}else{
+									enemy.interspeedx = enemy.oldx1 - enemy.oldx2;
+									//System.out.println("stagnál");
+								}
+						
+								
+							
+							
+						
+								
+							
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								if(enemy.intery < data.getDouble("y")){
+									enemy.interspeedy = enemy.oldy1 - enemy.oldy2 + Math.abs(enemy.intery - data.getDouble("y"));
+									//System.out.println("lemarad");
+								}else if(enemy.intery > enemy.getY()){
+									
+									enemy.interspeedy = enemy.oldy1 - enemy.oldy2 - Math.abs(enemy.intery - data.getDouble("y"));
+									//System.out.println("elhalad");
+								}else{
+									enemy.interspeedy = enemy.oldy1 - enemy.oldy2;
+									//System.out.println("stagnál");
+								}
+							
+								
+					
+							
+							
+							
+							
 							
 							
 							enemy.setX(data.getDouble("x"));

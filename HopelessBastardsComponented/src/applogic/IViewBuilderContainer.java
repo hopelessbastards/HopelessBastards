@@ -11,7 +11,7 @@ import applogic.viewbuilder.IStringViewBuilder;
 import screenconverter.IMonitorScreenManager;
 
 public interface IViewBuilderContainer {
-	public void viewPrepare();
+	public void viewPrepare(double lastTickTime, double nextTickTime);
 	public List<IImageViewBuilder> getStaticviewBuilder();
 	public List<IImageViewBuilder> getViewBuilder();
 	public IMonitorScreenManager getMonitorScreenManager();

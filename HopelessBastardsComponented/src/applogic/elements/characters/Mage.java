@@ -22,7 +22,7 @@ public class Mage extends Player{
 	public Mage(int x, int y, int health, int maxhealth, int mana, int maxMana,
 			String networkId, CharacterType characterType,int skillCount,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
-		super(x, y, 64, 64, 0, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
+		super(x, y, 63, 63, 0, health, maxhealth, mana, maxMana, networkId, characterType,skillCount,container,environment,provider,soundProvider);
 		
 		
 		

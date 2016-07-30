@@ -51,7 +51,7 @@ public class LoginViewBuilderContainer implements IViewBuilderContainer{
 	}
 	
 	@Override
-	public void viewPrepare() {
+	public void viewPrepare(double lastTickTime, double nextTickTime) {
 		/*Elõször a kamerát állíttatjuk be vele, megadva, hogy melyik pont legyen a képernyõ középpontjában.*/
 		
 		converter.startOfPieces();

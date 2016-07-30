@@ -16,7 +16,9 @@ import screenconverter.descriptors.RectangleDescriptor;
 import screenconverter.descriptors.StringDescriptor;
 
 public class Converter implements IConverter{
-
+public static boolean doit;
+	
+	
 	private IRenderer renderer;
 	
 	/*Ez itt lényegében egy objektum pool.Lényege, hogy 6 féle alakzat létezik(kép,oval,polygon,
@@ -92,8 +94,11 @@ public class Converter implements IConverter{
      				/*Csak azokat a komponenseket rajzoljuk ki, melyek benne lesznek a kirajzolt
      				képernyõn.*/
      				if(this.cameraMonitorCheckingElementsHelper.intersects(getVisibleArea())){
+     					//describer.get(i).getImageDescriptor()[j].
+     					
+     					doit = true;
      					renderer.render(describer.get(i).getImageDescriptor()[j]);
-     				
+     					doit = false;
      				}
         		}
         	}

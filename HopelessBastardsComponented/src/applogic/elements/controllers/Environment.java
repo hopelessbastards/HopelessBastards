@@ -44,7 +44,7 @@ public class Environment implements IEnvironment{
 	private Entity player;
 	private PlayerRectangle playerRectangle;
 	
-	private DoublePoint playerLocation;
+	public static DoublePoint playerLocation;
 	private EntityCommander userAction;
 	
 	private CursorInformationProvider cursorProvider;
@@ -89,15 +89,16 @@ public class Environment implements IEnvironment{
 		
 		this.entityCreator = new EntityCreator(this, soundProvider, container);
 		
-		/*player = new Mage(3500, 3048, 0, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider);
-		
+		/*player = new Mage(3500, 3048, 500, 1000, 500, 1000,"networirkid", CharacterType.MAGE,7,container,this,new EnemyAndFriendlyEntityProvider(this,true),soundProvider);
+		this.playerRectangle.setCenterObject(player);
 		friendlyEntities.add(player);*/
 		
 		userAction = new UserActionCommander(this);
 		
 		/*player.setCommander(userAction);
 		
-		player.setControlledByPlayer(true);*/
+		player.setControlledByPlayer(true);
+		userAction.setControlledEntity(player);*/
 		
 		this.container = container;
 	
@@ -175,15 +176,98 @@ public class Environment implements IEnvironment{
 		cursorProvider.tick(appTime);
 		
 		if(player != null){
+			//player.moveForward();
 			player.tick(appTime);
+			
+			
+			
+			/*player.oldx2 = player.oldx1;
+			player.oldx1 = player.getX();
+		
+			System.out.println("tickkkkkkkkkkk: " + player.getX());
+			
+			if(player.interx < player.getX()){
+				player.interspeedx = player.oldx1 - player.oldx2 + Math.abs(player.interx - player.getX());
+				//System.out.println("lemarad");
+			}else if(player.interx > player.getX()){
+				
+				player.interspeedx = player.oldx1 - player.oldx2 - Math.abs(player.interx - player.getX());
+				//System.out.println("elhalad");
+			}else{
+				player.interspeedx = player.oldx1 - player.oldx2;
+				//System.out.println("stagnál");
+			}*/
+			
+			//System.out.println("speed" + player.interspeedx);
+			
+			
+			player.oldy2 = player.oldy1;
+			player.oldy1 = player.getY();
+			
+		
 		}
+		
+		
 		
 		for(int i=0;i<enemyEntities.size();i++){
 			enemyEntities.get(i).tick(appTime);
+		
+			enemyEntities.get(i).oldx2 = enemyEntities.get(i).oldx1;
+			enemyEntities.get(i).oldx1 = enemyEntities.get(i).getX();
+		
+			
+			if(enemyEntities.get(i).interx < enemyEntities.get(i).getX()){
+				enemyEntities.get(i).interspeedx = enemyEntities.get(i).oldx1 - enemyEntities.get(i).oldx2 + Math.abs(enemyEntities.get(i).interx - enemyEntities.get(i).getX());
+				//System.out.println("lemarad");
+			}else if(enemyEntities.get(i).interx > enemyEntities.get(i).getX()){
+				
+				enemyEntities.get(i).interspeedx = enemyEntities.get(i).oldx1 - player.oldx2 - Math.abs(player.interx - player.getX());
+				//System.out.println("elhalad");
+			}else{
+				player.interspeedx = player.oldx1 - player.oldx2;
+				//System.out.println("stagnál");
+			}
+			
+			/*enemyEntities.get(i).oldx2 = enemyEntities.get(i).oldx1;
+			enemyEntities.get(i).oldx1 = enemyEntities.get(i).getX();
+			
+			enemyEntities.get(i).oldy2 = enemyEntities.get(i).oldy1;
+			enemyEntities.get(i).oldy1 = enemyEntities.get(i).getY();*/
+			
 		}
 		
 		for(int i=0;i<enemyPlayers.size();i++){
 			enemyPlayers.get(i).tick(appTime);
+			
+			//System.out.println("tickx: " + enemyPlayers.get(i).getX());
+			
+			/*
+			enemyPlayers.get(i).oldx2 = enemyPlayers.get(i).oldx1;
+			enemyPlayers.get(i).oldx1 = enemyPlayers.get(i).getX();
+		
+			System.out.println("tickkkkkkk: " + enemyPlayers.get(i).getX());
+			if(enemyPlayers.get(i).interx < enemyPlayers.get(i).getX()){
+				enemyPlayers.get(i).interspeedx = enemyPlayers.get(i).oldx1 - enemyPlayers.get(i).oldx2 + Math.abs(enemyPlayers.get(i).interx - enemyPlayers.get(i).getX());
+				//System.out.println("lemarad");
+			}else if(enemyPlayers.get(i).interx > enemyPlayers.get(i).getX()){
+				
+				enemyPlayers.get(i).interspeedx = enemyPlayers.get(i).oldx1 - enemyPlayers.get(i).oldx2 - Math.abs(enemyPlayers.get(i).interx - enemyPlayers.get(i).getX());
+				//System.out.println("elhalad");
+			}else{
+				enemyPlayers.get(i).interspeedx = enemyPlayers.get(i).oldx1 - enemyPlayers.get(i).oldx2;
+				//System.out.println("stagnál");
+			}*/
+			
+			
+			
+			/*if(enemyPlayers.get(i).gotNetworkUpdate){
+				enemyPlayers.get(i).oldx2 = enemyPlayers.get(i).oldx1;
+				enemyPlayers.get(i).oldx1 = enemyPlayers.get(i).getX();
+				
+				enemyPlayers.get(i).oldy2 = enemyPlayers.get(i).oldy1;
+				enemyPlayers.get(i).oldy1 = enemyPlayers.get(i).getY();
+			}*/
+			
 		}
 		
 		for(int i=0;i<friendlyEntities.size();i++){

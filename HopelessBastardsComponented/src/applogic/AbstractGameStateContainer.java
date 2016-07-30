@@ -22,7 +22,7 @@ public abstract class AbstractGameStateContainer {
 	}
 	
 	public abstract void tick(double appTime);
-	public abstract void render();
+	public abstract void render(double lastTickTime, double nextTickTime);
 
 	public IController getController() {
 		return this.controller;

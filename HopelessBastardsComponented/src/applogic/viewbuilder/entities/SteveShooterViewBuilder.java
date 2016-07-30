@@ -29,6 +29,7 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 		describers = new ImageDescriptor[2];
 		describers[1] = new ImageDescriptor(10, 10,0,10,10,steve.getWidth(),steve.getHeight(),"steve", 0);
 		describers[0] = new ImageDescriptor(10, 10,0,10,10,140,140,"stevegun2", 0);
+		
 		this.steve = steve;
 		animationHandler = new AnimationHandler(60, 2,true,"steve");
 

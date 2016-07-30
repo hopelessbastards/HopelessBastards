@@ -12,6 +12,7 @@ public class HealtBarRectangle extends IRectangleViewBuilder{
 	
 	public HealtBarRectangle(LivingObject entity) {
 		this.entity = entity;
+		
 		describers = new RectangleDescriptor[2];
 		this.describers[0] = new RectangleDescriptor(0,0,0,0,0,0,0,Color.white,false);
 		this.describers[1] = new RectangleDescriptor(0,0,0,0,0,0,0,Color.green,false);
@@ -19,6 +20,7 @@ public class HealtBarRectangle extends IRectangleViewBuilder{
 
 	@Override
 	public RectangleDescriptor[] getRectangleDescriptor() {
+	
 		
 		describers[0].setX((int)entity.getX());
 		describers[0].setY((int)entity.getY()-15);

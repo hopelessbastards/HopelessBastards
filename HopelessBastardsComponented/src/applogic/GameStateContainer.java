@@ -57,7 +57,7 @@ public class GameStateContainer extends AbstractGameStateContainer{
 	/*A render metódusban, amit a GameLoop hív meg annyit csinálunk, hogy az aktuális GameStatenak
 	 meghívjuk a viewPreapre metódusát, ami összerakja és kirajzolja a guit.*/
 	@Override
-	public void render() {
-		getActualGameState().viewPrepare();	
+	public void render(double lastTickTime, double nextTickTime) {
+		getActualGameState().viewPrepare(lastTickTime, nextTickTime);	
 	}
 }

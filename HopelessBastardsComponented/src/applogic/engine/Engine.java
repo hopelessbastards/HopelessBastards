@@ -54,14 +54,15 @@ public class Engine extends GameState{
 	private INetworkSetup networkSetup;
 	private IWorldUpdater worldUpdater;
 	
-	private double lastUpdateTime;
+	private int updateServer;
 	
 	public Engine(IConverter converter,ISoundProvider soundProvider) {
 		super(soundProvider);
 		networkConnector = new Connector();
-		networkConnector.connect("asd");
+		networkConnector.connect("http://playground2.iit.uni-miskolc.hu:8080/");
 		
 		this.playerRectangle = new PlayerRectangle();
+		
 		
 		setNextGameState(GameStateEnum.GAME);
 		this.converter  = converter;
@@ -83,8 +84,8 @@ public class Engine extends GameState{
 	 ViewBuilderContainer komponens viewPrepare() metódusát hívjuk tovább, ami ismeri az összes 
 	 Buildert(View,Line , stb..), és oda tudja adni a következõ nagy komponensnek, a ScreenConverternek.*/
 	@Override
-	public void viewPrepare() {
-		viewBuilderContainer.viewPrepare();
+	public void viewPrepare(double lastTickTime, double nextTickTime) {
+		viewBuilderContainer.viewPrepare(lastTickTime, nextTickTime);
 		
 	}
 	
@@ -102,13 +103,15 @@ public class Engine extends GameState{
 		if(way.getWay() == MoveWayEnum.DOWN){
 			
 			environment.getUserAction().setDown(true);
-			
 		}else if(way.getWay() == MoveWayEnum.LEFT){
 			environment.getUserAction().setLeft(true);
+			
 		}else if(way.getWay() == MoveWayEnum.RIGHT){
 			environment.getUserAction().setRight(true);
+			
 		}else if(way.getWay() == MoveWayEnum.UP){
 			environment.getUserAction().setUp(true);
+			
 		}
 	}
 
@@ -183,12 +186,9 @@ public class Engine extends GameState{
 				players.get(i).tick();
 			}*/
 			environment.tick(appTime);
+				
+			worldUpdater.updateServer(environment);
 			
-			if(lastUpdateTime + 0.1 <= appTime){
-				worldUpdater.updateServer(environment);
-				lastUpdateTime = appTime;
-			}
-
 			return null;
 		}else{
 			return getNextGameState();
