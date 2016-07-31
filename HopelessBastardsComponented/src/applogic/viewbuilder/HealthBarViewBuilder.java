@@ -2,6 +2,7 @@ package applogic.viewbuilder;
 
 import java.awt.Point;
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import screenconverter.IMonitorScreenManager;
 import screenconverter.descriptors.ImageDescriptor;
 
@@ -51,5 +52,10 @@ public class HealthBarViewBuilder extends IImageViewBuilder{
 			
 		}
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

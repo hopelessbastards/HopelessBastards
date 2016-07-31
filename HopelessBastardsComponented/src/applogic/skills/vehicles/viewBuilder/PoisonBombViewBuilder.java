@@ -1,5 +1,6 @@
 package applogic.skills.vehicles.viewBuilder;
 
+import applogic.elements.BasicElement;
 import applogic.skills.vehicles.PoisonBomb;
 import applogic.viewbuilder.IImageViewBuilder;
 import screenconverter.descriptors.ImageDescriptor;
@@ -25,5 +26,10 @@ public class PoisonBombViewBuilder extends IImageViewBuilder{
 		this.describers[0].setAngleCenterPointX((int)bomb.getX() + bomb.getWidth()/2);
 		this.describers[0].setAngleCenterPointY((int)bomb.getY() + bomb.getHeight()/2);
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return this.bomb;
 	}
 }

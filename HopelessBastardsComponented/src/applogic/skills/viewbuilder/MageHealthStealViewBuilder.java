@@ -1,6 +1,7 @@
 package applogic.skills.viewbuilder;
 
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import applogic.elements.Entity;
 import applogic.skills.AbstractSkill;
 import applogic.skills.imageicons.ImageIcons;
@@ -26,6 +27,11 @@ public class MageHealthStealViewBuilder extends IImageViewBuilder{
 	
 	@Override
 	public ImageDescriptor[] getImageDescriptor() {
+		return null;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
 		return null;
 	}
 }

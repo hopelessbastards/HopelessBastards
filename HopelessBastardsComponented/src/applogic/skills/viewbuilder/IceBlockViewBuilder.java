@@ -3,6 +3,7 @@ package applogic.skills.viewbuilder;
 import applogic.AnimationHandler;
 import applogic.IAnimationHandler;
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import applogic.elements.Entity;
 import applogic.skills.AbstractSkill;
 import applogic.skills.imageicons.ImageIcons;
@@ -80,5 +81,10 @@ public class IceBlockViewBuilder extends IImageViewBuilder{
 		}
 		
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

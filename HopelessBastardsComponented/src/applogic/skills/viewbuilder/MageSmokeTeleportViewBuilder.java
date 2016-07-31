@@ -3,6 +3,7 @@ package applogic.skills.viewbuilder;
 import applogic.AnimationHandler;
 import applogic.IAnimationHandler;
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import applogic.elements.Entity;
 import applogic.skills.MageSmokeTeleport;
 import applogic.skills.imageicons.ImageIcons;
@@ -74,5 +75,11 @@ public class MageSmokeTeleportViewBuilder extends IImageViewBuilder{
 		}	
 		
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

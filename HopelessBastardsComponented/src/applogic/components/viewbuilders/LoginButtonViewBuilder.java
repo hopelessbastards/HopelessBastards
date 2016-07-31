@@ -1,6 +1,7 @@
 package applogic.components.viewbuilders;
 
 import applogic.components.IComponent;
+import applogic.elements.BasicElement;
 import applogic.viewbuilder.IImageViewBuilder;
 import screenconverter.descriptors.ImageDescriptor;
 
@@ -28,5 +29,10 @@ public class LoginButtonViewBuilder extends IImageViewBuilder{
 		}
 		
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

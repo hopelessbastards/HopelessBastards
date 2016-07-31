@@ -30,5 +30,10 @@ public class LeafViewBuilder extends IImageViewBuilder{
 		this.describers[0].setAngleCenterPointY((int)leaf.getY() + leaf.getHeight() / 2);
 			
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return this.leaf;
 	}	
 }

@@ -68,7 +68,7 @@ public class Menu extends GameState{
 	}
 
 	@Override
-	public void viewPrepare(double lastTickTime, double nextTickTime) {
+	public void viewPrepare(double renderTime) {
 		// TODO Auto-generated method stub
 		
 	}

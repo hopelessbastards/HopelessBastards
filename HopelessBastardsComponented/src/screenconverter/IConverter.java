@@ -11,7 +11,7 @@ import applogic.viewbuilder.IRectangleViewBuilder;
 import applogic.viewbuilder.IStringViewBuilder;
 /*Ezen interfacen keresztül érhetõ el a Converter komponens funkciója.*/
 public interface IConverter {
-	public void stickImages(List<IImageViewBuilder> describer);
+	public void stickImages(List<IImageViewBuilder> describer, double renderTime);
 	public void stickLines(List<ILineViewBuilder> describer);
 	public void stickPolygones(List<IPolygonViewBuilder> describer);
 	public void stickRectangles(List<IRectangleViewBuilder> describer);

@@ -66,7 +66,7 @@ public abstract class IContainer {
 		garbageCollector.cleanGuiComponents(this.components);
 	
 		converter.stickRectangles(rectangles);
-		converter.stickImages(images);
+		converter.stickImages(images, 0);
 		converter.stickLines(lines);
 		converter.stickOvals(ovals);
 		converter.stickPolygones(polygons);

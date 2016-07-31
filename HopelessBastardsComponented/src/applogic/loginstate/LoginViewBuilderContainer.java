@@ -51,15 +51,15 @@ public class LoginViewBuilderContainer implements IViewBuilderContainer{
 	}
 	
 	@Override
-	public void viewPrepare(double lastTickTime, double nextTickTime) {
+	public void viewPrepare(double renderTime) {
 		/*Elõször a kamerát állíttatjuk be vele, megadva, hogy melyik pont legyen a képernyõ középpontjában.*/
 		
 		converter.startOfPieces();
 		converter.moveCameraToDefault();
-		converter.stickImages(viewBuilder);
+		converter.stickImages(viewBuilder, renderTime);
 		
 		componentContainer.stickComponents(converter);
-		converter.stickImages(staticViewBuilder);
+		converter.stickImages(staticViewBuilder, renderTime);
 		/*converter.stickLines(lineBuilder);
 		converter.stickOvals(ovalBuilder);
 		converter.stickPolygones(polygonBuilder);

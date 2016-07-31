@@ -111,8 +111,8 @@ public class Login extends GameState{
 	}
 	
 	@Override
-	public void viewPrepare(double lastTickTime, double nextTickTime) {
-		this.container.viewPrepare(lastTickTime, nextTickTime);
+	public void viewPrepare(double renderTime) {
+		this.container.viewPrepare(renderTime);
 	}
 	
 	@Override

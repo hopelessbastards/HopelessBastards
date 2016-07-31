@@ -16,17 +16,19 @@ public abstract class Entity extends LivingObject{
 	public double oldx2 = 0;
 	public double oldy2 = 0;
 	
+	public double oldangle1;
+	public double oldangle2;
+	
 	public double interspeedx;
 	public double interspeedy;
+	public double interanglespeed;
 	
 	public double interx;
 	public double intery;
+	public double interangle;
 	
-	public double newx;
-	public double newy;
-	public double newangle;
+	private EntityPositionEstimate positionEstimate;
 	
-	public boolean gotNetworkUpdate;
 	
 	private boolean selected = false;/*ez azért kell, hogy kivan-e választva ez az entitás az itteni
 	lokális player számára.*/
@@ -42,8 +44,8 @@ public abstract class Entity extends LivingObject{
 	private double velocityX = 0;/*velocity- sebesség*/
     private double velocityY = 0;
     
-    private double movementSpeed = /*1*/50;
-    private double backMovementSpeed = 50;
+    private double movementSpeed = /*1*/30;
+    private double backMovementSpeed = 15;
     
     private int maxMovementSpeed = 6;
     
@@ -100,8 +102,7 @@ public abstract class Entity extends LivingObject{
 		interx = x;
 		intery = y;
 		
-		newx = x;
-		newy = y;
+		
 		
 		this.live = true;
 		this.id = networkId;
@@ -129,6 +130,8 @@ public abstract class Entity extends LivingObject{
 		this.skillStarted = new boolean[this.skillCount];
 		this.xold = getX();
 		this.yold = getY();
+		
+		this.positionEstimate = new EntityPositionEstimate(this);
 	}
 	
 	public abstract void activateSkill(int skillnumber,double appTime);
@@ -229,8 +232,8 @@ public abstract class Entity extends LivingObject{
 		//setX(getX() + Math.cos( Math.toRadians(getAngle())) * this.movementSpeed);
 				 
 		//setY(getY() + Math.sin(Math.toRadians(getAngle())) * this.movementSpeed);
-		newx = getX() + Math.cos( Math.toRadians(newangle)) * moveSpeed;
-		newy = getY() + Math.sin(Math.toRadians(newangle)) * moveSpeed;
+		/*newx = getX() + Math.cos( Math.toRadians(newangle)) * moveSpeed;
+		newy = getY() + Math.sin(Math.toRadians(newangle)) * moveSpeed;*/
 	}
 	
 	public void moveBackNew(double moveSpeed) {
@@ -239,28 +242,28 @@ public abstract class Entity extends LivingObject{
 				 
 		//setY(getY() - Math.sin(Math.toRadians(getAngle())) * (this.backMovementSpeed));	
 		
-		newx = getX() - Math.cos( Math.toRadians(newangle)) * (moveSpeed);
-		newy = getY() - Math.sin(Math.toRadians(newangle)) * (moveSpeed);
+	/*newx = getX() - Math.cos( Math.toRadians(newangle)) * (moveSpeed);
+		newy = getY() - Math.sin(Math.toRadians(newangle)) * (moveSpeed);*/
 	}
 
 	public void turnLeftNew(double turnSpeed) {
 		//setAngle(getAngle() - this.turningSpeed);
-		newangle = getAngle() - turnSpeed;
+		/*newangle = getAngle() - turnSpeed;
 		if (newangle > 360) {
 		       newangle = 0;
 		} else if (newangle < 0) {
 		       newangle = 360;
-		}
+		}*/
 	}
 
 	public void trunRightNew(double turnSpeed) {
 		//setAngle(getAngle() + this.turningSpeed);
-		newangle = getAngle() + turnSpeed;
+		/*newangle = getAngle() + turnSpeed;
 		if (newangle > 360) {
 		       newangle = 0;
 		} else if (newangle < 0) {
 		       newangle = 360;
-		}		
+		}	*/	
 	}
 	
 	
@@ -572,4 +575,14 @@ public abstract class Entity extends LivingObject{
 			return false;
 		}
 	}
+
+	public EntityPositionEstimate getPositionEstimate() {
+		return positionEstimate;
+	}
+
+	public void setPositionEstimate(EntityPositionEstimate positionEstimate) {
+		this.positionEstimate = positionEstimate;
+	}
+	
+	
 }

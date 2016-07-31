@@ -4,6 +4,7 @@ import java.awt.Color;
 import applogic.AnimationHandler;
 import applogic.IAnimationHandler;
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import applogic.elements.Entity;
 import applogic.viewbuilder.IImageViewBuilder;
 import applogic.viewbuilder.IRectangleViewBuilder;
@@ -101,5 +102,10 @@ public class ZombieViewBuilder extends IImageViewBuilder{
 			
 			return describers;
 		}	
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return this.zombie;
 	}
 }

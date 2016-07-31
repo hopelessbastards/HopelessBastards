@@ -2,6 +2,7 @@ package applogic.skills.vehicles.viewBuilder;
 
 import applogic.AnimationHandler;
 import applogic.IAnimationHandler;
+import applogic.elements.BasicElement;
 import applogic.viewbuilder.IImageViewBuilder;
 import screenconverter.descriptors.ImageDescriptor;
 
@@ -39,5 +40,10 @@ public class BombViewBuilder extends IImageViewBuilder{
 			}
 		}
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

@@ -5,7 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.omg.Messaging.SyncScopeHelper;
 
+import applogic.GameLoop;
 import applogic.elements.Entity;
+import applogic.elements.EntityPositionEstimate;
 import applogic.elements.controllers.IEnvironment;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -14,6 +16,7 @@ public class NetworkSetup implements INetworkSetup{
 
 	private Socket socket;
 	private IEnvironment environment;
+	private EntityPositionEstimate estimatePosition;
 	
 	public NetworkSetup(Socket socket,IEnvironment environment) {
 		super();
@@ -153,66 +156,79 @@ public class NetworkSetup implements INetworkSetup{
 								environment.getPlayer().setSelectedEntity(environment.getPlayer());
 							}
 							
+							NetworkSetup.this.estimatePosition = enemy.getPositionEstimate();
+							
+							
+							estimatePosition.setLastlastTick(estimatePosition.getLastTick());
+							estimatePosition.setLastTick((double)System.nanoTime() / 1000000000.0);
+							
 							/*enemy.oldx2 = enemy.oldx1;
-							enemy.oldx1 = data.getDouble("x");
+							enemy.oldx1 = data.getDouble("x");*/
+							estimatePosition.setOldx2(estimatePosition.getOldx1());
+							estimatePosition.setOldx1(data.getDouble("x"));
 							
-							enemy.oldy2 = enemy.oldy1;
+							
+							/*enemy.oldy2 = enemy.oldy1;
 							enemy.oldy1 = data.getDouble("y");*/
+							estimatePosition.setOldy2(estimatePosition.getOldy1());
+							estimatePosition.setOldy1(data.getDouble("y"));
+							
+							/*enemy.oldangle2 = enemy.oldangle1;
+							enemy.oldangle1 = data.getDouble("angle");*/
+							estimatePosition.setOldangle2(estimatePosition.getOldangle1());
+							estimatePosition.setOldangle1(data.getDouble("angle"));
 							
 							
-							enemy.oldx2 = enemy.oldx1;
-							enemy.oldx1 = data.getDouble("x");
+							/*if(enemy.interangle < data.getDouble("angle")){
+								enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 + Math.abs(enemy.interangle - data.getDouble("angle"));
+							}else if(enemy.interangle > data.getDouble("angle")){
+								enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 - Math.abs(enemy.interangle - data.getDouble("angle"));
+							}else{
+								enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2;
+							}*/
 							
-							enemy.oldy2 = enemy.oldy1;
-							enemy.oldy1 = data.getDouble("y");
+							if(estimatePosition.getInterangle() < data.getDouble("angle")){
+								estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() + Math.abs(estimatePosition.getInterangle() - data.getDouble("angle")));
+							}else if(estimatePosition.getInterangle() > data.getDouble("angle")){
+								estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() - Math.abs(estimatePosition.getInterangle() - data.getDouble("angle")));
+							}else{
+								estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2());
+							}
+							
+							
+							/*if(enemy.interx < data.getDouble("x")){
+								enemy.interspeedx = enemy.oldx1 - enemy.oldx2 + Math.abs(enemy.interx - data.getDouble("x"));
+							}else if(enemy.interx > enemy.getX()){
+								enemy.interspeedx = enemy.oldx1 - enemy.oldx2 - Math.abs(enemy.interx - data.getDouble("x"));
+							}else{
+								enemy.interspeedx = enemy.oldx1 - enemy.oldx2;
+							}*/
+							
+							if(estimatePosition.getInterx() < data.getDouble("x")){
+								estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() + Math.abs(estimatePosition.getInterx() - data.getDouble("x")));
+							}else if(estimatePosition.getInterx() > data.getDouble("x")){
+								estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() - Math.abs(estimatePosition.getInterx() - data.getDouble("x")));
+							}else{
+								estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
+							}
 						
-							//System.out.println("tickkkkkkk: " + data.getDouble("x"));
 							
-						
-								if(enemy.interx < data.getDouble("x")){
-									enemy.interspeedx = enemy.oldx1 - enemy.oldx2 + Math.abs(enemy.interx - data.getDouble("x"));
-									//System.out.println("lemarad");
-								}else if(enemy.interx > enemy.getX()){
-									
-									enemy.interspeedx = enemy.oldx1 - enemy.oldx2 - Math.abs(enemy.interx - data.getDouble("x"));
-									//System.out.println("elhalad");
-								}else{
-									enemy.interspeedx = enemy.oldx1 - enemy.oldx2;
-									//System.out.println("stagnál");
-								}
-						
-								
+							/*if(enemy.intery < data.getDouble("y")){
+								enemy.interspeedy = enemy.oldy1 - enemy.oldy2 + Math.abs(enemy.intery - data.getDouble("y"));
+							}else if(enemy.intery > enemy.getY()){
+								enemy.interspeedy = enemy.oldy1 - enemy.oldy2 - Math.abs(enemy.intery - data.getDouble("y"));
+							}else{
+								enemy.interspeedy = enemy.oldy1 - enemy.oldy2;
+							}*/
 							
-							
-						
-								
-							
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								if(enemy.intery < data.getDouble("y")){
-									enemy.interspeedy = enemy.oldy1 - enemy.oldy2 + Math.abs(enemy.intery - data.getDouble("y"));
-									//System.out.println("lemarad");
-								}else if(enemy.intery > enemy.getY()){
-									
-									enemy.interspeedy = enemy.oldy1 - enemy.oldy2 - Math.abs(enemy.intery - data.getDouble("y"));
-									//System.out.println("elhalad");
-								}else{
-									enemy.interspeedy = enemy.oldy1 - enemy.oldy2;
-									//System.out.println("stagnál");
-								}
-							
-								
+							if(estimatePosition.getIntery() < data.getDouble("y")){
+								estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() + Math.abs(estimatePosition.getIntery() - data.getDouble("y")));
+							}else if(estimatePosition.getIntery() > data.getDouble("y")){
+								estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() - Math.abs(estimatePosition.getIntery() - data.getDouble("y")));
+							}else{
+								estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
+							}	
 					
-							
-							
-							
 							
 							
 							

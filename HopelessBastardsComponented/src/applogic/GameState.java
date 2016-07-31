@@ -36,7 +36,7 @@ public abstract class GameState implements GameListener,MenuListener{
 	
 	public abstract GameStateEnum tick(double appTime);
 	public abstract void init();
-	public abstract void viewPrepare(double lastTickTime, double nextTickTime);
+	public abstract void viewPrepare(double rednerTime);
 
 	public ISoundProvider getSoundProvider() {
 		return soundProvider;

@@ -16,8 +16,8 @@ import screenconverter.descriptors.RectangleDescriptor;
 import screenconverter.descriptors.StringDescriptor;
 
 public class Converter implements IConverter{
-public static boolean doit;
-	
+	public static boolean doit;
+	private IEstimator estimator;
 	
 	private IRenderer renderer;
 	
@@ -62,7 +62,7 @@ public static boolean doit;
 		 this.visibleArea = new Rectangle();
 		 this.canvasSizeRefresher = new CanvasSizeRefresher(renderer);
 		 this.monitorScreenManager = new MonitorScreenManager(this.renderer,7,this.canvasSizeRefresher);
-
+		 this.estimator = new Estimator();
 	}
 	
 	@Override
@@ -84,9 +84,14 @@ public static boolean doit;
 	 hívjuk meg annyiszor amennyi elemet átadott az AppLogic, és még néhány sajátot is hozzárak,
 	 pl.kósza madarak, stb jelentéktelen vizuális effektek.*/
 	@Override
-	public void stickImages(List<IImageViewBuilder> describer) {       
+	public void stickImages(List<IImageViewBuilder> describer, double renderTime) {       
         for(int i=0;i<describer.size();i++){
         	if(describer.get(i).getImageDescriptor() != null){
+        		
+        		if(describer.get(i).getPositionEstimate() != null && !describer.get(i).getPositionEstimate().getEntity().isThisEntityIsThePlayer()){
+					estimator.estimateNewPosition(describer.get(i), describer.get(i).getPositionEstimate(), renderTime);
+				}
+        		
         		for(int j=0;j<describer.get(i).getImageDescriptor().length;j++){
      				/*A megvizsgált elemet ebbe rakjuk, ez segédváltozó.*/
      				this.cameraMonitorCheckingElementsHelper.setBounds(describer.get(i).getImageDescriptor()[j].getX(),describer.get(i).getImageDescriptor()[j].getY() ,describer.get(i).getImageDescriptor()[j].getWidth() ,describer.get(i).getImageDescriptor()[j].getHeight());
@@ -96,9 +101,10 @@ public static boolean doit;
      				if(this.cameraMonitorCheckingElementsHelper.intersects(getVisibleArea())){
      					//describer.get(i).getImageDescriptor()[j].
      					
-     					doit = true;
+     						
+     				//	doit = true;
      					renderer.render(describer.get(i).getImageDescriptor()[j]);
-     					doit = false;
+     					//doit = false;
      				}
         		}
         	}

@@ -1,5 +1,6 @@
 package applogic.viewbuilder;
 
+import applogic.elements.BasicElement;
 import applogic.elements.Tile;
 import screenconverter.descriptors.ImageDescriptor;
 
@@ -14,5 +15,10 @@ public class TileViewBuilder extends IImageViewBuilder{
 	@Override
 	public ImageDescriptor[] getImageDescriptor() {
 		return describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

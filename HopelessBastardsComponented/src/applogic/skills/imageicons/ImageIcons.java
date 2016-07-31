@@ -1,6 +1,8 @@
 package applogic.skills.imageicons;
 
 import java.awt.Point;
+
+import applogic.elements.BasicElement;
 import applogic.elements.Entity;
 import applogic.skills.AbstractSkill;
 import applogic.viewbuilder.IImageViewBuilder;
@@ -69,5 +71,10 @@ public class ImageIcons extends IImageViewBuilder{
 		describers[0].setImageLogicalName(this.logicalName);
 		
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

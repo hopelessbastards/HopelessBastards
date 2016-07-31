@@ -125,7 +125,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 	}
 
 	@Override
-	public void viewPrepare(double lastTickTime, double nextTickTime) {
+	public void viewPrepare(double renderTime) {
 		/*Ezt a metódust hívja tovább a GameState, amikor renderelni szeretne.*/
 		
 		
@@ -147,10 +147,10 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		 amelyek mindig a képernyõn vannak, gondolok itt a healtbarra és stb, tehát ezeknek mindenek felett
 		 kell kirajzolódnia, azaz mindenek után.*/
 		
-		converter.stickImages(notDestroyableView);
+		converter.stickImages(notDestroyableView, renderTime);
 		
-		converter.stickImages(viewBuilder);
-		converter.stickImages(skillAnimationViewBuilders);
+		converter.stickImages(viewBuilder, renderTime);
+		converter.stickImages(skillAnimationViewBuilders, renderTime);
 		
 		
 		converter.stickLines(lineBuilder);
@@ -161,7 +161,7 @@ public class ViewBuilderContainer implements IViewBuilderContainer{
 		
 		
 		
-		converter.stickImages(staticviewBuilder);
+		converter.stickImages(staticviewBuilder, renderTime);
 		
 		converter.stickStrings(cdTimes);
 		

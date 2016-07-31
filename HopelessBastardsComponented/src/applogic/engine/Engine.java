@@ -84,8 +84,8 @@ public class Engine extends GameState{
 	 ViewBuilderContainer komponens viewPrepare() metódusát hívjuk tovább, ami ismeri az összes 
 	 Buildert(View,Line , stb..), és oda tudja adni a következõ nagy komponensnek, a ScreenConverternek.*/
 	@Override
-	public void viewPrepare(double lastTickTime, double nextTickTime) {
-		viewBuilderContainer.viewPrepare(lastTickTime, nextTickTime);
+	public void viewPrepare(double renderTime) {
+		viewBuilderContainer.viewPrepare(renderTime);
 		
 	}
 	

@@ -8,19 +8,15 @@ public class GameLoop implements Runnable,IGameLoop{
 	
 	private double delta;
 	private boolean runFlag;
-	private int sleepTime;
+	
 	private double currTime;
-	private double nextTime;
-	private double maxTimeDiff;
-	private int skippedFrames;
-	private int maxSkippedFrames;
+	
 	
 	private double lastTickTime;
 	
-	public static double lastRenderTime;
-	public static double nextRendererTime;
-	public static double renderTime;
-	public static boolean startapp;
+	private double lastRenderTime;
+	private double nextRendererTime;
+	private double renderTime;
 	
 	
 	public static double lastTick;
@@ -41,11 +37,11 @@ public class GameLoop implements Runnable,IGameLoop{
 	
 	private void gameLoopInitialization(){
 		 runFlag = true;
-	     delta = 1;
-	     nextTime = (double)System.nanoTime() / 1000000000.0;
+	     delta = 0.1;
+	     /*nextTime = (double)System.nanoTime() / 1000000000.0;
 	     maxTimeDiff = 0.5;
 	     skippedFrames = 1;
-	     maxSkippedFrames = 5;
+	     maxSkippedFrames = 5;*/
 	}
 	
 	private synchronized void start(){
@@ -62,8 +58,8 @@ public class GameLoop implements Runnable,IGameLoop{
 		gameStateContainer.tick(appTime);
 	}
 	@Override
-	public void render(double lastTickTime, double nextTickTime){
-		gameStateContainer.render(lastTickTime, nextTickTime);
+	public void render(double renderTime){
+		gameStateContainer.render(renderTime);
 	}
 	
 	private synchronized void stop(){
@@ -129,19 +125,14 @@ public class GameLoop implements Runnable,IGameLoop{
 	                currTime = (double)System.nanoTime() / 1000000000.0; 
 	                lastTickTime = currTime;
 	                
-	                lastlastTick = lastTick;
-                	lastTick = currTime;
-                	int dd = 0;
+                	
 	                while(currTime < lastTickTime + delta){
 	                	currTime = (double)System.nanoTime() / 1000000000.0;
 	                	
-	                	nextTick = lastTickTime + delta;
-	                	currentTick = currTime;
 	                	lastRenderTime = (double)System.nanoTime() / 1000000000.0;
-	                	render(lastTickTime, lastTickTime + delta);
-	                	//System.out.println("RendereltGameloop");
+	                	render(renderTime);
 	                	nextRendererTime = (double)System.nanoTime() / 1000000000.0;
-	                	dd++;
+	               
 	                	//System.out.println(dd);
 	                	renderTime = nextRendererTime - lastRenderTime;
 	                	//System.out.println(nextRendererTime - lastRenderTime);

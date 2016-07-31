@@ -1,6 +1,7 @@
 package applogic.components.viewbuilders;
 
 import applogic.components.IComponent;
+import applogic.elements.BasicElement;
 import applogic.viewbuilder.IImageViewBuilder;
 import screenconverter.descriptors.ImageDescriptor;
 
@@ -25,5 +26,10 @@ public class OptionPaneBoxViewBuilder extends IImageViewBuilder{
 			this.describers[0].setY(20000);
 		}
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

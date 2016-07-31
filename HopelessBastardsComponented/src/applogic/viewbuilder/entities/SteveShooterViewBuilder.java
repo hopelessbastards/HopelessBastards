@@ -3,6 +3,7 @@ package applogic.viewbuilder.entities;
 import applogic.AnimationHandler;
 import applogic.IAnimationHandler;
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import applogic.elements.Entity;
 import applogic.viewbuilder.IImageViewBuilder;
 import applogic.viewbuilder.IRectangleViewBuilder;
@@ -84,5 +85,10 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 		describers[0].setY((int)steve.getY() - 10);
 		
 		return describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return this.steve;
 	}
 }

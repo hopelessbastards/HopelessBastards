@@ -1,6 +1,7 @@
 package applogic.viewbuilder.buildings;
 
 import applogic.IViewBuilderContainer;
+import applogic.elements.BasicElement;
 import applogic.elements.LivingObject;
 import applogic.viewbuilder.IImageViewBuilder;
 import applogic.viewbuilder.simpleshapes.HealtBarRectangle;
@@ -33,5 +34,11 @@ private ImageDescriptor[] describers;
 		}
 		
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

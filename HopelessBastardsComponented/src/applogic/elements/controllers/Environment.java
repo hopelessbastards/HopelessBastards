@@ -207,67 +207,12 @@ public class Environment implements IEnvironment{
 		
 		}
 		
-		
-		
 		for(int i=0;i<enemyEntities.size();i++){
 			enemyEntities.get(i).tick(appTime);
-		
-			enemyEntities.get(i).oldx2 = enemyEntities.get(i).oldx1;
-			enemyEntities.get(i).oldx1 = enemyEntities.get(i).getX();
-		
-			
-			if(enemyEntities.get(i).interx < enemyEntities.get(i).getX()){
-				enemyEntities.get(i).interspeedx = enemyEntities.get(i).oldx1 - enemyEntities.get(i).oldx2 + Math.abs(enemyEntities.get(i).interx - enemyEntities.get(i).getX());
-				//System.out.println("lemarad");
-			}else if(enemyEntities.get(i).interx > enemyEntities.get(i).getX()){
-				
-				enemyEntities.get(i).interspeedx = enemyEntities.get(i).oldx1 - player.oldx2 - Math.abs(player.interx - player.getX());
-				//System.out.println("elhalad");
-			}else{
-				player.interspeedx = player.oldx1 - player.oldx2;
-				//System.out.println("stagnál");
-			}
-			
-			/*enemyEntities.get(i).oldx2 = enemyEntities.get(i).oldx1;
-			enemyEntities.get(i).oldx1 = enemyEntities.get(i).getX();
-			
-			enemyEntities.get(i).oldy2 = enemyEntities.get(i).oldy1;
-			enemyEntities.get(i).oldy1 = enemyEntities.get(i).getY();*/
-			
 		}
 		
 		for(int i=0;i<enemyPlayers.size();i++){
-			enemyPlayers.get(i).tick(appTime);
-			
-			//System.out.println("tickx: " + enemyPlayers.get(i).getX());
-			
-			/*
-			enemyPlayers.get(i).oldx2 = enemyPlayers.get(i).oldx1;
-			enemyPlayers.get(i).oldx1 = enemyPlayers.get(i).getX();
-		
-			System.out.println("tickkkkkkk: " + enemyPlayers.get(i).getX());
-			if(enemyPlayers.get(i).interx < enemyPlayers.get(i).getX()){
-				enemyPlayers.get(i).interspeedx = enemyPlayers.get(i).oldx1 - enemyPlayers.get(i).oldx2 + Math.abs(enemyPlayers.get(i).interx - enemyPlayers.get(i).getX());
-				//System.out.println("lemarad");
-			}else if(enemyPlayers.get(i).interx > enemyPlayers.get(i).getX()){
-				
-				enemyPlayers.get(i).interspeedx = enemyPlayers.get(i).oldx1 - enemyPlayers.get(i).oldx2 - Math.abs(enemyPlayers.get(i).interx - enemyPlayers.get(i).getX());
-				//System.out.println("elhalad");
-			}else{
-				enemyPlayers.get(i).interspeedx = enemyPlayers.get(i).oldx1 - enemyPlayers.get(i).oldx2;
-				//System.out.println("stagnál");
-			}*/
-			
-			
-			
-			/*if(enemyPlayers.get(i).gotNetworkUpdate){
-				enemyPlayers.get(i).oldx2 = enemyPlayers.get(i).oldx1;
-				enemyPlayers.get(i).oldx1 = enemyPlayers.get(i).getX();
-				
-				enemyPlayers.get(i).oldy2 = enemyPlayers.get(i).oldy1;
-				enemyPlayers.get(i).oldy1 = enemyPlayers.get(i).getY();
-			}*/
-			
+			enemyPlayers.get(i).tick(appTime);	
 		}
 		
 		for(int i=0;i<friendlyEntities.size();i++){

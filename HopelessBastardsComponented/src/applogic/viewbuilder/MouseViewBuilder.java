@@ -1,6 +1,7 @@
 package applogic.viewbuilder;
 
 import applogic.CursorInformationProvider;
+import applogic.elements.BasicElement;
 import screenconverter.descriptors.ImageDescriptor;
 
 public class MouseViewBuilder extends IImageViewBuilder{
@@ -23,5 +24,10 @@ public class MouseViewBuilder extends IImageViewBuilder{
 		}
 		
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

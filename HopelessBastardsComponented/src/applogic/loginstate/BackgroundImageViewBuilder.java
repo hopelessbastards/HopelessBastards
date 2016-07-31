@@ -1,5 +1,6 @@
 package applogic.loginstate;
 
+import applogic.elements.BasicElement;
 import applogic.viewbuilder.IImageViewBuilder;
 import screenconverter.IConverter;
 import screenconverter.descriptors.ImageDescriptor;
@@ -23,5 +24,11 @@ public class BackgroundImageViewBuilder extends IImageViewBuilder{
 		describers[0].setHeight(this.converter.getCanvasSize().getHEIGHT());
 		
 		return this.describers;
+	}
+
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return null;
 	}
 }

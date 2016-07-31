@@ -2,6 +2,7 @@ package applogic.skills.vehicles.viewBuilder;
 
 import applogic.AnimationHandler;
 import applogic.IAnimationHandler;
+import applogic.elements.BasicElement;
 import applogic.skills.vehicles.Bullet;
 import applogic.viewbuilder.IImageViewBuilder;
 import screenconverter.descriptors.ImageDescriptor;
@@ -27,5 +28,10 @@ public class BulletViewBuilder extends IImageViewBuilder{
 		this.describers[0].setAngleCenterPointX((int)bullet.getX() + bullet.getWidth()/2);
 		this.describers[0].setAngleCenterPointY((int)bullet.getY() + bullet.getHeight()/2);
 		return this.describers;
+	}
+
+	@Override
+	public BasicElement getTheRepresentetedElement() {
+		return this.bullet;
 	}
 }
