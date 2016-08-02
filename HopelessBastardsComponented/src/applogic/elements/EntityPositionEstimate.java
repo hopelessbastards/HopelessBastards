@@ -21,6 +21,8 @@ public class EntityPositionEstimate {
 	private double lastlastTick;
 	private double lastTick;
 	
+	private double tickTime;
+	
 	public EntityPositionEstimate(Entity entity) {
 		this.oldx1 = entity.getX();
 		this.oldx2 = entity.getX();
@@ -155,5 +157,15 @@ public class EntityPositionEstimate {
 	public void setLastTick(double lastTick) {
 		this.lastTick = lastTick;
 	}
+
+	public double getTickTime() {
+		return tickTime;
+	}
+
+	public void setTickTime(double tickTime) {
+		this.tickTime = tickTime;
+	}
+	
+	
 	
 }

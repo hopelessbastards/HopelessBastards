@@ -12,6 +12,7 @@ import applogic.collision.DoublePoint;
 import applogic.collision.ICollision;
 import applogic.elements.CharacterType;
 import applogic.elements.Entity;
+import applogic.elements.EntityPositionEstimate;
 import applogic.elements.LivingObject;
 import applogic.elements.SkillVehicle;
 import applogic.elements.Tile;
@@ -21,6 +22,7 @@ import applogic.elements.buildings.GreenBase;
 import applogic.elements.buildings.RedBase;
 import applogic.elements.characters.Mage;
 import applogic.elements.characters.SteveShooter;
+import network.NetworkSetup;
 import screenconverter.IConverter;
 import soundapi.ISoundProvider;
 
@@ -180,29 +182,80 @@ public class Environment implements IEnvironment{
 			player.tick(appTime);
 			
 			
+			EntityPositionEstimate estimatePosition = player.getPositionEstimate();
 			
-			/*player.oldx2 = player.oldx1;
-			player.oldx1 = player.getX();
-		
-			System.out.println("tickkkkkkkkkkk: " + player.getX());
 			
-			if(player.interx < player.getX()){
-				player.interspeedx = player.oldx1 - player.oldx2 + Math.abs(player.interx - player.getX());
-				//System.out.println("lemarad");
-			}else if(player.interx > player.getX()){
-				
-				player.interspeedx = player.oldx1 - player.oldx2 - Math.abs(player.interx - player.getX());
-				//System.out.println("elhalad");
+			estimatePosition.setLastlastTick(estimatePosition.getLastTick());
+			estimatePosition.setLastTick((double)System.nanoTime() / 1000000000.0);
+			
+			//System.out.println("tickÍ: " + player.getX());
+			
+			/*enemy.oldx2 = enemy.oldx1;
+			enemy.oldx1 = data.getDouble("x");*/
+			estimatePosition.setOldx2(estimatePosition.getOldx1());
+			estimatePosition.setOldx1(player.getX());
+			
+			/*enemy.oldy2 = enemy.oldy1;
+			enemy.oldy1 = data.getDouble("y");*/
+			estimatePosition.setOldy2(estimatePosition.getOldy1());
+			estimatePosition.setOldy1(player.getY());
+			
+			/*enemy.oldangle2 = enemy.oldangle1;
+			enemy.oldangle1 = data.getDouble("angle");*/
+			estimatePosition.setOldangle2(estimatePosition.getOldangle1());
+			estimatePosition.setOldangle1(player.getAngle());
+			
+			
+			/*if(enemy.interangle < data.getDouble("angle")){
+				enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 + Math.abs(enemy.interangle - data.getDouble("angle"));
+			}else if(enemy.interangle > data.getDouble("angle")){
+				enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 - Math.abs(enemy.interangle - data.getDouble("angle"));
 			}else{
-				player.interspeedx = player.oldx1 - player.oldx2;
-				//System.out.println("stagnál");
+				enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2;
 			}*/
 			
-			//System.out.println("speed" + player.interspeedx);
+			if(estimatePosition.getInterangle() < player.getAngle()){
+				estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() + Math.abs(estimatePosition.getInterangle() - player.getAngle()));
+			}else if(estimatePosition.getInterangle() > player.getAngle()){
+				estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() - Math.abs(estimatePosition.getInterangle() - player.getAngle()));
+			}else{
+				estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2());
+			}
 			
 			
-			player.oldy2 = player.oldy1;
-			player.oldy1 = player.getY();
+			/*if(enemy.interx < data.getDouble("x")){
+				enemy.interspeedx = enemy.oldx1 - enemy.oldx2 + Math.abs(enemy.interx - data.getDouble("x"));
+			}else if(enemy.interx > enemy.getX()){
+				enemy.interspeedx = enemy.oldx1 - enemy.oldx2 - Math.abs(enemy.interx - data.getDouble("x"));
+			}else{
+				enemy.interspeedx = enemy.oldx1 - enemy.oldx2;
+			}*/
+			
+			if(estimatePosition.getInterx() < player.getX()){
+				estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() + Math.abs(estimatePosition.getInterx() - player.getX()));
+			}else if(estimatePosition.getInterx() > player.getX()){
+				estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() - Math.abs(estimatePosition.getInterx() - player.getX()));
+			}else{
+				estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
+			}
+		
+			
+			/*if(enemy.intery < data.getDouble("y")){
+				enemy.interspeedy = enemy.oldy1 - enemy.oldy2 + Math.abs(enemy.intery - data.getDouble("y"));
+			}else if(enemy.intery > enemy.getY()){
+				enemy.interspeedy = enemy.oldy1 - enemy.oldy2 - Math.abs(enemy.intery - data.getDouble("y"));
+			}else{
+				enemy.interspeedy = enemy.oldy1 - enemy.oldy2;
+			}*/
+			
+			if(estimatePosition.getIntery() < player.getY()){
+				estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() + Math.abs(estimatePosition.getIntery() - player.getY()));
+			}else if(estimatePosition.getIntery() > player.getY()){
+				estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() - Math.abs(estimatePosition.getIntery() - player.getY()));
+			}else{
+				estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
+			}	
+	
 			
 		
 		}

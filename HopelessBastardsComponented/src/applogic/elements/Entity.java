@@ -44,12 +44,12 @@ public abstract class Entity extends LivingObject{
 	private double velocityX = 0;/*velocity- sebesség*/
     private double velocityY = 0;
     
-    private double movementSpeed = /*1*/30;
+    private double movementSpeed = /*1*/10;
     private double backMovementSpeed = 15;
     
     private int maxMovementSpeed = 6;
     
-    private double turningSpeed = 30;/*milyen mértékben forduljon(360 mennyivel módosuljon)*/
+    private double turningSpeed = 15;/*milyen mértékben forduljon(360 mennyivel módosuljon)*/
     
     
 	private AbstractSkill[] skills;/*hogy hány skillje van konfigfileból kapja.*/
@@ -170,8 +170,10 @@ public abstract class Entity extends LivingObject{
 			environment.getPlayer().setSelectedEntity(this);
 		}
 		
+		if(commander != null){
+			commander.command(appTime);
+		}
 		
-		commander.command(appTime);
 		/*moveBack();
 		moveForward();
 		turnLeft();

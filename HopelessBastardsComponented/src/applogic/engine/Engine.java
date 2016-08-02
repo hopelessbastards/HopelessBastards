@@ -186,8 +186,11 @@ public class Engine extends GameState{
 				players.get(i).tick();
 			}*/
 			environment.tick(appTime);
-				
+		
 			worldUpdater.updateServer(environment);
+			
+			
+			
 			
 			return null;
 		}else{

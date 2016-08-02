@@ -57,4 +57,16 @@ private static Point rotatePointHelper = new Point();
 		return rotatePointHelper;
 		//return new Point(p.x,p.y);
 	}
+	
+	public static double twoAngleDistance(double angle2, double angle1){
+		double angleDiff = angle1 - angle2;
+		if (angleDiff < -180.0) {
+			angleDiff += 360;
+		}
+		else if (angleDiff > 180.0) {
+			angleDiff -= 360;
+		}
+		return angleDiff;
+	}
+	
 }

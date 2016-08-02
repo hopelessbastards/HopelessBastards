@@ -3,14 +3,12 @@ package network;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.omg.Messaging.SyncScopeHelper;
-
-import applogic.GameLoop;
 import applogic.elements.Entity;
 import applogic.elements.EntityPositionEstimate;
 import applogic.elements.controllers.IEnvironment;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import math.RotatePoints;
 
 public class NetworkSetup implements INetworkSetup{
 
@@ -120,144 +118,116 @@ public class NetworkSetup implements INetworkSetup{
 					e.getMessage();
 				}
 			}
-		}).on("playerMoved", new Emitter.Listener() {
+		}).on("nodeTick", new Emitter.Listener() {
 			
 			@Override
 			public void call(Object... arg0) {
-				JSONObject data = (JSONObject)arg0[0];
+				JSONArray objects = (JSONArray)arg0[0];
+				JSONObject time = (JSONObject)arg0[1];
+
+				//System.out.println("network update: " + time.getDouble("tickTime"));
 				try{
 					Entity enemy = null;
-					String playerId = data.getString("id");
+					String playerId = environment.getPlayer().getId();
 					
-					for(int i=0;i<environment.getEnemyPlayers().size();i++){
-						if(environment.getEnemyPlayers().get(i).getId().equals(playerId)){
-							enemy = environment.getEnemyPlayers().get(i);
-							break;
+					for(int i=0;i<objects.length();i++){
+						String id = objects.getJSONObject(i).getString("id");
+						
+						enemy = null;
+						
+						for(int j=0;j<environment.getEnemyPlayers().size();j++){
+							if(environment.getEnemyPlayers().get(j).getId().equals(id) && !environment.getEnemyPlayers().get(j).getId().equals(playerId)){
+								enemy = environment.getEnemyPlayers().get(j);
+								
+								
+
+								if(enemy != null){
+									//Player entity = enemies.getById(playerId);
+									//entity.username = data.getString("username");
+									/*ezzel a sorral állítom be a user
+									nevét a Musclemanoknak meg satöbbiknek, nem pedig kosntruktorába(így mûködik
+									amúgy pedig nem igazán akart.)*/
+									
+									Entity selectedEntity = null;
+									for(int k=0;k<environment.getEnemyPlayers().size();k++){
+										if(environment.getEnemyPlayers().get(k).getId().equals(objects.getJSONObject(i).getString("selectedPlayer"))){
+											selectedEntity = environment.getEnemyPlayers().get(k);
+											break;
+										}
+									}
+									
+									if(selectedEntity == null){
+										environment.getPlayer().setSelectedEntity(environment.getPlayer());
+									}
+									
+									//NetworkSetup.this.estimatePosition = enemy.getPositionEstimate();
+									EntityPositionEstimate estimatePosition = enemy.getPositionEstimate();
+									
+									if((double)System.nanoTime() / 1000000000.0 - estimatePosition.getLastTick() > 0.1){
+										estimatePosition.setLastlastTick(estimatePosition.getLastTick());
+										estimatePosition.setLastTick((double)System.nanoTime() / 1000000000.0);
+										estimatePosition.setTickTime(time.getDouble("tickTime"));
+										
+										estimatePosition.setOldx2(estimatePosition.getOldx1());
+										estimatePosition.setOldx1(objects.getJSONObject(i).getDouble("x"));
+	
+										estimatePosition.setOldy2(estimatePosition.getOldy1());
+										estimatePosition.setOldy1(objects.getJSONObject(i).getDouble("y"));
+									
+										estimatePosition.setOldangle2(estimatePosition.getOldangle1());
+										estimatePosition.setOldangle1(objects.getJSONObject(i).getDouble("angle"));
+										
+										if(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() == 0){
+											estimatePosition.setInteranglespeed(RotatePoints.twoAngleDistance(estimatePosition.getInterangle(), estimatePosition.getOldangle1()));
+										}else{	
+											estimatePosition.setInteranglespeed(RotatePoints.twoAngleDistance(estimatePosition.getOldangle2(), estimatePosition.getOldangle1()));									
+										}
+										
+										if(estimatePosition.getOldx1() - estimatePosition.getOldx2() == 0){
+											estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getInterx());
+										}else{
+											estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
+										}
+										
+										if(estimatePosition.getOldy1() - estimatePosition.getOldy2() == 0){
+											estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getIntery());
+										}else{
+											estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
+										}
+									}
+									
+									enemy.setX(objects.getJSONObject(i).getDouble("x"));
+									enemy.setY(objects.getJSONObject(i).getDouble("y"));
+									enemy.setAngle(objects.getJSONObject(i).getDouble("angle"));
+									enemy.setNetworkHealth(objects.getJSONObject(i).getInt("health"));
+									enemy.setMaxhealth(objects.getJSONObject(i).getInt("maxhealth"));
+									enemy.setMana(objects.getJSONObject(i).getInt("mana"));
+									enemy.setMaxMana(objects.getJSONObject(i).getInt("maxmana"));
+									enemy.setDead(objects.getJSONObject(i).getBoolean("dead"));
+									if(objects.getJSONObject(i).getInt("skillStarted") >= 0){
+										enemy.setSkillStarted(objects.getJSONObject(i).getInt("skillStarted"), true);
+									}
+									
+									for(int k=0;k<enemy.getSkillCount();k++){
+										
+										if(enemy.getSkillStarted(k)){
+											enemy.getSkills()[k].activateSkillByServer(enemy.getAppTime());
+											enemy.setSkillStarted(k, false);
+											enemy.getSkills()[k].setNetworkActivate(false);
+											break;
+										}
+									}
+								}
+								break;
+							}
 						}
 					}
-					
-					
-						if(enemy != null){
-							//Player entity = enemies.getById(playerId);
-							//entity.username = data.getString("username");
-							/*ezzel a sorral állítom be a user
-							nevét a Musclemanoknak meg satöbbiknek, nem pedig kosntruktorába(így mûködik
-							amúgy pedig nem igazán akart.)*/
-							
-							Entity selectedEntity = null;
-							for(int j=0;j<environment.getEnemyPlayers().size();j++){
-								if(environment.getEnemyPlayers().get(j).getId().equals(data.getString("selectedPlayer"))){
-									selectedEntity = environment.getEnemyPlayers().get(j);
-									break;
-								}
-							}
-							
-							if(selectedEntity == null){
-								environment.getPlayer().setSelectedEntity(environment.getPlayer());
-							}
-							
-							NetworkSetup.this.estimatePosition = enemy.getPositionEstimate();
-							
-							
-							estimatePosition.setLastlastTick(estimatePosition.getLastTick());
-							estimatePosition.setLastTick((double)System.nanoTime() / 1000000000.0);
-							
-							/*enemy.oldx2 = enemy.oldx1;
-							enemy.oldx1 = data.getDouble("x");*/
-							estimatePosition.setOldx2(estimatePosition.getOldx1());
-							estimatePosition.setOldx1(data.getDouble("x"));
-							
-							
-							/*enemy.oldy2 = enemy.oldy1;
-							enemy.oldy1 = data.getDouble("y");*/
-							estimatePosition.setOldy2(estimatePosition.getOldy1());
-							estimatePosition.setOldy1(data.getDouble("y"));
-							
-							/*enemy.oldangle2 = enemy.oldangle1;
-							enemy.oldangle1 = data.getDouble("angle");*/
-							estimatePosition.setOldangle2(estimatePosition.getOldangle1());
-							estimatePosition.setOldangle1(data.getDouble("angle"));
-							
-							
-							/*if(enemy.interangle < data.getDouble("angle")){
-								enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 + Math.abs(enemy.interangle - data.getDouble("angle"));
-							}else if(enemy.interangle > data.getDouble("angle")){
-								enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 - Math.abs(enemy.interangle - data.getDouble("angle"));
-							}else{
-								enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2;
-							}*/
-							
-							if(estimatePosition.getInterangle() < data.getDouble("angle")){
-								estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() + Math.abs(estimatePosition.getInterangle() - data.getDouble("angle")));
-							}else if(estimatePosition.getInterangle() > data.getDouble("angle")){
-								estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() - Math.abs(estimatePosition.getInterangle() - data.getDouble("angle")));
-							}else{
-								estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2());
-							}
-							
-							
-							/*if(enemy.interx < data.getDouble("x")){
-								enemy.interspeedx = enemy.oldx1 - enemy.oldx2 + Math.abs(enemy.interx - data.getDouble("x"));
-							}else if(enemy.interx > enemy.getX()){
-								enemy.interspeedx = enemy.oldx1 - enemy.oldx2 - Math.abs(enemy.interx - data.getDouble("x"));
-							}else{
-								enemy.interspeedx = enemy.oldx1 - enemy.oldx2;
-							}*/
-							
-							if(estimatePosition.getInterx() < data.getDouble("x")){
-								estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() + Math.abs(estimatePosition.getInterx() - data.getDouble("x")));
-							}else if(estimatePosition.getInterx() > data.getDouble("x")){
-								estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() - Math.abs(estimatePosition.getInterx() - data.getDouble("x")));
-							}else{
-								estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
-							}
-						
-							
-							/*if(enemy.intery < data.getDouble("y")){
-								enemy.interspeedy = enemy.oldy1 - enemy.oldy2 + Math.abs(enemy.intery - data.getDouble("y"));
-							}else if(enemy.intery > enemy.getY()){
-								enemy.interspeedy = enemy.oldy1 - enemy.oldy2 - Math.abs(enemy.intery - data.getDouble("y"));
-							}else{
-								enemy.interspeedy = enemy.oldy1 - enemy.oldy2;
-							}*/
-							
-							if(estimatePosition.getIntery() < data.getDouble("y")){
-								estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() + Math.abs(estimatePosition.getIntery() - data.getDouble("y")));
-							}else if(estimatePosition.getIntery() > data.getDouble("y")){
-								estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() - Math.abs(estimatePosition.getIntery() - data.getDouble("y")));
-							}else{
-								estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
-							}	
-					
-							
-							
-							
-							enemy.setX(data.getDouble("x"));
-							enemy.setY(data.getDouble("y"));
-							enemy.setAngle(data.getDouble("angle"));
-							enemy.setNetworkHealth(data.getInt("health"));
-							enemy.setMaxhealth(data.getInt("maxhealth"));
-							enemy.setMana(data.getInt("mana"));
-							enemy.setMaxMana(data.getInt("maxmana"));
-							enemy.setDead(data.getBoolean("dead"));
-							if(data.getInt("skillStarted") >= 0){
-								enemy.setSkillStarted(data.getInt("skillStarted"), true);
-							}
-							
-							for(int k=0;k<enemy.getSkillCount();k++){
-								
-								if(enemy.getSkillStarted(k)){
-									enemy.getSkills()[k].activateSkillByServer(enemy.getAppTime());
-									enemy.setSkillStarted(k, false);
-									enemy.getSkills()[k].setNetworkActivate(false);
-									break;
-								}
-							}
-						}
 				}catch(JSONException e){
 					e.getMessage();
 				}
+				
 			}
+			
 		});	
 	}
 }

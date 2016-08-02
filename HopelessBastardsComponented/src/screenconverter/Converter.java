@@ -89,8 +89,10 @@ public class Converter implements IConverter{
         	if(describer.get(i).getImageDescriptor() != null){
         		
         		if(describer.get(i).getPositionEstimate() != null && !describer.get(i).getPositionEstimate().getEntity().isThisEntityIsThePlayer()){
-					estimator.estimateNewPosition(describer.get(i), describer.get(i).getPositionEstimate(), renderTime);
-				}
+					
+        			estimator.estimateNewPosition(describer.get(i), describer.get(i).getPositionEstimate(), renderTime);
+        			
+        		}
         		
         		for(int j=0;j<describer.get(i).getImageDescriptor().length;j++){
      				/*A megvizsgált elemet ebbe rakjuk, ez segédváltozó.*/
