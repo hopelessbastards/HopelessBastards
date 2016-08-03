@@ -18,7 +18,7 @@ public class Estimator implements IEstimator{
     	double yy = positionEstimate.getInterspeedy();
     	double aa = positionEstimate.getInteranglespeed();
     	
-    	System.out.println("speed: " + aa);
+    	
     	double vx;
     	double vy;
     	double va;

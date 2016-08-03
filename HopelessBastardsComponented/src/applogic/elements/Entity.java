@@ -11,24 +11,8 @@ import applogic.viewbuilder.string.DamageTextViewBuilder;
 import soundapi.ISoundProvider;
 
 public abstract class Entity extends LivingObject{
-	public double oldx1 = 0;
-	public double oldy1 = 0;
-	public double oldx2 = 0;
-	public double oldy2 = 0;
-	
-	public double oldangle1;
-	public double oldangle2;
-	
-	public double interspeedx;
-	public double interspeedy;
-	public double interanglespeed;
-	
-	public double interx;
-	public double intery;
-	public double interangle;
 	
 	private EntityPositionEstimate positionEstimate;
-	
 	
 	private boolean selected = false;/*ez azért kell, hogy kivan-e választva ez az entitás az itteni
 	lokális player számára.*/
@@ -94,16 +78,6 @@ public abstract class Entity extends LivingObject{
 			ISoundProvider soundProvider) {
 		super(x, y, width, height, angle,0,0,health,maxhealth);
 		
-		oldx1 = x;
-		oldx2 = x;
-		oldy1 = y;
-		oldy2 = y;
-		
-		interx = x;
-		intery = y;
-		
-		
-		
 		this.live = true;
 		this.id = networkId;
 		
@@ -166,6 +140,10 @@ public abstract class Entity extends LivingObject{
 	 majd az tudja, hogy mit kellc sinálnia, tehát az visszahívja az entitás move , stb metódusait.*/
 	@Override
 	public void tick(double appTime) {
+		if(isThisEntityIsThePlayer() && dead){
+			System.exit(0);
+		}
+		
 		if(environment.getCursorInformationProvider().isClick() && getCollideArea().contains(environment.getCursorInformationProvider().getMouse())){
 			environment.getPlayer().setSelectedEntity(this);
 		}
@@ -174,10 +152,7 @@ public abstract class Entity extends LivingObject{
 			commander.command(appTime);
 		}
 		
-		/*moveBack();
-		moveForward();
-		turnLeft();
-		trunRight();*/
+		
 		/*Illetve a skillek tick metódusát is tovább hívja.*/
 		for(int i=0;i<skills.length;i++){
 			if(skills[i] != null){

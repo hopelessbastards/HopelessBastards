@@ -16,7 +16,7 @@ public class MageLightning extends AbstractSkill{
 		
 	private ISound lightning;
 	
-	 private int damageValue = 250;/*Ennyi életerõt vesz le arról,akit ér a támadás*/
+	 private int damageValue = 100;/*Ennyi életerõt vesz le arról,akit ér a támadás*/
 	 private int manacost = 100;/*Ennyi manát vesz le a használata a támadásnak*/
 	 
 	 private double x, y, angle; // x,y and angle(szög)
@@ -119,17 +119,17 @@ public class MageLightning extends AbstractSkill{
 	    területtel(a bolt osztály polygonja), és azoknak az entitásoknak az életét csökkenti.*/
 		
 	   if(isIsactivated()){
-
-		   for(int i=0;i<getEnvironment().getEnemyEntities().size();i++){
-			   Entity en = getEnvironment().getEnemyEntities().get(i);
+		   
+		   for(int i=0;i<getSkillOwner().getEnemyEntities().size();i++){
+			   Entity en = getSkillOwner().getEnemyEntities().get(i);
 			   if(getPolygon().intersects(en.getCollideArea())){
 				   en.setHealth(-damageValue);
 				   //player.handler.damagetext.add(new DamagingText(en.x, en.y,String.valueOf(damageValue),true, player.handler));
 			   }
 		   }
 		   
-		   for(int i=0;i<getEnvironment().getEnemyPlayers().size();i++){
-			   Entity player = getEnvironment().getEnemyPlayers().get(i);
+		   for(int i = 0;i < getSkillOwner().getEnemyPlayers().size();i++){
+			   Entity player = getSkillOwner().getEnemyPlayers().get(i);
 			   if(getPolygon().intersects(player.getCollideArea())){
 				   player.setHealth(-damageValue);
 			   }

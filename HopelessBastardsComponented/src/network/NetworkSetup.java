@@ -123,111 +123,113 @@ public class NetworkSetup implements INetworkSetup{
 			@Override
 			public void call(Object... arg0) {
 				JSONArray objects = (JSONArray)arg0[0];
-				JSONObject time = (JSONObject)arg0[1];
 
 				//System.out.println("network update: " + time.getDouble("tickTime"));
 				try{
 					Entity enemy = null;
-					String playerId = environment.getPlayer().getId();
 					
 					for(int i=0;i<objects.length();i++){
 						String id = objects.getJSONObject(i).getString("id");
-						
+						boolean updated = objects.getJSONObject(i).getBoolean("livingconnection");
 						enemy = null;
 						
-						for(int j=0;j<environment.getEnemyPlayers().size();j++){
-							if(environment.getEnemyPlayers().get(j).getId().equals(id) && !environment.getEnemyPlayers().get(j).getId().equals(playerId)){
-								enemy = environment.getEnemyPlayers().get(j);
-								
-								
-
-								if(enemy != null){
-									//Player entity = enemies.getById(playerId);
-									//entity.username = data.getString("username");
-									/*ezzel a sorral állítom be a user
-									nevét a Musclemanoknak meg satöbbiknek, nem pedig kosntruktorába(így mûködik
-									amúgy pedig nem igazán akart.)*/
+						/*Az updated azt jelenti, hogy frissítve volt szerveroldalon az entitás,
+						 azaz új információ van róla.*/
+						if(updated){
+							for(int j=0;j<environment.getEnemyPlayers().size();j++){
+								if(environment.getEnemyPlayers().get(j).getId().equals(id)){
+									enemy = environment.getEnemyPlayers().get(j);
 									
-									Entity selectedEntity = null;
-									for(int k=0;k<environment.getEnemyPlayers().size();k++){
-										if(environment.getEnemyPlayers().get(k).getId().equals(objects.getJSONObject(i).getString("selectedPlayer"))){
-											selectedEntity = environment.getEnemyPlayers().get(k);
-											break;
-										}
-									}
-									
-									if(selectedEntity == null){
-										environment.getPlayer().setSelectedEntity(environment.getPlayer());
-									}
-									
-									//NetworkSetup.this.estimatePosition = enemy.getPositionEstimate();
-									EntityPositionEstimate estimatePosition = enemy.getPositionEstimate();
-									
-									if((double)System.nanoTime() / 1000000000.0 - estimatePosition.getLastTick() > 0.1){
-										estimatePosition.setLastlastTick(estimatePosition.getLastTick());
-										estimatePosition.setLastTick((double)System.nanoTime() / 1000000000.0);
-										estimatePosition.setTickTime(time.getDouble("tickTime"));
+									if(enemy != null){
+										//Player entity = enemies.getById(playerId);
+										//entity.username = data.getString("username");
+										/*ezzel a sorral állítom be a user
+										nevét a Musclemanoknak meg satöbbiknek, nem pedig kosntruktorába(így mûködik
+										amúgy pedig nem igazán akart.)*/
 										
-										estimatePosition.setOldx2(estimatePosition.getOldx1());
-										estimatePosition.setOldx1(objects.getJSONObject(i).getDouble("x"));
-	
-										estimatePosition.setOldy2(estimatePosition.getOldy1());
-										estimatePosition.setOldy1(objects.getJSONObject(i).getDouble("y"));
-									
-										estimatePosition.setOldangle2(estimatePosition.getOldangle1());
-										estimatePosition.setOldangle1(objects.getJSONObject(i).getDouble("angle"));
-										
-										if(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() == 0){
-											estimatePosition.setInteranglespeed(RotatePoints.twoAngleDistance(estimatePosition.getInterangle(), estimatePosition.getOldangle1()));
-										}else{	
-											estimatePosition.setInteranglespeed(RotatePoints.twoAngleDistance(estimatePosition.getOldangle2(), estimatePosition.getOldangle1()));									
+										Entity selectedEntity = null;
+										for(int k=0;k<environment.getEnemyPlayers().size();k++){
+											if(environment.getEnemyPlayers().get(k).getId().equals(objects.getJSONObject(i).getString("selectedPlayer"))){
+												selectedEntity = environment.getEnemyPlayers().get(k);
+												break;
+											}
 										}
 										
-										if(estimatePosition.getOldx1() - estimatePosition.getOldx2() == 0){
-											estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getInterx());
-										}else{
-											estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
+										if(selectedEntity == null){
+											environment.getPlayer().setSelectedEntity(environment.getPlayer());
 										}
 										
-										if(estimatePosition.getOldy1() - estimatePosition.getOldy2() == 0){
-											estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getIntery());
-										}else{
-											estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
-										}
-									}
-									
-									enemy.setX(objects.getJSONObject(i).getDouble("x"));
-									enemy.setY(objects.getJSONObject(i).getDouble("y"));
-									enemy.setAngle(objects.getJSONObject(i).getDouble("angle"));
-									enemy.setNetworkHealth(objects.getJSONObject(i).getInt("health"));
-									enemy.setMaxhealth(objects.getJSONObject(i).getInt("maxhealth"));
-									enemy.setMana(objects.getJSONObject(i).getInt("mana"));
-									enemy.setMaxMana(objects.getJSONObject(i).getInt("maxmana"));
-									enemy.setDead(objects.getJSONObject(i).getBoolean("dead"));
-									if(objects.getJSONObject(i).getInt("skillStarted") >= 0){
-										enemy.setSkillStarted(objects.getJSONObject(i).getInt("skillStarted"), true);
-									}
-									
-									for(int k=0;k<enemy.getSkillCount();k++){
+										//NetworkSetup.this.estimatePosition = enemy.getPositionEstimate();
+										EntityPositionEstimate estimatePosition = enemy.getPositionEstimate();
+										double now = (double)System.nanoTime() / 1000000000.0;
+										if(now - estimatePosition.getTickTime() > 0.05){
+											
+											estimatePosition.setTickTime(now);
+											
+											estimatePosition.setLastlastTick(estimatePosition.getLastTick());
+											estimatePosition.setLastTick(objects.getJSONObject(i).getDouble("lastTickTime"));
+											
+											estimatePosition.setOldx2(estimatePosition.getOldx1());
+											estimatePosition.setOldx1(objects.getJSONObject(i).getDouble("x"));
+		
+											estimatePosition.setOldy2(estimatePosition.getOldy1());
+											estimatePosition.setOldy1(objects.getJSONObject(i).getDouble("y"));
 										
-										if(enemy.getSkillStarted(k)){
-											enemy.getSkills()[k].activateSkillByServer(enemy.getAppTime());
-											enemy.setSkillStarted(k, false);
-											enemy.getSkills()[k].setNetworkActivate(false);
-											break;
+											estimatePosition.setOldangle2(estimatePosition.getOldangle1());
+											estimatePosition.setOldangle1(objects.getJSONObject(i).getDouble("angle"));
+											
+											if(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() == 0){
+												estimatePosition.setInteranglespeed(RotatePoints.twoAngleDistance(estimatePosition.getInterangle(), estimatePosition.getOldangle1()));
+											}else{	
+												estimatePosition.setInteranglespeed(RotatePoints.twoAngleDistance(estimatePosition.getOldangle2(), estimatePosition.getOldangle1()));									
+											}
+											
+											if(estimatePosition.getOldx1() - estimatePosition.getOldx2() == 0){
+												estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getInterx());
+											}else{
+												estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
+											}
+											
+											if(estimatePosition.getOldy1() - estimatePosition.getOldy2() == 0){
+												estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getIntery());
+											}else{
+												estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
+											}
+											
+											enemy.setX(objects.getJSONObject(i).getDouble("x"));
+											enemy.setY(objects.getJSONObject(i).getDouble("y"));
+											enemy.setAngle(objects.getJSONObject(i).getDouble("angle"));
+										}
+										
+										
+										enemy.setNetworkHealth(objects.getJSONObject(i).getInt("health"));
+										enemy.setMaxhealth(objects.getJSONObject(i).getInt("maxhealth"));
+										enemy.setMana(objects.getJSONObject(i).getInt("mana"));
+										enemy.setMaxMana(objects.getJSONObject(i).getInt("maxmana"));
+										enemy.setDead(objects.getJSONObject(i).getBoolean("dead"));
+										
+										if(objects.getJSONObject(i).getInt("skillStarted") >= 0){
+											enemy.setSkillStarted(objects.getJSONObject(i).getInt("skillStarted"), true);
+										}
+										
+										for(int k=0;k<enemy.getSkillCount();k++){	
+											if(enemy.getSkillStarted(k)){
+												enemy.getSkills()[k].activateSkillByServer(enemy.getAppTime());
+												enemy.setSkillStarted(k, false);
+												enemy.getSkills()[k].setNetworkActivate(false);
+												break;
+											}
 										}
 									}
+									break;
 								}
-								break;
 							}
 						}
 					}
 				}catch(JSONException e){
 					e.getMessage();
-				}
-				
+				}	
 			}
-			
 		});	
 	}
 }

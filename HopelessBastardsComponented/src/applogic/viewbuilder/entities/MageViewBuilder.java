@@ -42,13 +42,10 @@ public class MageViewBuilder extends IImageViewBuilder{
 	
 	public MageViewBuilder(Mage mage,IViewBuilderContainer container) {
 		this.container = container;
-		
 		setPositionEstimate(mage.getPositionEstimate());
 		
 		describers = new ImageDescriptor[1];
 		describers[0] = new ImageDescriptor(10, 10, 10, 10, 10, mage.getWidth(), 1000, "fire", 0);
-		//describers[1] = new ImageDescriptor(10, 10, 10, 10, 10, mage.getWidth(), 1000, "fire", 0);
-		//describers[2] = new ImageDescriptor(10, 10, 10, 10, 10, mage.getWidth(), 1000, "fire", 0);
 		
 		setX(mage.getX());
 		setY(mage.getY());
@@ -112,91 +109,14 @@ public class MageViewBuilder extends IImageViewBuilder{
 			describers[0].setAngle(mage.getAngle());
 		}
 		
-		
-		
 		describers[0].setAnimation(usingHandler.animationPiece());
 		describers[0].setImageLogicalName(usingHandler.getLogicName());
 		describers[0].setHeight(mage.getHeight());
 		describers[0].setWidth(mage.getWidth());	
-		
-		
-		/*if(!mage.isThisEntityIsThePlayer() && Converter.doit){
-			/*double xx = mage.interspeedx;
-	    	double yy = mage.interspeedy;
-	    	double aa = mage.interanglespeed;*/
-	    	/*double xx = mage.getPositionEstimate().getInterspeedx();
-	    	double yy = mage.getPositionEstimate().getInterspeedy();
-	    	double aa = mage.getPositionEstimate().getInteranglespeed();
-	    	
-	    	
-	    	double vx;
-	    	double vy;
-	    	double va;
-	    	
-	    	va = aa / ((GameLoop.lastTick - GameLoop.lastlastTick) / (GameLoop.renderTime));
-	    	aa = va;
-	    	/*newangle = aa + mage.interangle;
-	    	mage.interangle = newangle;*/
-	    	
-	    	/*newangle = aa + mage.getPositionEstimate().getInterangle();
-	    	mage.getPositionEstimate().setInterangle(newangle);
-	    	
-	    	describers[0].setAngle(newangle);
-	    	
-	    	
-		    if(((mage.getAngle() == 0 || mage.getAngle() == 180 || mage.getAngle() == 360) && mage.getX() != 0) || ((mage.getAngle() == 270 || mage.getAngle() == 90) && mage.getY() != 0) || (mage.getX() != 0 && mage.getY() != 0)){
-		    	
-		    	vx = xx / ((GameLoop.lastTick - GameLoop.lastlastTick) / (GameLoop.renderTime));
-		    	
-		    	vy = yy / ((GameLoop.lastTick - GameLoop.lastlastTick) / (GameLoop.renderTime));
-		    	
-		    	xx = vx;
-		    	yy = vy;
-		    	
-					
-				/*newxx = xx + mage.interx;
-				newyy = yy + mage.intery;*/
-		    /*	newxx = xx + mage.getPositionEstimate().getInterx();
-				newyy = yy + mage.getPositionEstimate().getIntery();
-			
-				/*mage.interx = newxx;
-				mage.intery = newyy;*/
-				/*mage.getPositionEstimate().setInterx(newxx);
-				mage.getPositionEstimate().setIntery(newyy);
-				
-		    }else{	
-		    	/*newxx = (int)mage.oldx1;
-		    	newyy = (int)mage.oldy1;*/
-		    /*	newxx = (int)mage.getPositionEstimate().getOldx1();
-		    	newyy = (int)mage.getPositionEstimate().getOldy1();
-		    }*/
-				
-		    
-			/*describers[0].setX((int)newxx);
-			describers[0].setY((int)newyy);*/
-			
-		/*}else{
-			
-			describers[0].setX((int)mage.getX());
-			describers[0].setY((int)mage.getY());
-			describers[0].setAngle(mage.getAngle());
-		}*/
-		
-		
-		
-		
-		
+	
 		describers[0].setAngleCenterPointX((int)describers[0].getX() + mage.getWidth()/2);
 		describers[0].setAngleCenterPointY((int)describers[0].getY() + mage.getHeight()/2);
 		
-	/*	describers[1].setAngle(mage.getAngle());
-		describers[1].setAngleCenterPointX((int)mage.getX() + mage.getWidth()/2);
-		describers[1].setAngleCenterPointY((int)mage.getY() + mage.getHeight()/2);
-		
-		describers[2].setAngle(mage.getAngle());
-		describers[2].setAngleCenterPointX((int)describers[2].getX() + mage.getWidth()/2);
-		describers[2].setAngleCenterPointY((int)describers[2].getY() + mage.getHeight()/2);
-		*/
 		return describers;
 	}
 

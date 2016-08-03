@@ -67,7 +67,7 @@ public class Environment implements IEnvironment{
 	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider, PlayerRectangle playerRectangle) {
 		this.playerRectangle = playerRectangle;
 		
-		this.selectedCharacterType = CharacterType.MAGE;
+		this.selectedCharacterType = CharacterType.STEVE;
 		this.garbageCollector = new GarbageCollector();
 		
 		this.soundProvider = soundProvider;
@@ -180,84 +180,6 @@ public class Environment implements IEnvironment{
 		if(player != null){
 			//player.moveForward();
 			player.tick(appTime);
-			
-			
-			EntityPositionEstimate estimatePosition = player.getPositionEstimate();
-			
-			
-			estimatePosition.setLastlastTick(estimatePosition.getLastTick());
-			estimatePosition.setLastTick((double)System.nanoTime() / 1000000000.0);
-			
-			//System.out.println("tickÍ: " + player.getX());
-			
-			/*enemy.oldx2 = enemy.oldx1;
-			enemy.oldx1 = data.getDouble("x");*/
-			estimatePosition.setOldx2(estimatePosition.getOldx1());
-			estimatePosition.setOldx1(player.getX());
-			
-			/*enemy.oldy2 = enemy.oldy1;
-			enemy.oldy1 = data.getDouble("y");*/
-			estimatePosition.setOldy2(estimatePosition.getOldy1());
-			estimatePosition.setOldy1(player.getY());
-			
-			/*enemy.oldangle2 = enemy.oldangle1;
-			enemy.oldangle1 = data.getDouble("angle");*/
-			estimatePosition.setOldangle2(estimatePosition.getOldangle1());
-			estimatePosition.setOldangle1(player.getAngle());
-			
-			
-			/*if(enemy.interangle < data.getDouble("angle")){
-				enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 + Math.abs(enemy.interangle - data.getDouble("angle"));
-			}else if(enemy.interangle > data.getDouble("angle")){
-				enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2 - Math.abs(enemy.interangle - data.getDouble("angle"));
-			}else{
-				enemy.interanglespeed = enemy.oldangle1 - enemy.oldangle2;
-			}*/
-			
-			if(estimatePosition.getInterangle() < player.getAngle()){
-				estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() + Math.abs(estimatePosition.getInterangle() - player.getAngle()));
-			}else if(estimatePosition.getInterangle() > player.getAngle()){
-				estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2() - Math.abs(estimatePosition.getInterangle() - player.getAngle()));
-			}else{
-				estimatePosition.setInteranglespeed(estimatePosition.getOldangle1() - estimatePosition.getOldangle2());
-			}
-			
-			
-			/*if(enemy.interx < data.getDouble("x")){
-				enemy.interspeedx = enemy.oldx1 - enemy.oldx2 + Math.abs(enemy.interx - data.getDouble("x"));
-			}else if(enemy.interx > enemy.getX()){
-				enemy.interspeedx = enemy.oldx1 - enemy.oldx2 - Math.abs(enemy.interx - data.getDouble("x"));
-			}else{
-				enemy.interspeedx = enemy.oldx1 - enemy.oldx2;
-			}*/
-			
-			if(estimatePosition.getInterx() < player.getX()){
-				estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() + Math.abs(estimatePosition.getInterx() - player.getX()));
-			}else if(estimatePosition.getInterx() > player.getX()){
-				estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2() - Math.abs(estimatePosition.getInterx() - player.getX()));
-			}else{
-				estimatePosition.setInterspeedx(estimatePosition.getOldx1() - estimatePosition.getOldx2());
-			}
-		
-			
-			/*if(enemy.intery < data.getDouble("y")){
-				enemy.interspeedy = enemy.oldy1 - enemy.oldy2 + Math.abs(enemy.intery - data.getDouble("y"));
-			}else if(enemy.intery > enemy.getY()){
-				enemy.interspeedy = enemy.oldy1 - enemy.oldy2 - Math.abs(enemy.intery - data.getDouble("y"));
-			}else{
-				enemy.interspeedy = enemy.oldy1 - enemy.oldy2;
-			}*/
-			
-			if(estimatePosition.getIntery() < player.getY()){
-				estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() + Math.abs(estimatePosition.getIntery() - player.getY()));
-			}else if(estimatePosition.getIntery() > player.getY()){
-				estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2() - Math.abs(estimatePosition.getIntery() - player.getY()));
-			}else{
-				estimatePosition.setInterspeedy(estimatePosition.getOldy1() - estimatePosition.getOldy2());
-			}	
-	
-			
-		
 		}
 		
 		for(int i=0;i<enemyEntities.size();i++){
@@ -366,6 +288,10 @@ public class Environment implements IEnvironment{
 		userAction.setControlledEntity(player);
 		
 		playerRectangle.setCenterObject(player);
+		
+		/*Azért kell hozzáadni a friendly playerekhez a PLayert, hogy így ez az enemik számára
+		 megtalálható legyen eme listában.*/
+		friendlyEntities.add(this.player);
 	}
 
 	@Override

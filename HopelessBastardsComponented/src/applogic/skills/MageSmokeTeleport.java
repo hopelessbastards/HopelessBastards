@@ -58,7 +58,33 @@ public class MageSmokeTeleport extends AbstractSkill{
 
 	@Override
 	public void activateSkillByServer(double appTime) {
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
 		
+		setViewBuilderActivate(true);
+		
+		
+		this.oldPlayerX = (int)getSkillOwner().getX();/*player alap koordinátájának beállítása,ahonnan elteleportál*/
+		this.oldPlayerY = (int)getSkillOwner().getY();
+		
+
+		/*Itt kiszámoljuk azt a pontot,ami a player közepétõl 500 pixellel mögötte van.
+		 Az a lényeg,hogy alaphelyzetben a player jobboldalra néz,tehát a mögötte lévõ pontot úgy kapom meg,
+		 hogy az x koordinátájából kivonok 500-at.Majd ezt a pontot annyival forgatom a player középpontja körül,
+		 ahány fokkal el van fordulva a player, és kész, megvan a pontosan mögötte lévõ pont.*/
+		behing500px = RotatePoints.rotatePoint(new Point((int)getSkillOwner().getX() + getSkillOwner().getWidth()/2-300, (int)getSkillOwner().getY() + getSkillOwner().getHeight()/2), getSkillOwner().getAngle(), (int)getSkillOwner().getX() + getSkillOwner().getWidth()/2,(int)getSkillOwner().getY() + getSkillOwner().getHeight()/2);
+		
+		/*Az új hely koordinátáinak meghatározása.*/
+		getSkillOwner().setX(behing500px.x - getSkillOwner().getWidth()/2);
+		getSkillOwner().setY(behing500px.y - getSkillOwner().getHeight()/2);
+		
+		
+		
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
+		   
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
+		//player.skill0started = false;
 	}
 
 	@Override

@@ -27,6 +27,8 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 	public SteveShooterViewBuilder(Entity steve,IViewBuilderContainer container) {
 		this.container = container;
 		
+		setPositionEstimate(steve.getPositionEstimate());
+		
 		describers = new ImageDescriptor[2];
 		describers[1] = new ImageDescriptor(10, 10,0,10,10,steve.getWidth(),steve.getHeight(),"steve", 0);
 		describers[0] = new ImageDescriptor(10, 10,0,10,10,140,140,"stevegun2", 0);
@@ -34,6 +36,10 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 		this.steve = steve;
 		animationHandler = new AnimationHandler(60, 2,true,"steve");
 
+		setX(steve.getX());
+		setY(steve.getY());
+		setAngle(steve.getAngle());
+		
 		usingHandler = animationHandler;
 		this.healthBar = new HealtBarRectangle(steve);
 		container.getRectangleBuilder().add(healthBar);
@@ -58,31 +64,51 @@ public class SteveShooterViewBuilder extends IImageViewBuilder{
 			}
 		}
 		
+		if(!steve.isThisEntityIsThePlayer()){
+			if((describers[1].getX() != getX()) || (describers[1].getY() != getY()) || 
+					(describers[1].getAngle() != getAngle())){
+				steve.setMoving(true);
+			}else{
+				steve.setMoving(false);
+			}
+		}
 		
 		
-		if(steve.isMoving()){
-			describers[1].setAnimation(usingHandler.animationPiece());
-			describers[1].setImageLogicalName(usingHandler.getLogicName());
-			
-			describers[1].setAngle(steve.getAngle());
-			describers[1].setAngleCenterPointX((int)steve.getX()+steve.getWidth()/2);
-			describers[1].setAngleCenterPointY((int)steve.getY() + steve.getHeight()/2);
-			
-			describers[1].setX((int)steve.getX());
-			describers[1].setY((int)steve.getY());
+		if(!steve.isThisEntityIsThePlayer()){
+			describers[1].setX((int)getX());
+			describers[1].setY((int)getY());
+			describers[1].setAngle(getAngle());
 		}else{
-			describers[1].setAnimation(0);
-			describers[1].setImageLogicalName(usingHandler.getLogicName());
 			describers[1].setX((int)steve.getX());
 			describers[1].setY((int)steve.getY());
 			describers[1].setAngle(steve.getAngle());
 		}
 		
-		describers[0].setAngle(steve.getAngle());
-		describers[0].setAngleCenterPointX((int)steve.getX()+steve.getWidth()/2);
-		describers[0].setAngleCenterPointY((int)steve.getY() + steve.getHeight()/2);
-		describers[0].setX((int)steve.getX() + 40);
-		describers[0].setY((int)steve.getY() - 10);
+		if(steve.isMoving()){
+			describers[1].setAnimation(usingHandler.animationPiece());
+			describers[1].setImageLogicalName(usingHandler.getLogicName());
+			
+			
+			describers[1].setAngleCenterPointX(describers[1].getX() + steve.getWidth()/2);
+			describers[1].setAngleCenterPointY(describers[1].getY() + steve.getHeight()/2);
+			//describers[1].setAngle(steve.getAngle());
+			/*describers[1].setX((int)steve.getX());
+			describers[1].setY((int)steve.getY());*/
+		}else{
+			describers[1].setAnimation(0);
+			describers[1].setImageLogicalName(usingHandler.getLogicName());
+			describers[1].setAngleCenterPointX(describers[1].getX() + steve.getWidth()/2);
+			describers[1].setAngleCenterPointY(describers[1].getY() + steve.getHeight()/2);
+			/*describers[1].setX((int)steve.getX());
+			describers[1].setY((int)steve.getY());
+			describers[1].setAngle(steve.getAngle());*/
+		}
+		
+		describers[0].setAngle(describers[1].getAngle());
+		describers[0].setAngleCenterPointX(describers[1].getX()+steve.getWidth()/2);
+		describers[0].setAngleCenterPointY(describers[1].getY() + steve.getHeight()/2);
+		describers[0].setX(describers[1].getX() + 40);
+		describers[0].setY(describers[1].getY() - 10);
 		
 		return describers;
 	}

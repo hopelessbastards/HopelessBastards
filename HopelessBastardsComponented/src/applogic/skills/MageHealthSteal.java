@@ -43,7 +43,24 @@ public class MageHealthSteal extends AbstractSkill{
 
 	@Override
 	public void activateSkillByServer(double appTime) {
-			
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
+		
+		setViewBuilderActivate(true);
+		
+		
+		/*A playernél leveszem a manát,amibe a skill került.*/
+		if(getSkillOwner().getMana() - this.manacost < 0){
+	    	getSkillOwner().setMana(0);
+	    }else{
+	    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+	    }
+		
+		
+		
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
 	}
 
 	@Override

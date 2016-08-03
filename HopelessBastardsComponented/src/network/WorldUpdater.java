@@ -52,6 +52,8 @@ public class WorldUpdater implements IWorldUpdater{
 				entity.put("dead", environment.getPlayer().isDead());
 				entity.put("maxhealth", environment.getPlayer().getMaxhealth());
 				entity.put("maxmana", environment.getPlayer().getMaxMana());
+			
+				entity.put("lastTickTime", (double)(System.nanoTime() / 1000000000.0));
 				
 				for(int i=0;i<environment.getPlayer().getSkills().length;i++){
 					if(environment.getPlayer().getSkills()[i] != null && environment.getPlayer().getSkills()[i].isNetworkActivate()){
