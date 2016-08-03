@@ -67,7 +67,7 @@ public class Environment implements IEnvironment{
 	public Environment(List<Tile> tiles,IViewBuilderContainer container,IConverter converter,ISoundProvider soundProvider, PlayerRectangle playerRectangle) {
 		this.playerRectangle = playerRectangle;
 		
-		this.selectedCharacterType = CharacterType.STEVE;
+		this.selectedCharacterType = CharacterType.MAGE;
 		this.garbageCollector = new GarbageCollector();
 		
 		this.soundProvider = soundProvider;
@@ -291,7 +291,7 @@ public class Environment implements IEnvironment{
 		
 		/*Azért kell hozzáadni a friendly playerekhez a PLayert, hogy így ez az enemik számára
 		 megtalálható legyen eme listában.*/
-		friendlyEntities.add(this.player);
+		friendlyPlayers.add(this.player);
 	}
 
 	@Override

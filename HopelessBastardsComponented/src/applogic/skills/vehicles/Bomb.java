@@ -21,6 +21,7 @@ public class Bomb extends SkillVehicle{
 	
 	private int damagingValue;
 	
+	
 	private IImageViewBuilder bombViewBuilder;
 	
 	public Bomb(int x, int y, int width, int height, double angle, int angleCenterX, int angleCenterY, Entity owner,IViewBuilderContainer container) {

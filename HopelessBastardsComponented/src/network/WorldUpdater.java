@@ -43,6 +43,7 @@ public class WorldUpdater implements IWorldUpdater{
 				}else{
 					entity.put("selectedPlayer", "null");
 				}
+				
 				entity.put("x", environment.getPlayer().getX());
 				entity.put("y", environment.getPlayer().getY());
 				entity.put("angle",environment.getPlayer().getAngle());

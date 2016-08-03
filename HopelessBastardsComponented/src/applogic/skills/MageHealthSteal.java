@@ -37,6 +37,8 @@ public class MageHealthSteal extends AbstractSkill{
 			    }
 			   
 			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			   
+			   setNetworkActivate(true);
 	
 		}
 	}
@@ -65,7 +67,8 @@ public class MageHealthSteal extends AbstractSkill{
 
 	@Override
 	public void tick(double appTime) {
-		if(isIsactivated()){   
+		if(isIsactivated()){ 
+			
 			getSkillOwner().getSelectedEntity().setHealth(-damageValue);
 			getSkillOwner().setHealth(damageValue);
 			

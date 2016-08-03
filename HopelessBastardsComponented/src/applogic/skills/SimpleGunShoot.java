@@ -31,30 +31,54 @@ public class SimpleGunShoot extends AbstractSkill{
 			setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
 			setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
 			
-			getEnvironment().getSkillVehicles().add(new Bullet(getSkillOwner().getX() + getSkillOwner().getWidth() + 80,getSkillOwner().getY() + getSkillOwner().getHeight()/2 + 5,getSkillOwner().getAngle(),65,6,getSkillOwner(),getContainer()));
-			this.shot.play();
-			
 			setViewBuilderActivate(true);
 
-			   if(getSkillOwner().getMana() - this.manacost < 0){
-			    	getSkillOwner().setMana(0);
-			    }else{
-			    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
-			    }
+			if(getSkillOwner().getMana() - this.manacost < 0){
+				getSkillOwner().setMana(0);
+			}else{
+			    getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+			}
 			   
-			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			getEnvironment().getSkillVehicles().add(new Bullet(getSkillOwner().getX() + getSkillOwner().getWidth() + 80,getSkillOwner().getY() + getSkillOwner().getHeight()/2 + 5,getSkillOwner().getAngle(),65,6,getSkillOwner(),getContainer()));
+			this.shot.play();
+			   
+			getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			setNetworkActivate(true);
 		}
 	}
 
 	@Override
 	public void activateSkillByServer(double appTime) {
-		// TODO Auto-generated method stub
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
+		
+		setViewBuilderActivate(true);
+		
+		
+		/*A playernél leveszem a manát,amibe a skill került.*/
+		if(getSkillOwner().getMana() - this.manacost < 0){
+	    	getSkillOwner().setMana(0);
+	    }else{
+	    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+	    }
+		
+		
+		getEnvironment().getSkillVehicles().add(new Bullet(getSkillOwner().getX() + getSkillOwner().getWidth() + 80,getSkillOwner().getY() + getSkillOwner().getHeight()/2 + 5,getSkillOwner().getAngle(),65,6,getSkillOwner(),getContainer()));
+		this.shot.play();
+		
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
+		   
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
 		
 	}
 
 	@Override
 	public void tick(double appTime) {
-		// TODO Auto-generated method stub
+		if(isIsactivated()){
+			setIsactivated(false);
+			getSkillOwner().setSkillStarted(getSkillnumber(), false);
+		}
 		
 	}
 

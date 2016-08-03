@@ -53,6 +53,8 @@ public class MageSmokeTeleport extends AbstractSkill{
 			player.y = behing500px.y - player.height/2;*/
 	
 			getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			
+			setNetworkActivate(true);
 		}
 	}
 
