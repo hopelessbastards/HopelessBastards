@@ -54,28 +54,27 @@ public class MageLightning extends AbstractSkill{
 			this.lightning.play();
 			
 			/*A playernél leveszem a manát,amibe a skill került.*/
-			   if(getSkillOwner().getMana() - this.manacost < 0){
-			    	getSkillOwner().setMana(0);
-			    }else{
-			    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
-			    }
+			if(getSkillOwner().getMana() - this.manacost < 0){
+				getSkillOwner().setMana(0);
+			}else{
+				getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+			}
 			   
-			   /*beállítom a paraméterben kapott koordinátákat és szöget, ami a player saját helyzete is egyben.*/
-			   this.x = getSkillOwner().getX() + getSkillOwner().getWidth();
-			   this.y = getSkillOwner().getY() - 118;
-			   this.angle = getSkillOwner().getAngle();
-			   this.width = 512;
-			   this.height = 300;
+			/*beállítom a paraméterben kapott koordinátákat és szöget, ami a player saját helyzete is egyben.*/
+			this.x = getSkillOwner().getX() + getSkillOwner().getWidth();
+			this.y = getSkillOwner().getY() - 118;
+			this.angle = getSkillOwner().getAngle();
+			this.width = 512;
+			this.height = 300;
 			   
+			 //animaionStillRuning = true;/*most már kirajzolhatjuk az animációt.*/
 			
-			   //animaionStillRuning = true;/*most már kirajzolhatjuk az animációt.*/
-			
-			   /*Ezzel állítjuk be a playernél, hogy ez a sorszámú képessége el lett tolva és volt rá
-			    elegendõ manája is.*/
-			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			 /*Ezzel állítjuk be a playernél, hogy ez a sorszámú képessége el lett tolva és volt rá
+			 elegendõ manája is.*/
+			 getSkillOwner().setSkillStarted(getSkillnumber(), true);
 			   
-			   setNetworkActivate(true);
-			   //player.skill0started = true; 
+			 setNetworkActivate(true);
+			 //player.skill0started = true; 
 		}
 	}
 
@@ -106,7 +105,6 @@ public class MageLightning extends AbstractSkill{
 		   
 		getSkillOwner().setSkillStarted(getSkillnumber(), false);
 		//player.skill0started = false;
-		
 	}
 
 	@Override
@@ -133,40 +131,8 @@ public class MageLightning extends AbstractSkill{
 			   if(getPolygon().intersects(player.getCollideArea())){
 				   player.setHealth(-damageValue);
 			   }
+			   
 		   }
-		   
-		   /*for(int i=0;i<getEnvironment().getEnemyEntities().size();i++){
-			   getEnvironment().getEnemyEntities().get(i).setDeletable(true);
-		   }*/
-		   
-		   /*Elõször az entitásokat ellenõrizzük végig.(Itt nem mozgo játékososk(pl zombi), és
-			 az adott user karaktere található.)*/
-			/*	for(int i=0;i<player.handler.entity.size();i++){
-					en = player.handler.entity.get(i);
-					if(en.id == Id.PLAYER){
-						
-						ene = (Player)player.handler.entity.get(i);
-
-						if(!(ene.networkId.equals(player.networkId)) && getPolygon().intersects(ene.getDamagedArea())){
-							ene.setHealth(-400);
-							player.handler.damagetext.add(new DamagingText(ene.x, ene.y, String.valueOf(400),true, player.handler));
-						}
-					}else{
-						enem = player.handler.entity.get(i);
-						if(getPolygon().intersects(enem.getDamagedArea())){
-							enem.setHealth(-400);
-							player.handler.damagetext.add(new DamagingText(enem.x, enem.y, String.valueOf(400),true, player.handler));
-						}
-					}		
-				}
-				
-				for(int i=0;i<player.handler.enemies.size();i++){
-					enemy = player.handler.enemies.get(i);
-					if(!(enemy.networkId.equals(player.networkId)) && getPolygon().intersects(enemy.getDamagedArea())){
-						enemy.setHealth(-400);
-						player.handler.damagetext.add(new DamagingText(enemy.x, enemy.y, String.valueOf(400),true, player.handler));
-					}	
-				}
 		   
 		 /*Mivel csak egyszer szeretnénk,hogy sebezzen a skill,nem pedig másodpercenként 60-szor, ezért rögtön az elsõ használat
 		 után hamisra állítjuk a damagingNow változót, így a sebzés nem fog megtörténni többet, csak ha újra elnyomjuk a skillt
@@ -176,23 +142,11 @@ public class MageLightning extends AbstractSkill{
 		setIsactivated(false);
 		getSkillOwner().setSkillStarted(getSkillnumber(), false);
 	   }
-		
-		
-		/*this.timeuntilcdend = this.skillStartedMainTime + this.cdtime - (Game.maintime);
-		/*Illetve mindíg megnézi,hogy a cd lejárt-e már,mertha igen ,akkor a hudmanagernek a változóját
-		 truera kell állítani,hogy kivilágosítsa a skillképet.*/
-		/*if(this.skillStartedMainTime + this.cdtime < Game.maintime || skillStartedMainTime == 0){
-			player.monitorScreenmanager.skill0useable = true;/*Ezzel látható,hogy az a baj,hogy ha 10 percig nem használom a skillt,
-			akkor 10 percig elérhetõ,és folymatosan mindíg truere állítja az értéket, ez pazarló lehet,javítani kellene
-			valami propertychangelistenert tudnék elképzelni.*/
-			
-		//}
 	}
 	
 	 public Polygon getPolygon(){
-		   /*Visszaadja egy bizonyos szöggel elforgatott polygont.Ez a polygon vizsgálja,hogy van-e mettszéspontja vmelyik
-		    entitással,mert akkor sebzés az mehet.*/
-		 
+		/*Visszaadja egy bizonyos szöggel elforgatott polygont.Ez a polygon vizsgálja,hogy van-e mettszéspontja vmelyik
+		entitással,mert akkor sebzés az mehet.*/
 		this.collideAreaPoints[0].setLocation((int)x,(int)y);
 		this.collideAreaPoints[1].setLocation((int)x + width,(int)y);
 		this.collideAreaPoints[2].setLocation((int)x+width,(int)y+height);
@@ -203,7 +157,6 @@ public class MageLightning extends AbstractSkill{
 
 	@Override
 	public Rectangle getBounds() {
-		
 		return null;
 	}
 }

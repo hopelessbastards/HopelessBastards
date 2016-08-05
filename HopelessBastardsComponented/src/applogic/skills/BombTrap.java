@@ -4,11 +4,9 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import applogic.IViewBuilderContainer;
 import applogic.elements.Entity;
-import applogic.elements.controllers.DoNothingCommander;
 import applogic.elements.controllers.IEnvironment;
 import applogic.skills.vehicles.Bomb;
 import applogic.skills.viewbuilder.BombTrapViewBuilder;
-import applogic.skills.viewbuilder.ChangePlayerSkillViewBuilder;
 
 
 public class BombTrap extends AbstractSkill{
@@ -39,12 +37,31 @@ public class BombTrap extends AbstractSkill{
 			    }
 			   
 			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			   
+			   setNetworkActivate(true);
 		}
 	}
 
 	@Override
 	public void activateSkillByServer(double appTime) {
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
 		
+		getEnvironment().getSkillVehicles().add(new Bomb((int)getSkillOwner().getX(),(int)getSkillOwner().getY(),64,64,0,0,0,getSkillOwner(),getContainer()));
+		
+		setViewBuilderActivate(true);
+		
+		/*A playernél leveszem a manát,amibe a skill került.*/
+		if(getSkillOwner().getMana() - this.manacost < 0){
+	    	getSkillOwner().setMana(0);
+	    }else{
+	    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+	    }
+		
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
+		   
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
 	}
 
 	@Override

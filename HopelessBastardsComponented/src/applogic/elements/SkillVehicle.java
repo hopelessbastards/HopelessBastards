@@ -1,8 +1,10 @@
 package applogic.elements;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 import applogic.IViewBuilderContainer;
+import applogic.elements.controllers.ai.ElementDescriptionToAI;
 
 public abstract class SkillVehicle extends BasicElement{
 	/*Ez az osztály azoknak az õse, amik a skillekhez elemek, és van tick metódusuk,
@@ -14,9 +16,12 @@ public abstract class SkillVehicle extends BasicElement{
 	private List<Entity> enemyPlayers;
 	private List<LivingObject> enemyBuildings;
 	
+	private ElementDescriptionToAI elementToAI;
+	
 	public SkillVehicle(int x, int y, int width, int height, double angle, int angleCenterX, int angleCenterY,Entity owner,IViewBuilderContainer container) {
 		super(x, y, width, height, angle, angleCenterX, angleCenterY);
 		this.owner = owner;
+		this.elementToAI = new ElementDescriptionToAI();
 	}
 	
 	public Entity getOwner() {
@@ -49,5 +54,36 @@ public abstract class SkillVehicle extends BasicElement{
 
 	public void setEnemyBuildings(List<LivingObject> enemyBuildings) {
 		this.enemyBuildings = enemyBuildings;
+	}
+	
+	@Override
+	public ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity) {
+	
+		elementToAI.setCollidedArea(getOperations().fogOfWarLocalLocation(fogOfWar, getCollideArea()));
+		if(elementToAI.getCollidedArea() != null){
+			elementToAI.setElementType("SkillVehicle");
+			
+			boolean isEnemy = false;
+			
+			for(int i=0;i<askerEntity.getEnemyEntities().size();i++){
+				if(askerEntity.getEnemyEntities().get(i).getId().equals(getOwner().getId())){
+					isEnemy = true;
+					break;
+				}
+			}
+			
+			for(int i=0;i<askerEntity.getEnemyPlayers().size();i++){
+				if(askerEntity.getEnemyPlayers().get(i).getId().equals(getOwner().getId())){
+					isEnemy = true;
+					break;
+				}
+			}
+			elementToAI.setEnemy(isEnemy);
+			
+			
+			return this.elementToAI;
+		}
+		
+		return null;
 	}
 }

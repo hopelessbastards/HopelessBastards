@@ -1,8 +1,10 @@
 package applogic.elements;
 
+import java.awt.Rectangle;
 import java.util.Random;
 
 import applogic.IViewBuilderContainer;
+import applogic.elements.controllers.ai.ElementDescriptionToAI;
 import applogic.loginstate.LeafViewBuilder;
 
 public class Leaf extends BasicElement{
@@ -36,5 +38,10 @@ public class Leaf extends BasicElement{
 			setX(getX() + this.speedx);
 			setY(getY() + this.speedy);
 		}
+	}
+
+	@Override
+	public ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity) {
+		return null;
 	}
 }

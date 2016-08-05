@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
+import applogic.elements.controllers.ai.ElementDescriptionToAI;
 import math.RotatePoints;
 
 public abstract class BasicElement {
@@ -24,8 +25,11 @@ public abstract class BasicElement {
 	private Rectangle collideArea;
 	private Point[] collideAreaPoints;
 	
+	private ElementOperations operations;
+	
 	public BasicElement(int x, int y, int width, int height, double angle,int angleCenterX,int angleCenterY) {
 		super();
+		this.operations = new ElementOperations();
 		this.angleCenterX = angleCenterX;
 		this.angleCenterY = angleCenterY;
 		this.x = x;
@@ -40,6 +44,8 @@ public abstract class BasicElement {
 		}
 	}
 	public abstract void tick(double appTime);
+	
+	public abstract ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity);
 	
 	public double getAppTime() {
 		return appTime;
@@ -108,6 +114,13 @@ public abstract class BasicElement {
 		return this.collideArea;
 	}
 	
+	public ElementOperations getOperations() {
+		return operations;
+	}
+	
+	public void setOperations(ElementOperations operations) {
+		this.operations = operations;
+	}
 	public Point[] getCollideAreaPoints(){
 		this.collideAreaPoints[0].setLocation((int)x - 1 , (int)y - 1);
 		this.collideAreaPoints[1].setLocation((int)x + width + 1 , (int)y - 1);

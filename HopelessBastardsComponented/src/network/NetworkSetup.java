@@ -154,7 +154,6 @@ public class NetworkSetup implements INetworkSetup{
 										for(int k=0;k<environment.getEnemyPlayers().size();k++){
 											if(environment.getEnemyPlayers().get(k).getId().equals(objects.getJSONObject(i).getString("selectedPlayer"))){
 												selectedEntity = environment.getEnemyPlayers().get(k);
-												
 												break;
 											}
 										}
@@ -162,21 +161,12 @@ public class NetworkSetup implements INetworkSetup{
 										for(int k=0; k < environment.getFriendlyPlayers().size();k++){
 											if(environment.getFriendlyPlayers().get(k).getId().equals(objects.getJSONObject(i).getString("selectedPlayer"))){
 												selectedEntity = environment.getFriendlyPlayers().get(k);
-												System.out.println("find");
 												break;
 											}
 										}
 										
-									
-										
-										
 										enemy.setSelectedEntity(selectedEntity);
 										
-										/*if(selectedEntity == null){
-											environment.getPlayer().setSelectedEntity(environment.getPlayer());
-										}*/
-										
-										//NetworkSetup.this.estimatePosition = enemy.getPositionEstimate();
 										EntityPositionEstimate estimatePosition = enemy.getPositionEstimate();
 										double now = (double)System.nanoTime() / 1000000000.0;
 										if(now - estimatePosition.getTickTime() > 0.05){

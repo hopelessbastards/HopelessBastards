@@ -35,24 +35,46 @@ public class PoisonBombBladeStorm extends AbstractSkill{
 			lastStackedTime = appTime;
 			setViewBuilderActivate(true);
 
-			   if(getSkillOwner().getMana() - this.manacost < 0){
-			    	getSkillOwner().setMana(0);
-			    }else{
-			    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
-			    }
+			if(getSkillOwner().getMana() - this.manacost < 0){
+			    getSkillOwner().setMana(0);
+			}else{
+			    getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+			}
 			   
-			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			getSkillOwner().setSkillStarted(getSkillnumber(), true);
 			   
-			   actualAngle = getSkillOwner().getAngle();
+			actualAngle = getSkillOwner().getAngle();
 			   
-			   stack = 0;
+			stack = 0;
+			setNetworkActivate(true);
 		}
 	}
 
 	@Override
 	public void activateSkillByServer(double appTime) {
-		// TODO Auto-generated method stub
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
 		
+		setViewBuilderActivate(true);
+		
+		/*A playernél leveszem a manát,amibe a skill került.*/
+		if(getSkillOwner().getMana() - this.manacost < 0){
+	    	getSkillOwner().setMana(0);
+	    }else{
+	    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+	    }
+		
+		lastStackedTime = appTime;
+		
+		actualAngle = getSkillOwner().getAngle();
+		   
+		stack = 0;
+		
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
+		   
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
+		//player.skill0started = false;
 	}
 
 	@Override
@@ -78,13 +100,11 @@ public class PoisonBombBladeStorm extends AbstractSkill{
 
 	@Override
 	public Polygon getPolygon() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

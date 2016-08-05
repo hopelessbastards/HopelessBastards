@@ -31,31 +31,49 @@ public class IceBlock extends AbstractSkill{
 		if(getSkillStartedMainTime() + this.getCdtime() < appTime || getSkillStartedMainTime() == 0){
 			setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
 			setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
-			//player.monitorScreenmanager.skill0useable = false;/*A skillbaron elszürkítjük a képet, ami a skillt képviseli*/
-			
 			
 			setViewBuilderActivate(true);
-		//	boltSong.play();
 			
 			/*A playernél leveszem a manát,amibe a skill került.*/
-			   if(getSkillOwner().getMana() - this.manacost < 0){
-			    	getSkillOwner().setMana(0);
-			    }else{
-			    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
-			    }
+			if(getSkillOwner().getMana() - this.manacost < 0){
+			    getSkillOwner().setMana(0);
+			}else{
+			    getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+			}
 			  
-			   getSkillOwner().setBlocking(true);
-			   getSkillOwner().setStunned(true);
+			getSkillOwner().setBlocking(true);
+			getSkillOwner().setStunned(true);
 			   
-			   getSkillOwner().setSkillStarted(getSkillnumber(), true);
-			   this.iceblocksound.play();
-			   
+			getSkillOwner().setSkillStarted(getSkillnumber(), true);
+			this.iceblocksound.play();
+			
+			setNetworkActivate(true);
 		}
 	}
 
 	@Override
 	public void activateSkillByServer(double appTime) {
-
+		setSkillStartedMainTime(appTime);/*A skillkezdési idõt beállítom a játék fõidejére*/
+		setIsactivated(true);/*aktívnak tekintjük innentõl a skillt*/
+		
+		setViewBuilderActivate(true);
+		
+		getSkillOwner().setBlocking(true);
+		getSkillOwner().setStunned(true);
+		
+		this.iceblocksound.play();
+		
+		/*A playernél leveszem a manát,amibe a skill került.*/
+		if(getSkillOwner().getMana() - this.manacost < 0){
+	    	getSkillOwner().setMana(0);
+	    }else{
+	    	getSkillOwner().setMana(getSkillOwner().getMana()-this.manacost);
+	    }
+		
+		getSkillOwner().setSkillStarted(getSkillnumber(), true);
+	
+		getSkillOwner().setSkillStarted(getSkillnumber(), false);
+		
 	}
 
 	@Override

@@ -1,11 +1,13 @@
 package applogic.elements;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 import applogic.IViewBuilderContainer;
 import applogic.elements.controllers.Commander;
 import applogic.elements.controllers.EnemyAndFriendlyEntityProvider;
 import applogic.elements.controllers.IEnvironment;
+import applogic.elements.controllers.ai.ElementDescriptionToAI;
 import applogic.skills.AbstractSkill;
 import applogic.viewbuilder.string.DamageTextViewBuilder;
 import soundapi.ISoundProvider;
@@ -73,10 +75,13 @@ public abstract class Entity extends LivingObject{
     private String username;
     private CharacterType characterType;
     
+    private ElementDescriptionToAI elementToAI;
+    
 	public Entity(int x, int y, int width, int height, double angle, int health,int maxhealth,int mana,int maxMana,
 			int skillCount, String networkId,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
 		super(x, y, width, height, angle,0,0,health,maxhealth);
+		this.elementToAI = new ElementDescriptionToAI();
 		
 		this.live = true;
 		this.id = networkId;
@@ -561,5 +566,40 @@ public abstract class Entity extends LivingObject{
 		this.positionEstimate = positionEstimate;
 	}
 	
-	
+	@Override
+	public ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity) {
+		elementToAI.setCollidedArea(getOperations().fogOfWarLocalLocation(fogOfWar, getCollideArea()));
+		
+		if(elementToAI.getCollidedArea() != null){
+			elementToAI.setElementType("LivingObject");
+			boolean isEnemy = false;
+			
+			for(int i=0;i<askerEntity.getEnemyPlayers().size();i++){
+				if(askerEntity.getEnemyPlayers().get(i).getId().equals(getId())){
+					isEnemy = true;
+					break;
+				}
+			}
+			
+			if(!isEnemy){
+				for(int i=0;i<askerEntity.getEnemyEntities().size();i++){
+					if(askerEntity.getEnemyEntities().get(i).getId().equals(getId())){
+						isEnemy = true;
+						break;
+					}
+				}
+			}
+			
+			elementToAI.setEnemy(isEnemy);
+			elementToAI.setHealth(getHealth());
+			elementToAI.setMaxHealth(getMaxhealth());
+			elementToAI.setPower(getMana());
+			elementToAI.setMaxPower(getMaxMana());
+			elementToAI.setElementType(characterType.toString());
+			
+			return this.elementToAI;
+		}
+		
+		return null;
+	}
 }

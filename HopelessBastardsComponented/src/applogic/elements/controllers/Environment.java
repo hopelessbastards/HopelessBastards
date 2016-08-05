@@ -108,11 +108,7 @@ public class Environment implements IEnvironment{
 		
 		this.stupidZombieCommander = new StupidZombieAI(this);
 		
-		/*enemyEntities.add(new Zombie(3000, 3000, 0, 500,1000,500,1000,7,container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		
-		this.stupidZombieCommander.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
-		enemyEntities.get(enemyEntities.size()-1).setCommander(stupidZombieCommander);
-		enemyEntities.get(enemyEntities.size()-1).setSelectedEntity(player);*/
 		
 		/*Kit kövessen a kamera*/
 		//this.container.setPlayer(enemyEntities.get(enemyEntities.size() - 1));
@@ -292,6 +288,17 @@ public class Environment implements IEnvironment{
 		/*Azért kell hozzáadni a friendly playerekhez a PLayert, hogy így ez az enemik számára
 		 megtalálható legyen eme listában.*/
 		friendlyPlayers.add(this.player);
+		
+		
+		
+		
+		
+		
+		enemyEntities.add(new Zombie(3000, 3000, 500,1000,500,1000,7,"id", container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		
+		this.stupidZombieCommander.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
+		enemyEntities.get(enemyEntities.size()-1).setCommander(stupidZombieCommander);
+		enemyEntities.get(enemyEntities.size()-1).setSelectedEntity(player);
 	}
 
 	@Override
