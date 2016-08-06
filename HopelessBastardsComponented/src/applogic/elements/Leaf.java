@@ -41,7 +41,7 @@ public class Leaf extends BasicElement{
 	}
 
 	@Override
-	public ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity) {
+	public ElementDescriptionToAI createElementDescriptionToAI(Entity askerEntity) {
 		return null;
 	}
 }

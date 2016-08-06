@@ -45,7 +45,7 @@ public abstract class BasicElement {
 	}
 	public abstract void tick(double appTime);
 	
-	public abstract ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity);
+	public abstract ElementDescriptionToAI createElementDescriptionToAI(Entity askerEntity);
 	
 	public double getAppTime() {
 		return appTime;

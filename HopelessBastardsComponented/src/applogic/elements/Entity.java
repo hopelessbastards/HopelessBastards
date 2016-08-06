@@ -14,6 +14,12 @@ import soundapi.ISoundProvider;
 
 public abstract class Entity extends LivingObject{
 	
+	private Rectangle fogOfWar;
+	
+	private boolean fullyInitialized;/*Ez a változó azért felelõs, hogyha igaz az értéke, akkor
+	az entitás minden fontos tagja inicializálva van, elõfordulhat, hogy nem minden, például
+	hálózatról érkezõ inicializûáláskor.*/
+	
 	private EntityPositionEstimate positionEstimate;
 	
 	private boolean selected = false;/*ez azért kell, hogy kivan-e választva ez az entitás az itteni
@@ -81,6 +87,11 @@ public abstract class Entity extends LivingObject{
 			int skillCount, String networkId,IViewBuilderContainer container,IEnvironment environment,EnemyAndFriendlyEntityProvider provider,
 			ISoundProvider soundProvider) {
 		super(x, y, width, height, angle,0,0,health,maxhealth);
+		
+		this.fogOfWar = new Rectangle();
+		this.fogOfWar.width = 500;
+		this.fogOfWar.height = 500;
+		
 		this.elementToAI = new ElementDescriptionToAI();
 		
 		this.live = true;
@@ -405,6 +416,16 @@ public abstract class Entity extends LivingObject{
 	public void setEnemyPlayers(List<Entity> enemyPlayers) {
 		this.enemyPlayers = enemyPlayers;
 	}
+	
+
+	public Rectangle getFogOfWar() {
+		/*Minden entitás vissza tudja adni azt a területet amit épp lát.Ez egy téglalap a nagy
+		 világtérképen.*/
+		this.fogOfWar.x = (int)getX() - getWidth() / 2 - 250;
+		this.fogOfWar.y = (int)getY() - getHeight() / 2 - 250;
+		return this.fogOfWar;
+	}
+
 
 	public List<LivingObject> getEnemyBuildings() {
 		return enemyBuildings;
@@ -540,6 +561,15 @@ public abstract class Entity extends LivingObject{
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
+
+	public boolean isFullyInitialized() {
+		return fullyInitialized;
+	}
+
+	public void setFullyInitialized(boolean fullyInitialized) {
+		this.fullyInitialized = fullyInitialized;
+	}
 
 	public CharacterType getCharacterType() {
 		return characterType;
@@ -567,8 +597,8 @@ public abstract class Entity extends LivingObject{
 	}
 	
 	@Override
-	public ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity) {
-		elementToAI.setCollidedArea(getOperations().fogOfWarLocalLocation(fogOfWar, getCollideArea()));
+	public ElementDescriptionToAI createElementDescriptionToAI(Entity askerEntity) {
+		elementToAI.setCollidedArea(getOperations().fogOfWarLocalLocation(askerEntity.getFogOfWar(), getCollideArea()));
 		
 		if(elementToAI.getCollidedArea() != null){
 			elementToAI.setElementType("LivingObject");
@@ -595,7 +625,7 @@ public abstract class Entity extends LivingObject{
 			elementToAI.setMaxHealth(getMaxhealth());
 			elementToAI.setPower(getMana());
 			elementToAI.setMaxPower(getMaxMana());
-			elementToAI.setElementType(characterType.toString());
+			elementToAI.setElementType(getCharacterType().toString());
 			
 			return this.elementToAI;
 		}

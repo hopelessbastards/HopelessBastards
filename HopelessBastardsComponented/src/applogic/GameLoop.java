@@ -37,7 +37,7 @@ public class GameLoop implements Runnable,IGameLoop{
 	
 	private void gameLoopInitialization(){
 		 runFlag = true;
-	     delta = 0.1;
+	     delta = 1;
 	     /*nextTime = (double)System.nanoTime() / 1000000000.0;
 	     maxTimeDiff = 0.5;
 	     skippedFrames = 1;

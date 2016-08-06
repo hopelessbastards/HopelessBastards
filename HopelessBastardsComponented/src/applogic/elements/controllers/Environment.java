@@ -289,16 +289,19 @@ public class Environment implements IEnvironment{
 		 megtalálható legyen eme listában.*/
 		friendlyPlayers.add(this.player);
 		
+		this.player.setFullyInitialized(true);
 		
 		
 		
 		
 		
-		enemyEntities.add(new Zombie(3000, 3000, 500,1000,500,1000,7,"id", container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		EntityCommander lua = new FirstLuaAI(this);
+		enemyEntities.add(new Zombie(2500, 3000, 500,1000,500,1000,7,"id", container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		
-		this.stupidZombieCommander.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
-		enemyEntities.get(enemyEntities.size()-1).setCommander(stupidZombieCommander);
-		enemyEntities.get(enemyEntities.size()-1).setSelectedEntity(player);
+		lua.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
+		enemyEntities.get(enemyEntities.size() - 1).setCommander(lua);
+		enemyEntities.get(enemyEntities.size() - 1).setSelectedEntity(player);
+		enemyEntities.get(enemyEntities.size() - 1).setFullyInitialized(true);
 	}
 
 	@Override

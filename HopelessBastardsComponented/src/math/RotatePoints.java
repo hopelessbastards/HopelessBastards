@@ -22,37 +22,37 @@ private static Point rotatePointHelper = new Point();
 		p[3] = p4;
 		
 	     
-	     for(int i=0;i<p.length;i++){
+		for(int i=0;i<p.length;i++){
 	   	   p[i].x-=dx;
 	   	   p[i].y-=dy;
-	     }
+	    }
 	      
-	      for(int i=0;i<p.length;i++){
+	    for(int i=0;i<p.length;i++){
 	   	   p[i].setLocation(p[i].getX() * Math.cos(Math.toRadians(angle)) - p[i].getY() * Math.sin(Math.toRadians(angle)),
 	   			   p[i].getX() * Math.sin(Math.toRadians(angle)) + p[i].getY() * Math.cos(Math.toRadians(angle)));
-	      }
+	    }
 
-	      for(int i=0;i<p.length;i++){
+	    for(int i=0;i<p.length;i++){
 	   	   	p[i].x+=dx;
 	   	   	p[i].y+=dy;
-	      }
+	    }
 	      
-	      int[] x = {(int) p[0].getX(), (int) p[1].getX(), (int)p[2].getX(), (int) p[3].getX()};
-		  int[] y = {(int) p[0].getY(), (int) p[1].getY(), (int)p[2].getY(), (int) p[3].getY()};
+	    int[] x = {(int) p[0].getX(), (int) p[1].getX(), (int)p[2].getX(), (int) p[3].getX()};
+		int[] y = {(int) p[0].getY(), (int) p[1].getY(), (int)p[2].getY(), (int) p[3].getY()};
 		  
-	      poly = new Polygon(x, y, x.length);
-	      return poly;
+	    poly = new Polygon(x, y, x.length);
+	    return poly;
 	}
 	
 	public static Point rotatePoint(Point p,double angle,int dx,int dy){
 		/*a dx, dy az ,hogy mely pont körül forgatmo a pontot*/
 		p.x-=dx;
 		p.y-=dy;
-		 p.setLocation(p.getX() * Math.cos(Math.toRadians(angle)) - p.getY() * Math.sin(Math.toRadians(angle)),
+		p.setLocation(p.getX() * Math.cos(Math.toRadians(angle)) - p.getY() * Math.sin(Math.toRadians(angle)),
 	   			   p.getX() * Math.sin(Math.toRadians(angle)) + p.getY() * Math.cos(Math.toRadians(angle)));
 		 
-		 p.x+=dx;
-	   	 p.y+=dy;
+		p.x+=dx;
+	   	p.y+=dy;
 		rotatePointHelper.setLocation(p.x,p.y);
 		return rotatePointHelper;
 		//return new Point(p.x,p.y);
@@ -68,5 +68,4 @@ private static Point rotatePointHelper = new Point();
 		}
 		return angleDiff;
 	}
-	
 }

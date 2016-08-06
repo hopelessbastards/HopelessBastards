@@ -42,9 +42,9 @@ public class Tile extends BasicElement{
 	}
 
 	@Override
-	public ElementDescriptionToAI createElementDescriptionToAI(Rectangle fogOfWar, Entity askerEntity) {
+	public ElementDescriptionToAI createElementDescriptionToAI(Entity askerEntity) {
 		if(hasCollision){
-			elementToAI.setCollidedArea(getOperations().fogOfWarLocalLocation(fogOfWar, getCollideArea()));
+			elementToAI.setCollidedArea(getOperations().fogOfWarLocalLocation(askerEntity.getFogOfWar(), getCollideArea()));
 			if(elementToAI.getCollidedArea() != null){
 				elementToAI.setElementType("LivingObject");
 				return this.elementToAI;
