@@ -296,7 +296,7 @@ public class Environment implements IEnvironment{
 		
 		
 		EntityCommander lua = new FirstLuaAI(this);
-		enemyEntities.add(new Zombie(2500, 3000, 500,1000,500,1000,7,"id", container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
+		enemyEntities.add(new Zombie(2500, 3148, 500,1000,500,1000,7,"id", container,this,new EnemyAndFriendlyEntityProvider(this,false),soundProvider));
 		
 		lua.setControlledEntity(enemyEntities.get(enemyEntities.size()-1));
 		enemyEntities.get(enemyEntities.size() - 1).setCommander(lua);

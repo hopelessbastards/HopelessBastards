@@ -17,9 +17,7 @@ M.up = 3
 M.down = 4
 
 
-M.moveToOrigo = moveToOrigo
-M.rotatePointCenterOfOrigo = rotatePointCenterOfOrigo
-M.gotTheAngleBetweenTwoPoint = gotTheAngleBetweenTwoPoint
+
 
 function moveToOrigo(a, b, center)
 	local amoved = {}
@@ -55,6 +53,14 @@ function gotTheAngleBetweenTwoPoint(a, b, center)
 
 end
 
+function twoPointsDistance(a, b)
+	dista = a[1] - b[1]
+	distb = a[2] - b[2]
+	return math.sqrt((dista * dista) + (distb * distb))
+end
 
-
+M.moveToOrigo = moveToOrigo
+M.rotatePointCenterOfOrigo = rotatePointCenterOfOrigo
+M.gotTheAngleBetweenTwoPoint = gotTheAngleBetweenTwoPoint
+M.twoPointsDistance = twoPointsDistance
 return M

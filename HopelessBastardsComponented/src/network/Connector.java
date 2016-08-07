@@ -13,8 +13,8 @@ public class Connector implements IConnector{
 	@Override
 	public void connect(String serverURL) {
 		try{
-			socket = IO.socket(serverURL);
-			//socket = IO.socket("http://localhost:8080");
+			//socket = IO.socket(serverURL);
+			socket = IO.socket("http://localhost:8080");
 			socket.connect();
 		}catch(Exception e){
 			e.getMessage();

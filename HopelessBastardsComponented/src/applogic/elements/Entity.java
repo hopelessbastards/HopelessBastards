@@ -421,8 +421,8 @@ public abstract class Entity extends LivingObject{
 	public Rectangle getFogOfWar() {
 		/*Minden entitás vissza tudja adni azt a területet amit épp lát.Ez egy téglalap a nagy
 		 világtérképen.*/
-		this.fogOfWar.x = (int)getX() - getWidth() / 2 - 250;
-		this.fogOfWar.y = (int)getY() - getHeight() / 2 - 250;
+		this.fogOfWar.x = (int)getX() + getWidth() / 2 - 250;
+		this.fogOfWar.y = (int)getY() + getHeight() / 2 - 250;
 		return this.fogOfWar;
 	}
 

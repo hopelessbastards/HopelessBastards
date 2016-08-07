@@ -65,7 +65,6 @@ public class FirstLuaAI extends EntityCommander{
 		descs = new LuaValue[10];
 		
 		for(int i=0;i<elements.size();i++){
-			System.out.println("elkementszize: " + elements.size());
 	        descs[0] = CoerceJavaToLua.coerce(elements.get(i).getCollidedArea().x);
 	        descs[1] = CoerceJavaToLua.coerce(elements.get(i).getCollidedArea().y);
 	        descs[2] = CoerceJavaToLua.coerce(elements.get(i).getCollidedArea().getWidth());
@@ -101,13 +100,20 @@ public class FirstLuaAI extends EntityCommander{
         arrays[2] = CoerceJavaToLua.coerce("x");/*kulcs*/
         arrays[3] = CoerceJavaToLua.coerce(10);/*érték*/
         
-        LuaValue[] fog = new LuaValue[6];
-        fog[0] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().x);
-        fog[1] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().y);
-        fog[2] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().width);
-        fog[3] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().height);
-        fog[4] = CoerceJavaToLua.coerce(getControlledEntity().getX() + getControlledEntity().getWidth() / 2);
-        fog[5] = CoerceJavaToLua.coerce(getControlledEntity().getY() + getControlledEntity().getHeight() / 2);
+        LuaValue[] fog = new LuaValue[12];
+        fog[0] = CoerceJavaToLua.coerce(1);
+        fog[1] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().x);
+        fog[2] = CoerceJavaToLua.coerce(2);
+        fog[3] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().y);
+        fog[4] = CoerceJavaToLua.coerce(3);
+        fog[5] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().width);
+        fog[6] = CoerceJavaToLua.coerce(4);
+        fog[7] = CoerceJavaToLua.coerce(getControlledEntity().getFogOfWar().height);
+        /*center*/
+        fog[8] = CoerceJavaToLua.coerce(5);
+        fog[9] = CoerceJavaToLua.coerce(getControlledEntity().getX() + getControlledEntity().getWidth() / 2);
+        fog[10] = CoerceJavaToLua.coerce(6);
+        fog[11] = CoerceJavaToLua.coerce(getControlledEntity().getY() + getControlledEntity().getHeight() / 2);
        
      
        
@@ -115,11 +121,30 @@ public class FirstLuaAI extends EntityCommander{
         if(environmentai.length > 0){
         	
         	LuaValue retvals = myAdd.call(LuaValue.tableOf(environmentai), LuaValue.valueOf(getControlledEntity().getAngle()), LuaValue.tableOf(fog));
-            System.out.println(retvals.toint());
+            System.out.println("left: " + retvals.get(1));
+            System.out.println("right: " + retvals.get(2));
+            
+            if(retvals.get(1).toboolean()){
+            	/*left*/
+            	getControlledEntity().turnLeft();
+            }
+            
+            if(retvals.get(2).toboolean()){
+            	/*right*/
+            	getControlledEntity().trunRight();
+            }
+            
+            if(retvals.get(3).toboolean()){
+            	/*up*/
+            	getControlledEntity().moveForward();
+            }
+            
+            if(retvals.get(4).toboolean()){
+            	/*down*/
+            	getControlledEntity().moveBack();
+            }
         }else{
         	
         }
-        
-	
 	}
 }
