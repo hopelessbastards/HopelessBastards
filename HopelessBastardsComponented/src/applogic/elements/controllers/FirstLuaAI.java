@@ -1,10 +1,7 @@
 package applogic.elements.controllers;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
@@ -20,9 +17,8 @@ public class FirstLuaAI extends EntityCommander{
 	private List<LuaValue> skills;
 	private List<LuaValue> state;
 	private LuaValue[] descs;
-	
-	
-	
+	private LuaValue _G;
+	private LuaValue ai;
 	
 	public FirstLuaAI(IEnvironment environment) {
 		super(environment);
@@ -31,7 +27,10 @@ public class FirstLuaAI extends EntityCommander{
 		this.skills = new ArrayList<LuaValue>();
 		this.state = new ArrayList<LuaValue>();
 		
-		
+		_G = JsePlatform.standardGlobals();
+		_G.get("dofile").call( LuaValue.valueOf("./firstLuaAI.lua"));        
+		ai = _G.get("command");
+		        
 	}
 
 	@Override
@@ -48,17 +47,6 @@ public class FirstLuaAI extends EntityCommander{
 				}
 			}
 		}
-		
-
-		// Use any of the "call()" or "invoke()" functions directly on the chunk.
-		//run the lua script defining your function
-	    LuaValue _G = JsePlatform.standardGlobals();
-		
-		
-		
-        _G.get("dofile").call( LuaValue.valueOf("./firstLuaAI.lua"));
-        
-        LuaValue myAdd = _G.get("command");
 		
 		environmentai = new LuaValue[elements.size() * 2];
 		int j = 1;
@@ -82,12 +70,6 @@ public class FirstLuaAI extends EntityCommander{
 	        j+= 2;
 		}
 		
-		/*for(int i=0;i<environmentai.length;i++){
-			System.out.println("a " + i + ". elem " + environmentai[i]);
-		}*/
-		
-		
-        
         LuaValue[] vv = new LuaValue[4];
         vv[0] = CoerceJavaToLua.coerce(100);/*kulcs*/
         vv[1] = CoerceJavaToLua.coerce(200);/*érték*/
@@ -115,13 +97,9 @@ public class FirstLuaAI extends EntityCommander{
         fog[10] = CoerceJavaToLua.coerce(6);
         fog[11] = CoerceJavaToLua.coerce(getControlledEntity().getY() + getControlledEntity().getHeight() / 2);
        
-     
-       
-       
         if(environmentai.length > 0){
-        	
-        	LuaValue retvals = myAdd.call(LuaValue.tableOf(environmentai), LuaValue.valueOf(getControlledEntity().getAngle()), LuaValue.tableOf(fog));
-            System.out.println("left: " + retvals.get(1));
+        	LuaValue retvals = ai.call(LuaValue.tableOf(environmentai), LuaValue.valueOf(getControlledEntity().getAngle()), LuaValue.tableOf(fog));
+        	System.out.println("left: " + retvals.get(1));
             System.out.println("right: " + retvals.get(2));
             
             if(retvals.get(1).toboolean()){
@@ -143,8 +121,6 @@ public class FirstLuaAI extends EntityCommander{
             	/*down*/
             	getControlledEntity().moveBack();
             }
-        }else{
-        	
         }
 	}
 }

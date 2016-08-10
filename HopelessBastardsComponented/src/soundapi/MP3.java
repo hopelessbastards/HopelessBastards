@@ -23,7 +23,7 @@ public class MP3 implements ISound{
         this.soundProvider = soundProvider;
         
         try {
-			this.path = new File(".").getCanonicalPath() + "./res/";
+			this.path = new File(".").getCanonicalPath() + "/res/";
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

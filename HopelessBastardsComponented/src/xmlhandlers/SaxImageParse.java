@@ -105,7 +105,7 @@ public class SaxImageParse implements DescriptorLoader{
 			pars.parse(documentPath, dh);
 			
 		} catch (Exception e) {
-			System.out.println("Gáz van!!!!");
+			System.out.println("Here is some xml issue!!!!");
 		}
 		return imgs;
 	}

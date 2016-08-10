@@ -22,7 +22,6 @@ public class SoundProvider implements ISoundProvider{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
 	}
 	
 	@Override

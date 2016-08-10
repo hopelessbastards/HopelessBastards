@@ -33,7 +33,7 @@ public class ImageLoader implements IimageLoader{
 		
 		/*Ebbe a képleíró objektum listába olvas bele xml-bõl.Az interfacet megvalósíthatná 
 		 json, stb megoldásokkal is.*/
-		List<ImageDescriptor> descriptors = docParser.Parse(path + "./images.xml");
+		List<ImageDescriptor> descriptors = docParser.Parse(path + "/images.xml");
 		
 		
 		for(int i=0;i<descriptors.size();i++){
@@ -55,7 +55,7 @@ public class ImageLoader implements IimageLoader{
 			}else{
 				try {
 					animation = images.get(desc.getLogicName());
-					file = new File(path + "./res/" + desc.getPath());
+					file = new File(path + "/res/" + desc.getPath());
 					animation.addAnimationSliceByIndex(desc.getAnimation(),ImageIO.read(file));
 				} catch (IOException e) {
 					e.printStackTrace();

@@ -10,6 +10,8 @@ function command(environment, state, fogOfWar)
 	center = {}
 	aicommand = {}
 	
+	enemyCenter = {}
+	
 	
 	aicommand[lib.up] = false
 	aicommand[lib.down] = false
@@ -24,6 +26,7 @@ function command(environment, state, fogOfWar)
 	
 	center[1] = fogOfWar[3] / 2
 	center[2] = fogOfWar[4] / 2
+	
 	
 	local newAngle = lib.gotTheAngleBetweenTwoPoint(a, b, center)
 	
@@ -45,11 +48,12 @@ function command(environment, state, fogOfWar)
 				aicommand[lib.right] = true
 			end
 		end
-		
-		
 	end
 
 	
+	if lib.twoPointsDistance(center, b) > 20 then
+		aicommand[lib.up] = true
+	end
 	
 	
 	return aicommand
